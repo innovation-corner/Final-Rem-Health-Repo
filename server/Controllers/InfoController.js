@@ -48,14 +48,16 @@ module.exports = {
       const { id } = req.params;
 
       const data = await Info.findOne({ where: { id } });
+      console.log(data)
 
       if (!data) {
-        return res.status(400).json({ message: "Data does not exist", e });
+        console.log('see!!')
+        return res.status(400).json({ message: "Data does not exist"});
       }
 
       return res.status(200).json({ message: "Data retrieved", data });
     } catch (e) {
-      return res.status(400).json({ message: "An error occurred", e });
+      return res.status(400).send({ message: "An error occurred", e });
     }
   },
 
@@ -67,7 +69,7 @@ module.exports = {
       const reqData = await Info.findOne({ where: { id } });
 
       if (!reqData) {
-        return res.status(400).json({ message: "Data does not exist", e });
+        return res.status(400).json({ message: "Data does not exist"});
       }
 
       await Info.update(update, { where: { id } });
