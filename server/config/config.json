@@ -16,10 +16,10 @@
     "operatorsAliases": false
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "remindmedb",
-    "host": "mysql://b1fd5201a5f26d:1e0b7017@us-cdbr-iron-east-02.cleardb.net/heroku_25009b87e6e8d7b?reconnect=true",
+    "username": "b1fd5201a5f26d",
+    "password": "1e0b7017",
+    "database": "heroku_25009b87e6e8d7b",
+    "host": "us-cdbr-iron-east-02.cleardb.net",
     "dialect": "mysql",
     "operatorsAliases": false
   }
