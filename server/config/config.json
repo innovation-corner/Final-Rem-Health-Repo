@@ -2,7 +2,7 @@
   "development": {
     "username": "nedu",
     "password": "password",
-    "database": "remind-me",
+    "database": "remhealth",
     "host": "localhost",
     "dialect": "mysql",
     "operatorsAliases": false
