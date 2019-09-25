@@ -1,5 +1,5 @@
 {
-  "production": {
+  "development": {
     "username": "doadmin",
     "password": "s8td9gasu3g3uis2",
     "database": "defaultdb",
