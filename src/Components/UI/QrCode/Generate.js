@@ -1,0 +1,212 @@
+import React, { Component, Fragment } from "react";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import PrintThisComponent from "../../Print";
+
+import PageTitle from "../../../Layout/AppMain/PageTitle";
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  CardTitle,
+  CardHeader,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  CardBody
+} from "reactstrap";
+
+class QrCode extends Component {
+  state = {
+    num: 0,
+    randomCode: [],
+    loading: false,
+    disablePrint: true
+  };
+
+  onChangeHandler = e => {
+    e.preventDefault();
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  submitHandler = e => {
+    e.preventDefault();
+    this.setState({ loading: true });
+    const generateCode = (length, chars) => {
+      if (!chars) {
+        chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+      }
+      let result = "";
+      for (let i = length; i > 0; --i) {
+        result += chars[Math.round(Math.random() * (chars.length - 1))];
+      }
+      return result;
+    };
+
+    const qrCode = [];
+    const num = this.state.num;
+    let image;
+    for (let i = 0; i < num; i++) {
+      const randomCode = generateCode(21);
+
+      fetch(
+        `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
+        {
+          method: "POST"
+        }
+      )
+        .then(res => {
+          console.log(res);
+          return res.blob();
+        })
+        .then(images => {
+          // Then create a local URL for that image and print it
+          //   image = URL.createObjectURL(images);
+          //   var reader = new Image();
+          //   console.log(image);
+          //   reader.readAsDataURL(image);
+          //   reader.onloadend = function() {
+          //     var base64data = reader.result;
+          //     console.log(base64data.substr(base64data.indexOf(",") + 1));
+
+          //     qrCode.push(base64data);
+          //   };
+          //   console.log(qrCode);
+          image = webkitURL.createObjectURL(images);
+          console.log(image);
+          qrCode.push(image);
+          this.setState({ num: 0, loading: false, disablePrint: false });
+          return;
+        });
+    }
+    this.setState({ randomCode: qrCode });
+    console.log(image);
+  };
+  print = e => {
+    e.preventDefault();
+    var content = document.getElementById("divcontents");
+    var pri = document.getElementById("ifmcontentstoprint").contentWindow;
+    pri.document.open();
+    pri.document.write(content.innerHTML);
+    pri.document.close();
+    pri.focus();
+    pri.print();
+  };
+  render() {
+    return (
+      <Fragment>
+        <ReactCSSTransitionGroup
+          component="div"
+          transitionName="TabsAnimation"
+          transitionAppear={true}
+          transitionAppearTimeout={0}
+          transitionEnter={false}
+          transitionLeave={false}
+        >
+          <div>
+            <PageTitle
+              heading={"Generate Qr Code"}
+              subheading=""
+              icon="lnr-cog icon-gradient bg-mean-fruit"
+            />
+            <Row>
+              <Col md="12">
+                <Card className="main-card mb-3">
+                  <CardBody>
+                    <CardTitle style={{ textAlign: "center" }}>
+                      Enter Amount of Code to generate
+                    </CardTitle>
+                    <Form>
+                      <Row form>
+                        <Col md={2}></Col>
+                        <Col md={4}>
+                          <FormGroup>
+                            <Label for="num">Amount</Label>
+                            <Input
+                              value={this.state.num}
+                              required
+                              type="number"
+                              name="num"
+                              id="num"
+                              placeholder="Enter Amount"
+                              onChange={this.onChangeHandler}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      {!this.state.loading ? (
+                        <Row form>
+                          <Col md={2}></Col>
+                          <Col md={4}>
+                            <Button
+                              color="success"
+                              className="mt-2"
+                              onClick={this.submitHandler}
+                            >
+                              Generate
+                            </Button>
+                          </Col>
+                          <Col md={4}>
+                            <Button
+                              color="warning"
+                              className="mt-2"
+                              onClick={this.print}
+                              disabled={this.state.disablePrint}
+                            >
+                              Print
+                            </Button>
+                          </Col>
+                        </Row>
+                      ) : (
+                        <Row form>
+                          <Col md={2}></Col>
+                          <Col md={4}>
+                            <div
+                              className="spinner-border text-success"
+                              role="status"
+                            >
+                              <span className="sr-only">Loading...</span>
+                            </div>
+                          </Col>
+                        </Row>
+                      )}
+                    </Form>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={1}></Col>
+
+              <Col>
+                <div id="divcontents">
+                  <Row>
+                    {this.state.randomCode.map(images => {
+                      return (
+                        <div
+                          key={images}
+                          style={{ marginRight: "20px", marginTop: "2vh" }}
+                        >
+                          <img src={images} /> <br />
+                          <small>Powered by Rem Health</small>
+                        </div>
+                      );
+                    })}
+                  </Row>
+                </div>
+                <iframe
+                  id="ifmcontentstoprint"
+                  className="printing"
+                  style={{ height: "0px", width: "0px", position: "absolute" }}
+                ></iframe>
+              </Col>
+            </Row>
+          </div>
+        </ReactCSSTransitionGroup>
+      </Fragment>
+    );
+  }
+}
+
+export default QrCode;
