@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "nedu",
-    "password": "i4qmytywphyryopi",
-    "database": "remind-me",
-    "host": "remind-me-do-user-6579406-0.db.ondigitalocean.com",
+    "username": "root",
+    "password": "",
+    "database": "defaultdb",
+    "host": "localhost",
     "dialect": "mysql",
     "operatorsAliases": false,
     "port" : 25060
