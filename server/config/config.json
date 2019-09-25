@@ -2,7 +2,7 @@
   "development": {
     "username": "doadmin",
     "password": "s8td9gasu3g3uis2",
-    "database": "defaultdb",
+    "database": "remind-me",
     "host": "remind-me-do-user-6579406-0.db.ondigitalocean.com",
     "dialect": "mysql",
     "operatorsAliases": false,
