@@ -3,9 +3,8 @@
     "username": "root",
     "password": "",
     "database": "defaultdb",
-    "host": "remind-me-do-user-6579406-0.db.ondigitalocean.com",
+    "host": "localhost",
     "dialect": "mysql",
-    "operatorsAliases": false,
-    "port" : 25060
+    "operatorsAliases": false
   }
 }
