@@ -5,6 +5,7 @@
     "database": "remind-me",
     "host": "localhost",
     "dialect": "mysql",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "port": 25060
   }
 }
