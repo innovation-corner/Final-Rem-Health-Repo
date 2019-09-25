@@ -1,4 +1,14 @@
 {
+  
+  "production": {
+    "username": "doadmin",
+    "password": "s8td9gasu3g3uis2",
+    "database": "defaultdb",
+    "host": "private-remind-me-do-user-6579406-0.db.ondigitalocean.com",
+    "dialect": "mysql",
+    "operatorsAliases": false,
+    "port" : 25060
+  },
   "development": {
     "username": "root",
     "password": null,
@@ -14,14 +24,5 @@
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": false
-  },
-  "production": {
-    "username": "doadmin",
-    "password": "s8td9gasu3g3uis2",
-    "database": "defaultdb",
-    "host": "private-remind-me-do-user-6579406-0.db.ondigitalocean.com",
-    "dialect": "mysql",
-    "operatorsAliases": false,
-    "port" : 25060
   }
 }
