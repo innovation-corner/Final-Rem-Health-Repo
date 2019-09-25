@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       immunizationCode: {
         type: DataTypes.STRING,
       },
+      qrCode: {
+        type: DataTypes.BLOB,
+      },
       dob: {
         type: DataTypes.STRING,
       },

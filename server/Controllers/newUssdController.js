@@ -1,11 +1,13 @@
 const ussdMenu = require("ussd-menu-builder");
 const moment = require("moment");
-let menu = new ussdMenu();
 const { Info } = require("../models");
 const { Temp } = require("../models");
 const sms = require("../Services/SmsService");
 const messageService = require("../Services/NotificationService");
 const stateCode = require("../Services/stateService");
+const { generate } = require("../Services/QrCodeService");
+
+let menu = new ussdMenu();
 
 module.exports = {
   async regChild(req, res) {
@@ -48,10 +50,15 @@ module.exports = {
         } else if (info.id >= 1000) {
           imCode = code + info.id;
         }
-        await Info.update(
-          { immunizationCode: imCode, state },
-          { where: { name: data.name, phonenumber: data.phonenumber } }
-        );
+        console.log('1',info);
+        info.immunizationCode = imCode;
+        const qrCode = await generate(info.immunizationCode);
+
+        console.log(qrCode);
+        console.log('2',info);
+        info.qrCode = qrCode;
+        info.state = state;
+        await info.save();
 
         const due = moment()
           .subtract(7, "days")

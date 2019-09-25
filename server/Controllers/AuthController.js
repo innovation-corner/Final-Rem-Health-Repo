@@ -7,6 +7,7 @@ module.exports = {
   async register(req, res) {
     try {
       const { email, username, password, role, name, state } = req.body;
+      console.log(req.body)
 
       const checkUserEmail = await User.findOne({
         where: { email }

@@ -31,6 +31,11 @@ module.exports = {
       }
 
       if (details.password) {
+        if (!reqUser.validPassword(details.password)) {
+          return res.status(400).json({
+            message: "Incorrect password."
+          });
+        }
         if (details.password.trim() === "") {
           return res.status(400).json({ message: "invalid password" });
         }
@@ -65,15 +70,17 @@ module.exports = {
 
   async single(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
 
+      console.log("id", id);
       const user = await User.findOne({ where: { id } });
       if (!user) {
         return res.status(400).json({ message: "invalid selection" });
       }
 
-      return res.status(200).json({ message: "user retrieved", data });
+      return res.status(200).json({ message: "user retrieved", user });
     } catch (e) {
+      console.log(e);
       return res.status(400).json({ message: "An error occurred", e });
     }
   }

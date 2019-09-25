@@ -32,6 +32,9 @@ module.exports = {
       immunizationCode: {
         type: Sequelize.STRING
       },
+      qrCode: {
+        type: Sequelize.BLOB
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

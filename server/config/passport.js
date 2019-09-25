@@ -11,12 +11,7 @@ const { User } = require("../models/index");
 const authenticate = async (email, password, done) => {
   try {
     const user = await User.findOne({
-      [Op.or]: [
-        {
-          where: { email },
-          where: { username: email }
-        }
-      ]
+      where: { [Op.or]: [{ email }, { username: email }] }
     });
 
     if (!user) {
@@ -31,6 +26,7 @@ const authenticate = async (email, password, done) => {
     return done(null, user);
   } catch (e) {
     console.error("error", e);
+    return done(null, false, { message: "An error occured" });
   }
 };
 
