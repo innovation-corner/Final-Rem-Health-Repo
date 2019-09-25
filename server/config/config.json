@@ -1,11 +1,10 @@
 {
   "development": {
-    "username": "root",
-    "password": "",
+    "username": "nedu",
+    "password": "password",
     "database": "remind-me",
     "host": "localhost",
     "dialect": "mysql",
-    "operatorsAliases": false,
-    "port": 25060
+    "operatorsAliases": false
   }
 }
