@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "nedu",
-    "password": "",
+    "password": "i4qmytywphyryopi",
     "database": "remind-me",
     "host": "remind-me-do-user-6579406-0.db.ondigitalocean.com",
     "dialect": "mysql",
