@@ -73,9 +73,9 @@ class QrCode extends Component {
           //     qrCode.push(base64data);
           //   };
           //   console.log(qrCode);
-          image = webkitURL.createObjectURL(images);
-          console.log(image);
-          qrCode.push(image);
+          // image = webkitURL.createObjectURL(images);
+          // console.log(image);
+          // qrCode.push(image);
           this.setState({ num: 0, loading: false, disablePrint: false });
           return;
         });

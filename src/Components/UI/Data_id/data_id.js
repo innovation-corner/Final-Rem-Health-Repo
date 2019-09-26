@@ -193,6 +193,7 @@ export default class Data extends Component {
               immunizationCode,
               gender,
               state,
+              id,
               language
             } = data;
 

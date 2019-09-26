@@ -101,22 +101,28 @@ export default class MainDashboard extends PureComponent {
 
   async componentWillMount() {
     const token = await sessionStorage.getItem("token");
-    const totData = await fetch("http://localhost:8000/user/view", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+    try {
+      const totData = await fetch("http://localhost:8000/user/view", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(totData);
+
+      if (!totData.ok) {
+        return this.props.history.push("/login");
       }
-    });
-    if (!totData.ok) {
+      console.log(totData);
+      const { user } = await totData.json();
+
+      this.setState({
+        name: user.name
+      });
+    } catch (error) {
       return this.props.history.push("/login");
     }
-
-    const { user } = await totData.json();
-
-    this.setState({
-      name: user.name
-    });
   }
 
   async componentDidMount() {
