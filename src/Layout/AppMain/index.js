@@ -3,14 +3,6 @@ import React, { Suspense, lazy, Fragment } from "react";
 
 import { ToastContainer } from "react-toastify";
 
-const Dashboards = lazy(() => import("../../DemoPages/Dashboards"));
-
-const Widgets = lazy(() => import("../../DemoPages/Widgets"));
-const Elements = lazy(() => import("../../DemoPages/Elements"));
-const Components = lazy(() => import("../../DemoPages/Components"));
-const Charts = lazy(() => import("../../DemoPages/Charts"));
-const Forms = lazy(() => import("../../DemoPages/Forms"));
-const Tables = lazy(() => import("../../DemoPages/Tables"));
 const RemindMe = lazy(() => import("../../Components/UI/Dashboard/"));
 const RemindMeData = lazy(() => import("../../Components/UI/Data/"));
 const Login = lazy(() => import("../../Components/Login"));
@@ -70,17 +62,7 @@ const AppMain = () => {
       >
         <Route exact path="/new" component={Add} />
       </Suspense>
-      <Suspense
-        fallback={
-          <div className="loader-container">
-            <div className="loader-container-inner">
-              <h6 className="mt-3">Please wait ...</h6>
-            </div>
-          </div>
-        }
-      >
-        <Route exact path="/charts" component={Charts} />
-      </Suspense>
+
       <Suspense
         fallback={
           <div className="loader-container">
