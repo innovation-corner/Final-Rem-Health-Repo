@@ -11,7 +11,7 @@ class SearchBox extends React.Component {
   searchHandler = e => {
     e.preventDefault();
     const token = sessionStorage.getItem("token");
-    fetch("http://localhost:8000/user/view", {
+    fetch("https://api.remhealth.co/user/view", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

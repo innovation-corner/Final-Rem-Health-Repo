@@ -27,7 +27,7 @@ class Login extends React.Component {
   };
   async componentWillMount() {
     const token = await sessionStorage.getItem("token");
-    const totData = await fetch(`http://localhost:8000/info/total`, {
+    const totData = await fetch(`https://api.remhealth.co/info/total`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ class Login extends React.Component {
     e.preventDefault();
     this.setState({ loading: true });
 
-    fetch("http://localhost:8000/auth/login", {
+    fetch("https://api.remhealth.co/auth/login", {
       method: "POST",
       body: JSON.stringify({
         email: this.state.username,

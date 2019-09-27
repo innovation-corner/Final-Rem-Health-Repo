@@ -61,7 +61,7 @@ export default class Pie extends Component {
       .toISOString();
     const today = moment().toISOString();
 
-    const totData = await fetch(`http://localhost:8000/info/total`, {
+    const totData = await fetch(`https://api.remhealth.co/info/total`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

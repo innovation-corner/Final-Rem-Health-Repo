@@ -81,7 +81,7 @@ export default class Data extends Component {
 
   async componentWillMount() {
     const token = await sessionStorage.getItem("token");
-    const totData = await fetch("http://localhost:8000/user/view", {
+    const totData = await fetch("https://api.remhealth.co/user/view", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export default class Data extends Component {
 
     console.log(this.props);
     const { id } = this.props.match.params;
-    const response = await fetch(`http://localhost:8000/info/view/${id}`, {
+    const response = await fetch(`https://api.remhealth.co/info/view/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -158,7 +158,7 @@ export default class Data extends Component {
     if (this.state.button == "Save") {
       this.setState({ loading: true });
     }
-    fetch(`http://localhost:8000/info/edit/${this.state.id}`, {
+    fetch(`https://api.remhealth.co/info/edit/${this.state.id}`, {
       method: "PUT",
       body: JSON.stringify({
         email: this.state.email,

@@ -34,7 +34,7 @@ class Add extends React.Component {
   };
   async componentDidMount() {
     const token = await sessionStorage.getItem("token");
-    const totData = await fetch("http://localhost:8000/user/view", {
+    const totData = await fetch("https://api.remhealth.co/user/view", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

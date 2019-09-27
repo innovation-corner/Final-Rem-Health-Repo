@@ -102,7 +102,7 @@ export default class MainDashboard extends PureComponent {
   async componentWillMount() {
     const token = await sessionStorage.getItem("token");
     try {
-      const totData = await fetch("http://localhost:8000/user/view", {
+      const totData = await fetch("https://api.remhealth.co/user/view", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -172,7 +172,7 @@ export default class MainDashboard extends PureComponent {
 
     const { data } = await this.checkRegistrations(month, today);
 
-    const totData = await fetch(`http://localhost:8000/info/total`, {
+    const totData = await fetch(`https://api.remhealth.co/info/total`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -213,7 +213,7 @@ export default class MainDashboard extends PureComponent {
   }
   async getData(monthStart, monthEnd, month) {
     const res = await fetch(
-      `http://localhost:8000/info/list?dateFrom=${monthStart}&dateTo=${monthEnd}`,
+      `https://api.remhealth.co/info/list?dateFrom=${monthStart}&dateTo=${monthEnd}`,
       {
         method: "GET",
         headers: {
@@ -263,7 +263,7 @@ export default class MainDashboard extends PureComponent {
     perPage = perPage || 50;
     currentPage = currentPage - 1 || 0;
     const res = await fetch(
-      `http://localhost:8000/info/list?dateFrom=${dateFrom}&dateTo=${dateTo}&currentPage=${currentPage}&perPage=${perPage}`,
+      `https://api.remhealth.co/info/list?dateFrom=${dateFrom}&dateTo=${dateTo}&currentPage=${currentPage}&perPage=${perPage}`,
       {
         method: "GET",
         headers: {
@@ -283,7 +283,7 @@ export default class MainDashboard extends PureComponent {
     let end = moment().toISOString();
 
     const res = await fetch(
-      `http://localhost:8000/info/date?dateFrom=${monthStart}&dateTo=${end}`,
+      `https://api.remhealth.co/info/date?dateFrom=${monthStart}&dateTo=${end}`,
       {
         method: "GET",
         headers: {

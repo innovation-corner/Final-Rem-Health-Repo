@@ -30,7 +30,7 @@ class UserBox extends React.Component {
   async componentDidMount() {
     const token = sessionStorage.getItem("token");
 
-    const response = await fetch("http://localhost:8000/user/view", {
+    const response = await fetch("https://api.remhealth.co/user/view", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
