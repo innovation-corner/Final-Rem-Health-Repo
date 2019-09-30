@@ -41,6 +41,7 @@ export default class Data extends Component {
     input: "",
     dateTo: "",
     error: "",
+    message: "",
     dateFrom: "",
     activeSearch: false,
     totalData: [],
@@ -53,6 +54,15 @@ export default class Data extends Component {
       autoClose: 3000,
       position: "top-right",
       type: "error",
+      hideProgressBar: true
+    }));
+
+  retrievedData = () =>
+    (this.toastId = toast(this.state.message, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "success",
       hideProgressBar: true
     }));
 
@@ -78,7 +88,6 @@ export default class Data extends Component {
   async componentDidMount() {
     const token = await sessionStorage.getItem("token");
 
-    console.log(this.state.pageOfItems);
     const totData = await fetch(`https://api.remhealth.co/info/list`, {
       method: "GET",
       headers: {
@@ -112,7 +121,6 @@ export default class Data extends Component {
         }
       })
         .then(res => {
-          console.log(res, "hi");
           if (res.status != 200) {
             this.setState(
               { totalData: [], error: "No Data Found" },
@@ -123,16 +131,18 @@ export default class Data extends Component {
           return res.json();
         })
         .then(res => {
-          this.setState({ totalData: res.data.rows });
+          this.setState(
+            { totalData: res.data.rows, message: "Data retrieved" },
+            this.retrievedData
+          );
         });
     }
-    if(this.state.activeSearch)
-    this.setState({ error: "No search criteria" }, this.noData);
+    if (this.state.activeSearch)
+      this.setState({ error: "No search criteria" }, this.noData);
   };
 
-  filterHandler = e => {
+  filterHandler = async e => {
     e.preventDefault();
-    console.log("hi");
     let url;
     if (this.state.filterBy == "Dob") {
       url = "https://api.remhealth.co/info/date";
@@ -142,14 +152,13 @@ export default class Data extends Component {
     const start = moment(this.state.dateFrom);
     const end = moment(this.state.dateTo);
     if (start.diff(end, "days") > 0) {
-      console.log("hihi");
       this.setState({ error: "Please check the dates" }, this.noData);
       return;
     }
 
     if (this.state.dateFrom != "" && this.state.dateFrom != "") {
       const token = sessionStorage.getItem("token");
-      fetch(
+      await fetch(
         `${url}?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`,
         {
           method: "GET",
@@ -171,9 +180,10 @@ export default class Data extends Component {
           return res.json();
         })
         .then(res => {
-          console.log(res);
-          this.setState({ totalData: res.data });
+          this.setState({ totalData: res.data, message: "Data retrieved" },
+            this.retrievedData );
         });
+        return;
     }
     this.setState({ error: "Please select dates" }, this.noData);
   };
