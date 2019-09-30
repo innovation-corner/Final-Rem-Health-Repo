@@ -165,7 +165,7 @@ class Add extends React.Component {
                         onChange={this.onChangeHandler}
                         disabled={this.state.disableState}
                       >
-                        <select>--State--</select>
+                        <option defaultValue>--State--</option>
                         {this.state.sor.map(sors => {
                           return (
                             <option key={sors} value={sors}>

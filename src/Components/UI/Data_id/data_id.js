@@ -283,7 +283,7 @@ export default class Data extends Component {
                               name="soo"
                               id="state"
                               onChange={this.onChangeHandler}
-                              disabled={this.state.disableState}
+                              disabled={this.state.disableState || this.state.disableInput}
                             >
                               <option>--State--</option>
                               {this.state.sor.map(sors => {

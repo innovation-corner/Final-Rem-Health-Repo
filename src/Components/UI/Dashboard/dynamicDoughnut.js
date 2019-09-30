@@ -33,22 +33,13 @@ export default class Pie extends Component {
     const total = this.state.totalLength;
     let malePercentage, femalePercentage;
 
-    if (this.state.totalData.length <= 1) {
-      if (this.state.totalData[0].gender == "Female") {
-        femalePercentage = 100;
-        malePercentage = 0;
-      }
-      femalePercentage = 0;
-      malePercentage = 100;
-    } else {
-      const females = this.state.totalData.filter(data => {
-        return data.gender == "Female";
-      });
-      const femaleLength = females.length;
+    const females = this.state.totalData.filter(data => {
+      return data.gender == "Female";
+    });
+    const femaleLength = females.length;
 
-      femalePercentage = (femaleLength / total) * 100;
-      malePercentage = 100 - femalePercentage;
-    }
+    femalePercentage = (femaleLength / total) * 100;
+    malePercentage = 100 - femalePercentage;
     return { femalePercentage, malePercentage };
   }
 

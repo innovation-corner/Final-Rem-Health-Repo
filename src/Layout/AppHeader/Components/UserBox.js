@@ -129,7 +129,7 @@ class UserBox extends React.Component {
               <div className="widget-content-left  ml-3 header-user-info">
                 <div className="widget-heading">{this.state.name}</div>
                 <div className="widget-subheading">
-                  {this.state.region + " state"}
+                  {this.state.region ? this.state.region + " state": null}
                 </div>
               </div>
 

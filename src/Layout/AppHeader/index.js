@@ -7,7 +7,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import HeaderLogo from '../AppLogo';
 
-import SearchBox from './Components/SearchBox';
+// import SearchBox from './Components/SearchBox';
 import UserBox from './Components/UserBox';
 
 class Header extends React.Component {
@@ -34,9 +34,9 @@ class Header extends React.Component {
                         "app-header__content",
                         {'header-mobile-open': enableMobileMenuSmall},
                     )}>
-                        <div className="app-header-left">
+                        {/* <div className="app-header-left">
                             <SearchBox/>
-                        </div>
+                        </div> */}
                         <div className="app-header-right">
                             <UserBox/>
                         </div>

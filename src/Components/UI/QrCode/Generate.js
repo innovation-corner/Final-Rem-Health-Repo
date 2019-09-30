@@ -24,13 +24,32 @@ class QrCode extends Component {
     loading: false,
     disablePrint: true
   };
+  async componentDidMount() {
+    const token = await sessionStorage.getItem("token");
+    const totData = await fetch("https://api.remhealth.co/user/view", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if (!totData.ok) {
+      return this.props.history.push("/login");
+    }
+
+    const { user } = await totData.json();
+
+    if (user.role !== "superAdmin") {
+      return this.props.history.push("/home");
+    }
+  }
 
   onChangeHandler = e => {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  submitHandler = e => {
+  submitHandler = async e => {
     e.preventDefault();
     this.setState({ loading: true });
     const generateCode = (length, chars) => {
@@ -50,38 +69,70 @@ class QrCode extends Component {
     for (let i = 0; i < num; i++) {
       const randomCode = generateCode(21);
 
-      fetch(
+      const res = await fetch(
         `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
         {
           method: "POST"
         }
-      )
-        .then(res => {
-          console.log(res);
-          return res.blob();
-        })
-        .then(images => {
-          // Then create a local URL for that image and print it
-          //   image = URL.createObjectURL(images);
-          //   var reader = new Image();
-          //   console.log(image);
-          //   reader.readAsDataURL(image);
-          //   reader.onloadend = function() {
-          //     var base64data = reader.result;
-          //     console.log(base64data.substr(base64data.indexOf(",") + 1));
+      );
 
-          //     qrCode.push(base64data);
-          //   };
-          //   console.log(qrCode);
-          // image = webkitURL.createObjectURL(images);
-          // console.log(image);
-          // qrCode.push(image);
-          this.setState({ num: 0, loading: false, disablePrint: false });
-          return;
-        });
+      const images = await res.blob();
+
+      // Then create a local URL for that image and print it
+      // image = URL.createObjectURL(images);
+      // var reader = images.toDataUrl();
+      // console.log(reader)
+      // console.log(images);
+      // reader.readAsDataURL(image);
+      // reader.onloadend = function() {
+      //   var base64data = reader.result;
+      //   console.log(base64data.substr(base64data.indexOf(",") + 1));
+
+      //   qrCode.push(base64data);
+      // };
+      // console.log(qrCode);
+
+      image = await URL.createObjectURL(images);
+      // console.log(reader);
+
+      // const convertURIToImageData = async URI => {
+      //   return new Promise(function(resolve, reject) {
+      //     console.log(URI);
+      //     if (URI == null) return reject();
+      //     var canvas = document.createElement("canvas"),
+      //       context = canvas.getContext("2d"),
+      //       image = new Image();
+      //     image.addEventListener(
+      //       "load",
+      //       function() {
+      //         canvas.width = image.width;
+      //         canvas.height = image.height;
+      //         context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      //         resolve(context.getImageData(0, 0, canvas.width, canvas.height));
+      //       },
+      //       false
+      //     );
+      //     image.src = URI;
+      //   });
+      // };
+
+      // var URI = `data:image/x-icon;base64,${images}`;
+
+      // const data = await convertURIToImageData(URI);
+      // // Here you can use imageData
+      // console.log("hi");
+      // console.log(data);
+
+      // console.log(image);
+      qrCode.push(image);
     }
-    this.setState({ randomCode: qrCode });
-    console.log(image);
+    this.setState({
+      randomCode: qrCode,
+      num: 0,
+      loading: false,
+      disablePrint: false
+    });
+    // console.log(image);
   };
   print = e => {
     e.preventDefault();
@@ -122,14 +173,14 @@ class QrCode extends Component {
                         <Col md={2}></Col>
                         <Col md={4}>
                           <FormGroup>
-                            <Label for="num">Amount</Label>
+                            <Label for="num">Quantity</Label>
                             <Input
                               value={this.state.num}
                               required
                               type="number"
                               name="num"
                               id="num"
-                              placeholder="Enter Amount"
+                              placeholder="Enter qty"
                               onChange={this.onChangeHandler}
                             />
                           </FormGroup>

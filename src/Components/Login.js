@@ -117,8 +117,8 @@ class Login extends React.Component {
               <CardTitle style={{ textAlign: "center" }}>Login</CardTitle>
               <Form>
                 <Row form>
-                  <Col md={4}></Col>
-                  <Col md={4}>
+                  <Col md="4"></Col>
+                  <Col md="4">
                     <FormGroup>
                       <Label for="exampleEmail11">Username/Email</Label>
                       <Input
@@ -130,11 +130,6 @@ class Login extends React.Component {
                         onChange={this.onChangeHandler}
                       />
                     </FormGroup>
-                  </Col>
-                </Row>
-                <Row form>
-                  <Col md={4}></Col>
-                  <Col md={4}>
                     <FormGroup>
                       <Label for="examplePassword11">Password</Label>
                       <Input
@@ -146,12 +141,7 @@ class Login extends React.Component {
                         onChange={this.onChangeHandler}
                       />
                     </FormGroup>
-                  </Col>
-                </Row>
-                {!this.state.loading ? (
-                  <Row form>
-                    <Col md={4}></Col>
-                    <Col md={4}>
+                    {!this.state.loading ? (
                       <Button
                         color="success"
                         className="mt-2"
@@ -159,21 +149,16 @@ class Login extends React.Component {
                       >
                         Sign in
                       </Button>
-                    </Col>
-                  </Row>
-                ) : (
-                  <Row form>
-                    <Col md={4}></Col>
-                    <Col md={4}>
+                    ) : (
                       <div
                         className="spinner-border text-success"
                         role="status"
                       >
                         <span className="sr-only">Loading...</span>
                       </div>
-                    </Col>
-                  </Row>
-                )}
+                    )}
+                  </Col>
+                </Row>
               </Form>
             </CardBody>
           </Card>
