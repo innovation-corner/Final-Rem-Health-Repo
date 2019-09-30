@@ -40,13 +40,15 @@ export default class Data extends Component {
     filterBy: "Dob",
     input: "",
     dateTo: "",
+    error: "",
     dateFrom: "",
     activeSearch: false,
     totalData: [],
     pageOfItems: []
   };
+
   noData = () =>
-    (this.toastId = toast("No Data Found", {
+    (this.toastId = toast(this.state.error, {
       transition: Bounce,
       autoClose: 3000,
       position: "top-right",
@@ -112,7 +114,10 @@ export default class Data extends Component {
         .then(res => {
           console.log(res, "hi");
           if (res.status != 200) {
-            this.setState({ totalData: [] }, this.noData);
+            this.setState(
+              { totalData: [], error: "No Data Found" },
+              this.noData
+            );
             return;
           }
           return res.json();
@@ -121,42 +126,56 @@ export default class Data extends Component {
           this.setState({ totalData: res.data.rows });
         });
     }
+    if(this.state.activeSearch)
+    this.setState({ error: "No search criteria" }, this.noData);
   };
 
   filterHandler = e => {
     e.preventDefault();
-    console.log('hi')
+    console.log("hi");
     let url;
     if (this.state.filterBy == "Dob") {
       url = "https://api.remhealth.co/info/date";
     } else {
       url = "https://api.remhealth.co/info/list";
     }
-    const start = moment(this.state.dateFrom).toIsoString();
-    const end = moment(this.state.dateTo).toIsoString();
+    const start = moment(this.state.dateFrom);
+    const end = moment(this.state.dateTo);
+    if (start.diff(end, "days") > 0) {
+      console.log("hihi");
+      this.setState({ error: "Please check the dates" }, this.noData);
+      return;
+    }
 
-    if (start != "" && end ) {
+    if (this.state.dateFrom != "" && this.state.dateFrom != "") {
       const token = sessionStorage.getItem("token");
-      fetch(`${url}?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+      fetch(
+        `${url}?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
         .then(res => {
           console.log(res, "hi");
           if (res.status != 200) {
-            this.setState({ totalData: [] }, this.noData);
+            this.setState(
+              { totalData: [], error: "No data found" },
+              this.noData
+            );
             return;
           }
           return res.json();
         })
         .then(res => {
-          console.log(res)
-          this.setState({ totalData: res.data});
+          console.log(res);
+          this.setState({ totalData: res.data });
         });
     }
+    this.setState({ error: "Please select dates" }, this.noData);
   };
 
   onChangeHandler = e => {
