@@ -78,52 +78,9 @@ class QrCode extends Component {
 
       const images = await res.blob();
 
-      // Then create a local URL for that image and print it
-      // image = URL.createObjectURL(images);
-      // var reader = images.toDataUrl();
-      // console.log(reader)
-      // console.log(images);
-      // reader.readAsDataURL(image);
-      // reader.onloadend = function() {
-      //   var base64data = reader.result;
-      //   console.log(base64data.substr(base64data.indexOf(",") + 1));
-
-      //   qrCode.push(base64data);
-      // };
-      // console.log(qrCode);
-
+     
       image = await URL.createObjectURL(images);
-      // console.log(reader);
-
-      // const convertURIToImageData = async URI => {
-      //   return new Promise(function(resolve, reject) {
-      //     console.log(URI);
-      //     if (URI == null) return reject();
-      //     var canvas = document.createElement("canvas"),
-      //       context = canvas.getContext("2d"),
-      //       image = new Image();
-      //     image.addEventListener(
-      //       "load",
-      //       function() {
-      //         canvas.width = image.width;
-      //         canvas.height = image.height;
-      //         context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      //         resolve(context.getImageData(0, 0, canvas.width, canvas.height));
-      //       },
-      //       false
-      //     );
-      //     image.src = URI;
-      //   });
-      // };
-
-      // var URI = `data:image/x-icon;base64,${images}`;
-
-      // const data = await convertURIToImageData(URI);
-      // // Here you can use imageData
-      // console.log("hi");
-      // console.log(data);
-
-      // console.log(image);
+     
       qrCode.push(image);
     }
     this.setState({
@@ -132,7 +89,6 @@ class QrCode extends Component {
       loading: false,
       disablePrint: false
     });
-    // console.log(image);
   };
   print = e => {
     e.preventDefault();

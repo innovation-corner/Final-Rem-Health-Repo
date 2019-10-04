@@ -30,6 +30,7 @@ export default class Data extends Component {
     language: "",
     phonenumber: "",
     dob: "",
+    qrCode: "",
     name: "",
     gender: "",
     disableState: true,
@@ -139,6 +140,22 @@ export default class Data extends Component {
       language,
       soo: state
     });
+
+    let image;
+    let randomCode = data.qrCode;
+    if (data.qrCode) {
+      const res = await fetch(
+        `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
+        {
+          method: "POST"
+        }
+      );
+
+      const images = await res.blob();
+
+      image = await URL.createObjectURL(images);
+    }
+    this.setState({ qrCode: image });
   }
 
   onChangeHandler = e => {
@@ -237,196 +254,205 @@ export default class Data extends Component {
                       Registration Info
                     </CardTitle>
                     <Form>
-                      <Row form>
-                        <Col md={2}></Col>
+                      <Row>
                         <Col md={4}>
-                          <FormGroup>
-                            <Label for="name">Full Name</Label>
-                            <Input
-                              value={this.state.name}
-                              required
-                              type="text"
-                              name="name"
-                              id="name"
-                              placeholder="Enter full name"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableInput}
-                            />
-                          </FormGroup>
+                          <Row>
+                            <Col md={12}>
+                              {this.state.qrCode? this.state.qrCode : 'No Qr Code'}
+                            </Col>
+                          </Row>
                         </Col>
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="dob">D.O.B</Label>
-                            <Input
-                              value={moment(this.state.dob).format(
-                                "YYYY-MM-DD"
-                              )}
-                              type="date"
-                              required
-                              name="dob"
-                              id="dob"
-                              max={max}
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableInput}
-                            />
-                          </FormGroup>
+                        <Col md={8}>
+                          <Row form>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="name">Full Name</Label>
+                                <Input
+                                  value={this.state.name}
+                                  required
+                                  type="text"
+                                  name="name"
+                                  id="name"
+                                  placeholder="Enter full name"
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="dob">D.O.B</Label>
+                                <Input
+                                  value={moment(this.state.dob).format(
+                                    "YYYY-MM-DD"
+                                  )}
+                                  type="date"
+                                  required
+                                  name="dob"
+                                  id="dob"
+                                  max={max}
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row form>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="state">State</Label>
+                                <Input
+                                  value={this.state.soo}
+                                  type="select"
+                                  name="soo"
+                                  id="state"
+                                  onChange={this.onChangeHandler}
+                                  disabled={
+                                    this.state.disableState ||
+                                    this.state.disableInput
+                                  }
+                                >
+                                  <option>--State--</option>
+                                  {this.state.sor.map(sors => {
+                                    return (
+                                      <option key={sors} value={sors}>
+                                        {sors}
+                                      </option>
+                                    );
+                                  })}
+                                </Input>
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="phonenumber">Phonenumber</Label>
+                                <Input
+                                  value={this.state.phonenumber}
+                                  type="text"
+                                  name="phonenumber"
+                                  id="phonenumber"
+                                  required
+                                  placeholder="Phone Number"
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row form>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="gender">Gender</Label>
+                                <Input
+                                  value={this.state.gender}
+                                  type="select"
+                                  name="gender"
+                                  id="gender"
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                >
+                                  <option>Male</option>
+                                  <option>Female</option>
+                                </Input>
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="language">Language</Label>
+                                <Input
+                                  value={this.state.language}
+                                  type="select"
+                                  name="language"
+                                  id="language"
+                                  placeholder="language"
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                >
+                                  <option>English</option>
+                                  <option>Pidgin</option>
+                                  <option>Igbo</option>
+                                  <option>Yoruba</option>
+                                  <option>Hausa</option>
+                                </Input>
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row form>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="immunizationCode">
+                                  Immunization Code
+                                </Label>
+                                <Input
+                                  value={this.state.immunizationCode}
+                                  type="text"
+                                  name="immunizationCode"
+                                  id="immunizationCode"
+                                  onChange={this.onChangeHandler}
+                                  disabled
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="email">Email</Label>
+                                <Input
+                                  value={this.state.email}
+                                  type="email"
+                                  name="email"
+                                  id="email"
+                                  placeholder="yourmail@host.com"
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          {!this.state.loading ? (
+                            <Row form>
+                              <Col md={6}>
+                                <Button
+                                  color="success"
+                                  className="mt-2"
+                                  onClick={this.submitHandler}
+                                >
+                                  {this.state.button}
+                                </Button>
+                                {this.state.cancel ? (
+                                  // <Col md={4}>
+                                  <Button
+                                    style={{ marginLeft: "5px" }}
+                                    color="warning"
+                                    className="mt-2"
+                                    onClick={() =>
+                                      this.setState({
+                                        cancel: false,
+                                        button: "Edit",
+                                        disableInput: true
+                                      })
+                                    }
+                                  >
+                                    Cancel
+                                  </Button>
+                                ) : // </Col>
+                                null}
+                              </Col>
+                            </Row>
+                          ) : (
+                            <Row form>
+                              <Col md={6}></Col>
+                              <Col md={4}>
+                                <div
+                                  className="spinner-border text-success"
+                                  role="status"
+                                >
+                                  <span className="sr-only">Loading...</span>
+                                </div>
+                              </Col>
+                            </Row>
+                          )}
                         </Col>
                       </Row>
-                      <Row form>
-                        <Col md={2}></Col>
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="state">State</Label>
-                            <Input
-                              value={this.state.soo}
-                              type="select"
-                              name="soo"
-                              id="state"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableState || this.state.disableInput}
-                            >
-                              <option>--State--</option>
-                              {this.state.sor.map(sors => {
-                                return (
-                                  <option key={sors} value={sors}>
-                                    {sors}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="phonenumber">Phonenumber</Label>
-                            <Input
-                              value={this.state.phonenumber}
-                              type="text"
-                              name="phonenumber"
-                              id="phonenumber"
-                              required
-                              placeholder="Phone Number"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableInput}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row form>
-                        <Col md={2}></Col>
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="gender">Gender</Label>
-                            <Input
-                              value={this.state.gender}
-                              type="select"
-                              name="gender"
-                              id="gender"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableInput}
-                            >
-                              <option>Male</option>
-                              <option>Female</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="language">Language</Label>
-                            <Input
-                              value={this.state.language}
-                              type="select"
-                              name="language"
-                              id="language"
-                              placeholder="language"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableInput}
-                            >
-                              <option>English</option>
-                              <option>Pidgin</option>
-                              <option>Igbo</option>
-                              <option>Yoruba</option>
-                              <option>Hausa</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row form>
-                        <Col md={2}></Col>
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="immunizationCode">
-                              Immunization Code
-                            </Label>
-                            <Input
-                              value={this.state.immunizationCode}
-                              type="text"
-                              name="immunizationCode"
-                              id="immunizationCode"
-                              onChange={this.onChangeHandler}
-                              disabled
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="email">Email</Label>
-                            <Input
-                              value={this.state.email}
-                              type="email"
-                              name="email"
-                              id="email"
-                              placeholder="yourmail@host.com"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableInput}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      {!this.state.loading ? (
-                        <Row form>
-                          <Col md={2}></Col>
-                          <Col md={4}>
-                            <Button
-                              color="success"
-                              className="mt-2"
-                              onClick={this.submitHandler}
-                            >
-                              {this.state.button}
-                            </Button>
-                            {this.state.cancel ? (
-                              // <Col md={4}>
-                              <Button
-                              style={{marginLeft: '5px'}}
-                                color="warning"
-                                className="mt-2"
-                                onClick={() =>
-                                  this.setState({
-                                    cancel: false,
-                                    button: "Edit",
-                                    disableInput: true
-                                  })
-                                }
-                              >
-                                Cancel
-                              </Button>
-                              // </Col>
-                            ) : null}
-                          </Col>
-                        </Row>
-                      ) : (
-                        <Row form>
-                          <Col md={6}></Col>
-                          <Col md={4}>
-                            <div
-                              className="spinner-border text-success"
-                              role="status"
-                            >
-                              <span className="sr-only">Loading...</span>
-                            </div>
-                          </Col>
-                        </Row>
-                      )}
                     </Form>
                   </CardBody>
                 </Card>

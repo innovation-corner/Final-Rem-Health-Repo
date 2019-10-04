@@ -184,9 +184,18 @@ export default class MainDashboard extends PureComponent {
     const totalLength = length.data.count;
     const totalData = length.data.rows;
 
+    if (!data) {
+      await this.setState({
+        data: [],
+        length: 0
+      });
+    } else {
+      await this.setState({
+        data: data.rows,
+        length: data.count
+      });
+    }
     await this.setState({
-      data: data.rows,
-      length: data.count,
       totalLength,
       totalData
     });
@@ -284,16 +293,7 @@ export default class MainDashboard extends PureComponent {
   /**--------------------------------------------------------------------------------------------------------------------- */
   async getbarChartInfo() {
     let femaleLength, maleLength;
-    let monthStart = moment()
-      .startOf("month")
-      .toISOString();
-
-    let monthEnd = moment()
-      .endOf("month")
-      .toISOString();
-
-    let month = moment().format("MMM");
-    const males = [];
+    let monthStart, monthEnd, month;
 
     for (let i = 5; i > -1; i--) {
       monthStart = moment()
@@ -322,12 +322,10 @@ export default class MainDashboard extends PureComponent {
             Females: femaleLength,
             Males: maleLength
           });
-
-          this.setState({ barChart: chartData });
-          return males.push({ X: month, y: maleLength });
         }
       }
     }
+    this.setState({ barChart: chartData });
   }
 
   render() {
