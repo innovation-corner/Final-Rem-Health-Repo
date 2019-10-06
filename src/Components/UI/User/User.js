@@ -89,6 +89,7 @@ class User extends React.Component {
     const { user } = await totData.json();
 
     if (user.role !== "superAdmin") {
+      alert('please contact remhealth to add a new user')
       return this.props.history.push("/home");
     }
   }

@@ -51,44 +51,45 @@ class QrCode extends Component {
 
   submitHandler = async e => {
     e.preventDefault();
-    this.setState({ loading: true });
-    const generateCode = (length, chars) => {
-      if (!chars) {
-        chars = "0123456789abcdefghijklmnopqrstuvwxyz";
-      }
-      let result = "";
-      for (let i = length; i > 0; --i) {
-        result += chars[Math.round(Math.random() * (chars.length - 1))];
-      }
-      return result;
-    };
-
-    const qrCode = [];
     const num = this.state.num;
-    let image;
-    for (let i = 0; i < num; i++) {
-      const randomCode = generateCode(21);
-
-      const res = await fetch(
-        `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
-        {
-          method: "POST"
+    if (num > 0) {
+      this.setState({ loading: true });
+      const generateCode = (length, chars) => {
+        if (!chars) {
+          chars = "0123456789abcdefghijklmnopqrstuvwxyz";
         }
-      );
+        let result = "";
+        for (let i = length; i > 0; --i) {
+          result += chars[Math.round(Math.random() * (chars.length - 1))];
+        }
+        return result;
+      };
 
-      const images = await res.blob();
+      const qrCode = [];
+      let image;
+      for (let i = 0; i < num; i++) {
+        const randomCode = generateCode(21);
 
-     
-      image = await URL.createObjectURL(images);
-     
-      qrCode.push(image);
+        const res = await fetch(
+          `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
+          {
+            method: "POST"
+          }
+        );
+
+        const images = await res.blob();
+
+        image = await URL.createObjectURL(images);
+
+        qrCode.push(image);
+      }
+      this.setState({
+        randomCode: qrCode,
+        num: 0,
+        loading: false,
+        disablePrint: false
+      });
     }
-    this.setState({
-      randomCode: qrCode,
-      num: 0,
-      loading: false,
-      disablePrint: false
-    });
   };
   print = e => {
     e.preventDefault();
@@ -136,6 +137,7 @@ class QrCode extends Component {
                               type="number"
                               name="num"
                               id="num"
+                              min = {0}
                               placeholder="Enter qty"
                               onChange={this.onChangeHandler}
                             />

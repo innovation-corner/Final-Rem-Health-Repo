@@ -341,7 +341,7 @@ export default class MainDashboard extends PureComponent {
         >
           <div>
             <PageTitle
-              heading={"Hello " + this.state.name + "! Welcome to Remind Me"}
+              heading={"Hello " + this.state.name + "! Welcome to RemHealth"}
               subheading=""
               icon="lnr-cog icon-gradient bg-mean-fruit"
             />

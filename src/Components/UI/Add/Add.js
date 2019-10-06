@@ -486,7 +486,7 @@ class Add extends React.Component {
             "Gwagwalada",
             "Kuje",
             "Kwali",
-            "Municipal Area Council"
+            "AMAC"
           ]
         });
         break;
@@ -585,7 +585,7 @@ class Add extends React.Component {
             "Igabi",
             "Ikara",
             "Jaba",
-            "Jema a",
+            "Jema'a",
             "Kachia",
             "Kaduna North",
             "Kaduna South",

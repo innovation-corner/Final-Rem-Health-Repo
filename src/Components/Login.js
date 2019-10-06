@@ -16,6 +16,7 @@ import {
 import { toast, Bounce } from "react-toastify";
 import { connect } from "react-redux";
 import { setUser } from "../store/actions/";
+import image from "../assets/utils/images/logo.png";
 
 class Login extends React.Component {
   state = {
@@ -83,6 +84,7 @@ class Login extends React.Component {
           return res.json().then(res => {
             const { responseObj, message } = res;
             sessionStorage.setItem("token", responseObj.token);
+            sessionStorage.setItem("role", responseObj.user.role);
             this.props.setUser(responseObj.user);
             this.setState({ loginMessage: message }, this.loginSuccess);
             this.props.history.push("/home");
@@ -114,11 +116,14 @@ class Login extends React.Component {
         >
           <Card className="main-card mb-3 login">
             <CardBody>
-              <CardTitle style={{ textAlign: "center" }}>Login</CardTitle>
               <Form>
                 <Row form>
-                  <Col md="4"></Col>
+                  <Col md="2"></Col>
                   <Col md="4">
+                    <img src={image} />
+                  </Col>
+                  <Col md="4">
+                    <CardTitle style={{ textAlign: "cenleftter" }}>Login</CardTitle>
                     <FormGroup>
                       <Label for="exampleEmail11">Username/Email</Label>
                       <Input

@@ -48,12 +48,12 @@ class AppSidebar extends Component {
                             <Nav/>
                         </div>
                     </PerfectScrollbar>
-                    <div
+                    {/* <div
                         className={cx("app-sidebar-bg", backgroundImageOpacity)}
                         style={{
                             backgroundImage: enableBackgroundImage ? 'url(' + backgroundImage + ')' : null
                         }}>
-                    </div>
+                    </div> */}
                 </ReactCSSTransitionGroup>
             </Fragment>
         )
