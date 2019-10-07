@@ -1190,7 +1190,7 @@ class Add extends React.Component {
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="dob">D.O.B</Label>
+                      <Label for="dob">Date Of Birth</Label>
                       <Input
                         value={this.state.dob}
                         type="date"

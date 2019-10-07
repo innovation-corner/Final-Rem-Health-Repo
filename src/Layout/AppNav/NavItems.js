@@ -16,7 +16,7 @@ let MainNav = [
   },
   {
     icon: "pe-7s-disk",
-    label: "QrCode",
+    label: "QR Code",
     to: "/qrCode/generate"
   },
   {

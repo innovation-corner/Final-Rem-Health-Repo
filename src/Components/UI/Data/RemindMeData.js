@@ -275,8 +275,7 @@ export default class Data extends Component {
             .subtract(7, "days")
             .startOf("week")
             .toISOString();
-          dateTo = moment()
-            .toISOString();
+          dateTo = moment().toISOString();
           break;
 
         case "OPV 1":
@@ -546,7 +545,7 @@ export default class Data extends Component {
                           onChange={this.onChangeHandler}
                         >
                           <option defaultValue>Registration</option>
-                          <option>Dob</option>
+                          <option>Date Of Birth</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -762,8 +761,8 @@ export default class Data extends Component {
                       <thead>
                         <tr>
                           <th className="text-center">Id</th>
-                          <th>Name</th>
-                          <th className="text-center">DOB</th>
+                          <th className="text-center">Name</th>
+                          <th className="text-center">Date Of Birth</th>
                           <th className="text-center">Phonenumber</th>
                           <th className="text-center">Gender</th>
                           <th className="text-center">Immunization Code</th>

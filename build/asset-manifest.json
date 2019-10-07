@@ -1,14 +1,14 @@
 {
-  "main.css": "static/css/main.265d76e2.css",
-  "main.js": "static/js/main.9b82ea9a.js",
-  "static/js/0.83895f09.chunk.js": "static/js/0.83895f09.chunk.js",
-  "static/js/1.33390c40.chunk.js": "static/js/1.33390c40.chunk.js",
-  "static/js/2.3b3c3eea.chunk.js": "static/js/2.3b3c3eea.chunk.js",
-  "static/js/3.a789e8ea.chunk.js": "static/js/3.a789e8ea.chunk.js",
-  "static/js/4.30707846.chunk.js": "static/js/4.30707846.chunk.js",
-  "static/js/5.f324b182.chunk.js": "static/js/5.f324b182.chunk.js",
-  "static/js/6.af53813e.chunk.js": "static/js/6.af53813e.chunk.js",
-  "static/js/7.bdb6cad7.chunk.js": "static/js/7.bdb6cad7.chunk.js",
+  "main.css": "static/css/main.4b48e088.css",
+  "main.js": "static/js/main.2af6a0f2.js",
+  "static/js/0.8519727f.chunk.js": "static/js/0.8519727f.chunk.js",
+  "static/js/1.395bb851.chunk.js": "static/js/1.395bb851.chunk.js",
+  "static/js/2.650a1862.chunk.js": "static/js/2.650a1862.chunk.js",
+  "static/js/3.3b94262f.chunk.js": "static/js/3.3b94262f.chunk.js",
+  "static/js/4.48043a46.chunk.js": "static/js/4.48043a46.chunk.js",
+  "static/js/5.a2411181.chunk.js": "static/js/5.a2411181.chunk.js",
+  "static/js/6.435b0fbb.chunk.js": "static/js/6.435b0fbb.chunk.js",
+  "static/js/7.72aa361a.chunk.js": "static/js/7.72aa361a.chunk.js",
   "static/media/Linearicons-Free.eot": "static/media/Linearicons-Free.b9b7f23c.eot",
   "static/media/Linearicons-Free.svg?w118d": "static/media/Linearicons-Free.71ad32ce.svg",
   "static/media/Linearicons-Free.ttf?w118d": "static/media/Linearicons-Free.2f3e9f80.ttf",
@@ -19,6 +19,5 @@
   "static/media/Pe-icon-7-stroke.ttf?d7yf1v": "static/media/Pe-icon-7-stroke.01798bc1.ttf",
   "static/media/Pe-icon-7-stroke.woff?d7yf1v": "static/media/Pe-icon-7-stroke.b38ef310.woff",
   "static/media/city1.jpg": "static/media/city1.ebc5562d.jpg",
-  "static/media/logo.png": "static/media/logo.63736c51.png",
-  "static/media/rsz_logo-inverse2.png": "static/media/rsz_logo-inverse2.800089d8.png"
+  "static/media/logo.png": "static/media/logo.63736c51.png"
 }

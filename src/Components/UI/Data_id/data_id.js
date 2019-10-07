@@ -281,7 +281,7 @@ export default class Data extends Component {
                             </Col>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="dob">D.O.B</Label>
+                                <Label for="dob">Date Of Birth</Label>
                                 <Input
                                   value={moment(this.state.dob).format(
                                     "YYYY-MM-DD"

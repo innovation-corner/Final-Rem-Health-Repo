@@ -118,14 +118,14 @@ class Login extends React.Component {
             <CardBody>
               <Form>
                 <Row form>
-                  <Col md="1"></Col>
-                  <Col lg="6" md="12" sm="12">
-                    <div style={{ marginTop: "8vh" }}>
+                  <Col md="4"></Col>
+                  <Col md="4">
+                    <div style={{ textAlign: "center", marginTop: "6px" }}>
                       <img src={image} />
                     </div>
-                  </Col>
-                  <Col md="4">
-                    <CardTitle style={{ textAlign: "left" }}>Login</CardTitle>
+                    <CardTitle style={{ textAlign: "left", marginTop: "4px" }}>
+                      Login
+                    </CardTitle>
                     <FormGroup>
                       <Label for="exampleEmail11">Username/Email</Label>
                       <Input
