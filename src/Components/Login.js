@@ -16,7 +16,7 @@ import {
 import { toast, Bounce } from "react-toastify";
 import { connect } from "react-redux";
 import { setUser } from "../store/actions/";
-import image from "../assets/utils/images/logo.png";
+import image from "../assets/utils/images/rsz_logo-inverse2.png";
 
 class Login extends React.Component {
   state = {
@@ -118,12 +118,14 @@ class Login extends React.Component {
             <CardBody>
               <Form>
                 <Row form>
-                  <Col md="2"></Col>
-                  <Col md="4">
-                    <img src={image} />
+                  <Col md="1"></Col>
+                  <Col lg="6" md="12" sm="12">
+                    <div style={{ marginTop: "8vh" }}>
+                      <img src={image} />
+                    </div>
                   </Col>
                   <Col md="4">
-                    <CardTitle style={{ textAlign: "cenleftter" }}>Login</CardTitle>
+                    <CardTitle style={{ textAlign: "left" }}>Login</CardTitle>
                     <FormGroup>
                       <Label for="exampleEmail11">Username/Email</Label>
                       <Input
