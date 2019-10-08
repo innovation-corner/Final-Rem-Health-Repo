@@ -15,6 +15,8 @@ module.exports = {
       .toISOString();
 
     const info = await Info.findAll({});
+    
+    // immunization date
     const date = moment()
       .add(5, "days")
       .endOf("day")

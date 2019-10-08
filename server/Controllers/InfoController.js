@@ -1,5 +1,4 @@
-const { Info } = require("../models");
-const { User } = require("../models");
+const { Info, User } = require("../models");
 const { Op } = require("sequelize");
 const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
@@ -68,7 +67,7 @@ module.exports = {
 
       const data = await Info.findAll({ where: criteria });
 
-      if (!data) {
+      if (!data.length) {
         return res.status(401).json({ message: "No data" });
       }
 
@@ -155,7 +154,7 @@ module.exports = {
       }
       info.immunizationCode = imCode;
       const qrCode = await generate(info.immunizationCode);
-      console.log(qrCode)
+      console.log(qrCode);
       // info.qrCode = qrCode;
       await info.save();
 

@@ -4,37 +4,38 @@ module.exports = (sequelize, DataTypes) => {
     "Info",
     {
       name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       phonenumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       immunizationCode: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       qrCode: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING
       },
       dob: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       state: {
         type: DataTypes.STRING
       },
       language: {
-        type: DataTypes.ENUM("English","Pidgin","Yoruba","Hausa","Igbo"),
+        type: DataTypes.ENUM("English", "Pidgin", "Yoruba", "Hausa", "Igbo")
       },
       gender: {
-        type: DataTypes.ENUM("Male","Female"),
-      },
-      hospitalCode: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM("Male", "Female")
       }
     },
     {}
   );
   Info.associate = function(models) {
     // associations can be defined here
+    Info.hasMany(models.ImmunizationRecords, {
+      foreignKey: "immunizationCode",
+      as: 'immunizations'
+    });
   };
   return Info;
 };
