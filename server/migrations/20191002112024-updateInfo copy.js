@@ -2,13 +2,13 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn("Infos", "qrCode", {
+    return queryInterface.addColumn("Infos", "state", {
       type: Sequelize.STRING,
       allowNull: true
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn("Infos", "qrCode");
+    return queryInterface.removeColumn("Infos", "state");
   }
 };
