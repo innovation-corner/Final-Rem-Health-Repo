@@ -2,18 +2,25 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn("Infos", {
-      qrCode: { type: Sequelize.STRING, allowNull: true },
-      state: { type: Sequelize.STRING, allowNull: true },
-      lga: { type: Sequelize.STRING, allowNull: true }
+    queryInterface.addColumn("Infos", "qrCode", {
+      type: Sequelize.STRING,
+      allowNull: true
     });
+    queryInterface.addColumn("Infos", "state", {
+      type: Sequelize.STRING,
+      allowNull: true
+    });
+    queryInterface.addColumn("Infos", "lga", {
+      type: Sequelize.STRING,
+      allowNull: true
+    });
+    return;
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn("Infos", {
-      qrCode,
-      state,
-      lga
-    });
+    queryInterface.removeColumn("Infos", "qrCode");
+    queryInterface.removeColumn("Infos", "state");
+    queryInterface.removeColumn("Infos", "lga");
+    return;
   }
 };
