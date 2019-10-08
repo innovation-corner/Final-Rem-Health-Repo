@@ -68,7 +68,7 @@ module.exports = {
 
       const data = await Info.findAll({ where: criteria });
 
-      if (!data) {
+      if (!data.length) {
         return res.status(401).json({ message: "No data" });
       }
 

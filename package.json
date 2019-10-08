@@ -27,7 +27,8 @@
     "request": "^2.88.0",
     "sequelize": "^5.17.2",
     "ussd-menu-builder": "^1.1.1"
-  },"engines": {
+  },
+  "engines": {
     "node": "10.16.3"
   }
 }
