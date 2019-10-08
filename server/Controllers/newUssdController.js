@@ -1,7 +1,6 @@
 const ussdMenu = require("ussd-menu-builder");
 const moment = require("moment");
-const { Info } = require("../models");
-const { Temp } = require("../models");
+const { Info, Temp } = require("../models");
 const sms = require("../Services/SmsService");
 const messageService = require("../Services/NotificationService");
 const stateCode = require("../Services/stateService");
@@ -50,12 +49,12 @@ module.exports = {
         } else if (info.id >= 1000) {
           imCode = code + info.id;
         }
-        console.log('1',info);
+        console.log("1", info);
         info.immunizationCode = imCode;
         const qrCode = await generate(info.immunizationCode);
 
         console.log(qrCode);
-        console.log('2',info);
+        console.log("2", info);
         info.qrCode = qrCode;
         info.state = state;
         await info.save();

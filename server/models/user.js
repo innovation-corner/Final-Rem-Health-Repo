@@ -34,8 +34,20 @@ module.exports = (sequelize, DataTypes) => {
       state: {
         type: DataTypes.STRING
       },
+      phonenumber: {
+        type: DataTypes.STRING,
+        unique: {
+          args: true,
+          msg: "Phonenumber already exists!"
+        }
+      },
       role: {
-        type: DataTypes.ENUM("superAdmin",'nationalAdmin', "stateAdmin", "user"),
+        type: DataTypes.ENUM(
+          "superAdmin",
+          "nationalAdmin",
+          "stateAdmin",
+          "user"
+        ),
         defaultValue: "user"
       },
       password: {

@@ -18,7 +18,12 @@ module.exports = {
         type: Sequelize.DATE
       },
       hospitalCode: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        references: {
+          model: "Hospitals",
+          key: "code",
+          as: "PHC"
+        }
       },
       language: {
         type: Sequelize.STRING
@@ -33,7 +38,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       qrCode: {
-        type: Sequelize.BLOB
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

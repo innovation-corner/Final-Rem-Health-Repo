@@ -1,7 +1,7 @@
 module.exports = {
   async sixWeeks(language, child, date) {
     let message;
-    
+
     switch (language) {
       case "English":
         return (message = `Hi, your child ${child.name} 
@@ -202,7 +202,7 @@ module.exports = {
     }
   },
 
-  async fifteenMonths(language, child, date) {
+  async eighteenMonths(language, child, date) {
     let message;
 
     switch (language) {
@@ -277,5 +277,10 @@ module.exports = {
         return (message = `Sannu, ${child.name} ya kamata ya tafi immunization a ranar ${date}.
         Alurar hada da  (HPV Vaccine )`);
     }
+  },
+  async newUser(email, password) {
+    const message = `Hello! An account has been created for you at RemHealth.co. Your Login details are email: ${email}, password:
+    ${password}`;
+    return message;
   }
 };

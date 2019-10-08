@@ -1,5 +1,4 @@
-const { Info } = require("../models");
-const { User } = require("../models");
+const { Info, User } = require("../models");
 const { Op } = require("sequelize");
 const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
@@ -155,7 +154,7 @@ module.exports = {
       }
       info.immunizationCode = imCode;
       const qrCode = await generate(info.immunizationCode);
-      console.log(qrCode)
+      console.log(qrCode);
       // info.qrCode = qrCode;
       await info.save();
 
