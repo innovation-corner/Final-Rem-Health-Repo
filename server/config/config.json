@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "inform",
-    "host": "127.0.0.1",
+    "username": "nedu",
+    "password": "password",
+    "database": "remhealth",
+    "host": "localhost",
     "dialect": "mysql",
     "operatorsAliases": false
   }
