@@ -30,6 +30,8 @@ module.exports = {
           { phonenumber: search },
           { createdAt: search },
           { dob: search },
+          { state: search },
+          { lga: search },
           { language: search },
           { gender: search },
           { immunizationCode: search }
