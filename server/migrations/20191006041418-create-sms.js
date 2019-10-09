@@ -19,11 +19,7 @@ module.exports = {
       },
       sender: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "User",
-          key: "id",
-          as: "sender"
-        }
+        
       },
       createdAt: {
         allowNull: false,
