@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       state: {
         type: DataTypes.STRING
       },
+      lga: {
+        type: DataTypes.STRING
+      },
       language: {
         type: DataTypes.ENUM("English", "Pidgin", "Yoruba", "Hausa", "Igbo")
       },
@@ -32,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Info.associate = function(models) {
     // associations can be defined here
-    Info.hasMany(models.ImmunizationRecords, {
+    Info.hasMany(models.ImmunizationRecord, {
       foreignKey: "immunizationCode",
       as: 'immunizations'
     });
