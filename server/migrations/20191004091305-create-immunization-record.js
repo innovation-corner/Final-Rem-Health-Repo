@@ -13,11 +13,7 @@ module.exports = {
       },
       child: {
         type: Sequelize.STRING,
-        references: {
-          model: "Infos",
-          key: "immunizationCode",
-          as: "child"
-        }
+        
       },
       createdAt: {
         allowNull: false,
