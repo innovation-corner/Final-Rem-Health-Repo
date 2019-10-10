@@ -80,7 +80,7 @@ module.exports = {
 
       hosDetails.admin = user.id;
       const hospital = await Hospital.create(hosDetails);
-      let { code } = await stateCode.selectState(state, lga);
+      let { code } = await assignCode(state, lga);
       let hsCode;
 
       if (hospital.id < 10) {
