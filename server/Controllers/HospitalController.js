@@ -132,9 +132,8 @@ module.exports = {
       if (checkPhone) {
         return res.status(400).json({ message: "Phonenumber already exists" });
       }
-
-      if (checkUsername) {
-        return res.status(400).json({ message: "username already exists" });
+      if (checkEmail) {
+        return res.status(400).json({ message: "Email already exists" });
       }
 
       if (hospital.id < 10) {
@@ -165,6 +164,29 @@ module.exports = {
       }
 
       return res.status(200).json({ message: "retrieved hospital", hospital });
+    } catch (error) {
+      console.log(error);
+      error = error || error.toString();
+      return res.status(400).json({ message: "An error occured", error });
+    }
+  },
+  async viewAll(req, res) {
+    try {
+      const query = {}
+
+      if(req.user.role == 'stateAdmin'){
+        const user = await User.findOne({where:{id:req.user.id}})
+        query = {
+          state: user.state
+        }
+      }
+
+      const hospitals = await Hospital.findAll({where:{query}});
+      if (!hospitals.length) {
+        return res.status(400).json({ message: "No hospitals" });
+      }
+
+      return res.status(200).json({ message: "retrieved hospitals", hospitals });
     } catch (error) {
       console.log(error);
       error = error || error.toString();
