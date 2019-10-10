@@ -24,7 +24,7 @@ module.exports = {
         where: { username }
       });
 
-      const checkPhone= await User.findOne({
+      const checkPhone = await User.findOne({
         where: { phonenumber }
       });
 
@@ -172,12 +172,11 @@ module.exports = {
         }
       }
 
-      await User.update(
-        {
+      await User.update(data, {
+        where: {
           id: req.user.id
-        },
-        data
-      );
+        }
+      });
 
       return res
         .status(200)

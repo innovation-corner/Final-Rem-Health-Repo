@@ -27,6 +27,16 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   router.user
 );
+app.use(
+  "/hospital/",
+  passport.authenticate("jwt", { session: false }),
+  router.hs
+);
+app.use(
+  "/sms/",
+  passport.authenticate("jwt", { session: false }),
+  router.sms
+);
 
 // app.get("/", (req, res) =>
 //   res.status(200).send({

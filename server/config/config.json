@@ -1,5 +1,13 @@
 {
   "development": {
+    "username": "root",
+    "password": null,
+    "database": "inform",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "production": {
     "username": "nedu",
     "password": "password",
     "database": "remhealth",
