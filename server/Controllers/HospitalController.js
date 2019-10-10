@@ -78,9 +78,7 @@ module.exports = {
         role: user.role
       });
 
-      const responseObj = { user, token };
-
-      hosDetails.admin = user.id
+      hosDetails.admin = user.id;
       const hospital = await Hospital.create(hosDetails);
       let { code } = await stateCode.selectState(state, lga);
       let hsCode;
@@ -94,10 +92,10 @@ module.exports = {
       } else if (hospital.id >= 1000) {
         hsCode = hospital.id;
       }
-      await Hospital.update(
-        { id: hospital.id },
-        { code: `${code}-${hsCode}`}
-      );
+      hospital.code = `${code}-${hsCode}`;
+      await hospital.save();
+
+      const responseObj = { user, token, hospital };
 
       return res
         .status(200)
@@ -106,5 +104,71 @@ module.exports = {
       console.log(e);
       return res.status(400).json({ message: "An error occured", e });
     }
-  }
+  },
+
+  async edit(req, res) {
+    try {
+      const { name, phonenumber, email, address, state, lga, admin } = req.body;
+
+      const hosDetails = {
+        name,
+        phonenumber,
+        email,
+        address,
+        state,
+        lga,
+        admin,
+        username: phonenumber
+      };
+
+      const checkUserEmail = await User.findOne({
+        where: { email }
+      });
+
+      const checkPhone = await User.findOne({
+        where: { phonenumber }
+      });
+
+      if (checkPhone) {
+        return res.status(400).json({ message: "Phonenumber already exists" });
+      }
+
+      if (checkUsername) {
+        return res.status(400).json({ message: "username already exists" });
+      }
+
+      if (hospital.id < 10) {
+        hsCode = "000" + hospital.id;
+      } else if (hospital.id >= 10 && hospital.id < 99) {
+        hsCode = "00" + hospital.id;
+      } else if (hospital.id >= 100 && hospital.id < 999) {
+        hsCode = "0" + hospital.id;
+      } else if (hospital.id >= 1000) {
+        hsCode = hospital.id;
+      }
+      await Hospital.update(hosDetails, { where: { id: hospital.id } });
+
+      return res
+        .status(200)
+        .json({ message: "registration successful", responseObj });
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({ message: "An error occured", e });
+    }
+  },
+  async view(req, res) {
+    try {
+      const { id } = req.params;
+      const hospital = await Hospital.findOne({ where: { id } });
+      if (!hospital) {
+        return res.status(400).json({ message: "Invalid Selection" });
+      }
+
+      return res.status(200).json({ message: "retrieved hospital", hospital });
+    } catch (error) {
+      console.log(error);
+      error = error || error.toString();
+      return res.status(400).json({ message: "An error occured", error });
+    }
+  },
 };
