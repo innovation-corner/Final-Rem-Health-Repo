@@ -1,5 +1,5 @@
 {
-  "development": {
+  "production": {
     "username": "root",
     "password": null,
     "database": "inform",
@@ -7,7 +7,7 @@
     "dialect": "mysql",
     "operatorsAliases": false
   },
-  "production": {
+  "development": {
     "username": "nedu",
     "password": "password",
     "database": "remhealth",
