@@ -11,6 +11,7 @@ const Profile = lazy(() => import("../../Components/UI/Profile/"));
 const Data_id = lazy(() => import("../../Components/UI/Data_id/"));
 const Generate = lazy(() => import("../../Components/UI/QrCode/"));
 const User = lazy(() => import("../../Components/UI/User/"));
+const Sms = lazy(() => import("../../Components/UI/SMS/"));
 
 const AppMain = () => {
   return (
@@ -38,6 +39,18 @@ const AppMain = () => {
         }
       >
         <Route exact path="/data" component={RemindMeData} />
+      </Suspense>
+      
+      <Suspense
+        fallback={
+          <div className="loader-container">
+            <div className="loader-container-inner">
+              <h6 className="mt-3">Please wait ...</h6>
+            </div>
+          </div>
+        }
+      >
+        <Route exact path="/sms" component={Sms} />
       </Suspense>
 
       <Suspense

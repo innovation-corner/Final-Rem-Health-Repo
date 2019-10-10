@@ -16,7 +16,7 @@ import {
 import { toast, Bounce } from "react-toastify";
 import { connect } from "react-redux";
 import { setUser } from "../store/actions/";
-import image from "../assets/utils/images/rsz_logo-inverse2.png";
+import image from "../assets/utils/images/rsz_rem_health_logo_colored_sans_bg.png";
 
 class Login extends React.Component {
   state = {
@@ -114,15 +114,21 @@ class Login extends React.Component {
           transitionEnter={false}
           transitionLeave={false}
         >
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "20vh",
+              marginBottom: "-20vh"
+            }}
+          >
+            <img src={image} />
+          </div>
           <Card className="main-card mb-3 login">
             <CardBody>
               <Form>
                 <Row form>
                   <Col md="4"></Col>
                   <Col md="4">
-                    <div style={{ textAlign: "center", marginTop: "6px" }}>
-                      <img src={image} />
-                    </div>
                     <CardTitle style={{ textAlign: "left", marginTop: "4px" }}>
                       Login
                     </CardTitle>

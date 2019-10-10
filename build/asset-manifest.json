@@ -1,14 +1,15 @@
 {
   "main.css": "static/css/main.4b48e088.css",
-  "main.js": "static/js/main.2af6a0f2.js",
-  "static/js/0.8519727f.chunk.js": "static/js/0.8519727f.chunk.js",
-  "static/js/1.395bb851.chunk.js": "static/js/1.395bb851.chunk.js",
-  "static/js/2.650a1862.chunk.js": "static/js/2.650a1862.chunk.js",
-  "static/js/3.3b94262f.chunk.js": "static/js/3.3b94262f.chunk.js",
-  "static/js/4.48043a46.chunk.js": "static/js/4.48043a46.chunk.js",
-  "static/js/5.a2411181.chunk.js": "static/js/5.a2411181.chunk.js",
-  "static/js/6.435b0fbb.chunk.js": "static/js/6.435b0fbb.chunk.js",
-  "static/js/7.72aa361a.chunk.js": "static/js/7.72aa361a.chunk.js",
+  "main.js": "static/js/main.6ce8a2f6.js",
+  "static/js/0.5f2702c0.chunk.js": "static/js/0.5f2702c0.chunk.js",
+  "static/js/1.b3f24e75.chunk.js": "static/js/1.b3f24e75.chunk.js",
+  "static/js/2.fe50c00d.chunk.js": "static/js/2.fe50c00d.chunk.js",
+  "static/js/3.17a543d8.chunk.js": "static/js/3.17a543d8.chunk.js",
+  "static/js/4.ff93af12.chunk.js": "static/js/4.ff93af12.chunk.js",
+  "static/js/5.9d336cba.chunk.js": "static/js/5.9d336cba.chunk.js",
+  "static/js/6.571cdc13.chunk.js": "static/js/6.571cdc13.chunk.js",
+  "static/js/7.2b1345f6.chunk.js": "static/js/7.2b1345f6.chunk.js",
+  "static/js/8.cbe7f3e1.chunk.js": "static/js/8.cbe7f3e1.chunk.js",
   "static/media/Linearicons-Free.eot": "static/media/Linearicons-Free.b9b7f23c.eot",
   "static/media/Linearicons-Free.svg?w118d": "static/media/Linearicons-Free.71ad32ce.svg",
   "static/media/Linearicons-Free.ttf?w118d": "static/media/Linearicons-Free.2f3e9f80.ttf",
@@ -19,5 +20,6 @@
   "static/media/Pe-icon-7-stroke.ttf?d7yf1v": "static/media/Pe-icon-7-stroke.01798bc1.ttf",
   "static/media/Pe-icon-7-stroke.woff?d7yf1v": "static/media/Pe-icon-7-stroke.b38ef310.woff",
   "static/media/city1.jpg": "static/media/city1.ebc5562d.jpg",
-  "static/media/logo.png": "static/media/logo.63736c51.png"
+  "static/media/logo.png": "static/media/logo.63736c51.png",
+  "static/media/rsz_rem_health_logo_colored_sans_bg.png": "static/media/rsz_rem_health_logo_colored_sans_bg.09030e83.png"
 }

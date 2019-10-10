@@ -11,7 +11,7 @@ class Nav extends Component {
 
   render() {
     return (
-      <Fragment style={{color:'black'}}>
+      <Fragment>
         <h5 className="app-sidebar__heading">Menu</h5>
         <MetisMenu
           content={MainNav}

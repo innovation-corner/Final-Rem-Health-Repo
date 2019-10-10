@@ -37,14 +37,14 @@ export default class Data extends Component {
     dropdownOpen: false,
     activeTab1: "11",
     name: "",
+    role: "",
     input: "",
+    message: "",
     dateTo: "",
     error: "",
     message: "",
     dateFrom: "",
     gender: "Male",
-    role: "",
-    soo: "Abia",
     activeSearch: false,
     totalData: [],
     dateRangeType: "Registration",
@@ -52,18 +52,20 @@ export default class Data extends Component {
     pageOfItems: [],
     ageType: "Days",
     ageFromType: "Days",
+    disableState: true,
     ageFrom: "",
     ageToType: "Days",
     ageTo: "",
     vaccine: "BCG",
     searchCriteria: "",
-    searchByState: false,
-    searchByLga: false,
     searchByAge: false,
     searchByGender: false,
     searchByVaccine: false,
     dateRange: false,
+    searchByState: false,
+    searchByLga: false,
     ageRange: false,
+    soo: "Abia",
     lga: [],
     slga: "",
     sor: [
@@ -124,66 +126,6 @@ export default class Data extends Component {
       type: "success",
       hideProgressBar: true
     }));
-
-  async componentWillMount() {
-    const token = await sessionStorage.getItem("token");
-    const tdata = await fetch("https://api.remhealth.co/user/view", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    });
-    const { user } = await tdata.json();
-    if (!tdata.ok) {
-      return this.props.history.push("/login");
-    }
-
-    this.setState({
-      name: user.name
-    });
-  }
-
-  async componentDidMount() {
-    const token = await sessionStorage.getItem("token");
-    const tdata = await fetch("https://api.remhealth.co/user/view", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!tdata.ok) {
-      return this.props.history.push("/login");
-    }
-
-    const { user } = await tdata.json();
-
-    if (user.role === "superAdmin" || user.role === "nationalAdmin") {
-      this.setState({ disableState: false });
-    }
-    this.setState({
-      soo: user.state,
-      name: user.name,
-      role: user.role
-    });
-
-    const totData = await fetch(`https://api.remhealth.co/info/list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const length = await totData.json();
-    const totalData = length.data.rows;
-
-    await this.setState({
-      totalData
-    });
-  }
 
   handleState = () => {
     let states = this.state.soo;
@@ -1220,6 +1162,66 @@ export default class Data extends Component {
     }
   };
 
+  async componentWillMount() {
+    const token = await sessionStorage.getItem("token");
+    const tdata = await fetch("https://api.remhealth.co/user/view", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const { user } = await tdata.json();
+    if (!tdata.ok) {
+      return this.props.history.push("/login");
+    }
+
+    this.setState({
+      name: user.name
+    });
+  }
+
+  async componentDidMount() {
+    const token = await sessionStorage.getItem("token");
+    const tdata = await fetch("https://api.remhealth.co/user/view", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!tdata.ok) {
+      return this.props.history.push("/login");
+    }
+
+    const { user } = await tdata.json();
+
+    if (user.role === "superAdmin" || user.role === "nationalAdmin") {
+      this.setState({ disableState: false });
+    }
+    this.setState({
+      soo: user.state,
+      name: user.name,
+      role: user.role
+    });
+
+    const totData = await fetch(`https://api.remhealth.co/info/list`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const length = await totData.json();
+    const totalData = length.data.rows;
+
+    await this.setState({
+      totalData
+    });
+  }
+
   onChangePage(pageOfItems) {
     this.setState({ pageOfItems });
   }
@@ -1316,6 +1318,7 @@ export default class Data extends Component {
           searchByState: false,
           searchByLga: false
         });
+        break;
     }
   };
 
@@ -1513,37 +1516,10 @@ export default class Data extends Component {
           );
           return;
         }
-        return this.setState({ totalData: [], error: "No data found" }, this.noData);
+        this.setState({ totalData: [], error: "No data found" }, this.noData);
       }
-    } else if (this.state.searchCriteria == "State") {
-      if(!this.state.soo){
-        return;
-      }
-      let param = this.state.soo;
-      if (this.state.slga !== "") {
-        param = this.state.slga;
-      }
-      console.log(param)
-      console.log(this.state.soo)
-      console.log(this.state.slga)
-      const token = sessionStorage.getItem("token");
-      const res = await fetch(`${url}?search=${param}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      });
-      if (res.ok) {
-        const { data } = await res.json();
-        this.setState(
-          { totalData: data.rows, message: "Data retrieved" },
-          this.retrievedData
-        );
-        return;
-      }
-      return this.setState({ totalData: [], error: "No data found" }, this.noData);
     } else if (this.state.searchCriteria == "Age") {
+      console.log("hi");
       dateFrom = moment()
         .subtract(this.state.ageSearch, this.state.ageType)
         .startOf(this.state.ageType)
@@ -1611,7 +1587,7 @@ export default class Data extends Component {
 
   buttonHandler = e => {
     e.preventDefault();
-    this.setState({ activeSearch: !this.state.activeSearch, input:'' });
+    this.setState({ activeSearch: !this.state.activeSearch });
   };
 
   render() {
@@ -1631,7 +1607,7 @@ export default class Data extends Component {
                 <Row form>
                   <Col md={3}>
                     <FormGroup>
-                      <Label for="dob">Choose Criteria</Label>
+                      <Label for="dob">Choose Recipients</Label>
                       <Input
                         value={this.state.searchCriteria}
                         type="select"
@@ -1911,6 +1887,24 @@ export default class Data extends Component {
                       </FormGroup>
                     </Col>
                   ) : null}
+                  {this.state.searchByGender ? (
+                    <Col md={2}>
+                      <FormGroup>
+                        <Label for="gender">Gender</Label>
+                        <Input
+                          value={this.state.gender}
+                          type="select"
+                          required
+                          name="gender"
+                          id="gender"
+                          onChange={this.onChangeHandler}
+                        >
+                          <option defaultValue>Male</option>
+                          <option defaultValue>Female</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
                   {this.state.searchByVaccine ? (
                     <Col md={2}>
                       <FormGroup>
@@ -1968,79 +1962,33 @@ export default class Data extends Component {
                   </Col>
                 </Row>
                 <Card className="main-card mb-3">
-                  <div className="card-header">
-                    <div className="app-header-left">
-                      <SearchBox
-                        input={this.state.input}
-                        buttonHandler={this.buttonHandler}
-                        searchHandler={this.searchHandler}
-                        onChangeHandler={this.onChangeHandler}
-                        activeSearch={this.state.activeSearch}
-                      />
-                    </div>
-                    <div className="btn-actions-pane-right">
-                      <div role="group" className="btn-group-sm btn-group">
-                        <Link to="/new">
-                          <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
-                            <i className="pe-7s-plus btn-icon-wrapper"> </i>
-                          </button>
-                        </Link>
-                        Add New Data
-                      </div>
-                    </div>
-                  </div>
                   <div className="table-responsive">
-                    <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th className="text-center">Id</th>
-                          <th className="text-center">Name</th>
-                          <th className="text-center">Date Of Birth</th>
-                          <th className="text-center">Phonenumber</th>
-                          <th className="text-center">State</th>
-                          <th className="text-center">LGA</th>
-                          <th className="text-center">Gender</th>
-                          <th className="text-center">Immunization Code</th>
-                        </tr>
-                      </thead>
-                      {this.state.pageOfItems.map(item => {
-                        return (
-                          <tbody key={item.name}>
-                            <tr>
-                              <td className="text-center text-muted">
-                                #{item.id}
-                              </td>
-                              <td className="text-center">{item.name}</td>
-                              <td className="text-center">
-                                {moment(item.dob).format("DD - MM - YYYY")}
-                              </td>
-                              <td className="text-center">
-                                {item.phonenumber}
-                              </td>
-                              <td className="text-center">{item.state}</td>
-                              <td className="text-center">{item.lga || "-"}</td>
-                              <td className="text-center">{item.gender}</td>
-                              <td className="text-center">
-                                {item.immunizationCode}
-                              </td>
-                              <td className="text-center">
-                                <Link
-                                  to={`/data/${item.id}`}
-                                  params={{ id: item.id }}
-                                >
-                                  view
-                                </Link>
-                              </td>
-                            </tr>
-                          </tbody>
-                        );
-                      })}
-                    </table>
-                    <JwPagination
-                      items={this.state.totalData}
-                      onChangePage={this.onChangePage}
-                      pageSize={50}
-                    />
+                    <Row>
+                      <Col md="3"></Col>
+                      <Col md="6">
+                        <Row
+                          style={{ marginTop: "10px", marginBottom: "10px" }}
+                        >
+                          <Label for="gender">Message</Label>
+                          <Input
+                            value={this.state.message}
+                            type="textarea"
+                            required
+                            name="message"
+                            id="message"
+                            onChange={this.onChangeHandler}
+                          />
+                          <Button
+                            onClick={this.filterHandler}
+                            disabled={this.state.searchCriteria == ""}
+                            color="success"
+                            style={{ marginTop: "10px", marginBottom: "10px" }}
+                          >
+                            Send
+                          </Button>
+                        </Row>
+                      </Col>
+                    </Row>
                   </div>
                 </Card>
               </Col>
