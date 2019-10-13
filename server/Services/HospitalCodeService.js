@@ -1,6 +1,5 @@
 module.exports = {
-  assignCode(state, lga) {
-    let code, stateCode, lgaCode;
+  assignStateCode(state) {
     switch (state) {
       case "Abia":
         return (stateCode = "AB");
@@ -75,7 +74,8 @@ module.exports = {
       case "F.C.T":
         return (stateCode = "FCT");
     }
-
+  },
+  async assignLga(lga) {
     switch (lga) {
       // ABIA
       case "Aba North":
@@ -1711,6 +1711,5 @@ module.exports = {
       case "AMAC":
         return (lgaCode = "AMAC");
     }
-    return (code = `${stateCode}-${lgaCode}`);
   }
 };

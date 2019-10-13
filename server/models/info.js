@@ -6,6 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING
       },
+      motherName: {
+        type: DataTypes.STRING
+      },
+      fatherName: {
+        type: DataTypes.STRING
+      },
       phonenumber: {
         type: DataTypes.STRING
       },
