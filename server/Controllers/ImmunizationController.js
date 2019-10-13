@@ -1,58 +1,42 @@
-const { Info, User } = require("../models");
+const { Info, User, ImmunizationRecord } = require("../models");
 const { Op } = require("sequelize");
+const _ = require("lodash");
 const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
 const moment = require("moment");
 const { generate } = require("../Services/QrCodeService");
 
 module.exports = {
-  async getTotalCount(req, res) {
-    const data = await Info.findAndCountAll({});
+  async create(req, res) {
+    try {
+      const { type, immunizationCode } = req.body;
+      const { id } = req.user;
 
-    return res.json({ message: "Data retrieved", data });
+      const data = { type, immunizationCode, administeredBy: id };
+
+      if (_.isEmpty(type) || _.isEmpty(immunizationCode)) {
+        return res.status(400).json({ message: "Incomplete parameters" });
+      }
+
+      await ImmunizationRecord.create(data);
+
+      return res.status(200).json({ message: "saved" });
+    } catch (e) {
+      return res.status(400).json({ message: "An error occurred", e });
+    }
   },
 
-  async list(req, res) {
+  async getChildImmunization(req, res) {
     try {
-      let criteria = {};
-      const { search, dateFrom, dateTo } = req.query;
-      const { id } = req.user;
-      const user = await User.findOne({ where: { id } });
-      let data;
+      const { id } = req.params;
+      const child = await Info.findOne({ where: { id } });
 
-      if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
-        criteria = { state: user.state };
+      if (!child) {
+        return res.status(400).json({ message: "An error occurred" });
       }
 
-      if (user.role == "HMO") {
-        creiteria = { hmo: id };
-      }
-
-      if (search) {
-        criteria[Op.or] = [
-          { name: { [Op.like]: "%" + search + "%" } },
-          { phonenumber: search },
-          { createdAt: search },
-          { dob: search },
-          { state: search },
-          { lga: search },
-          { language: search },
-          { gender: search },
-          { immunizationCode: search },
-          { qrCode: search }
-        ];
-      }
-
-      if (dateFrom || dateTo) {
-        criteria.createdAt = { [Op.between]: [dateFrom, dateTo] };
-      }
-
-      data = await Info.findAndCountAll({ where: criteria });
-
-      if (!data.rows.length) {
-        return res.status(401).json({ message: "No data" });
-      }
-
+      const records = await ImmunizationRecords.findAll({where:{}})
+      
       return res.status(200).json({ message: "Data retrieved", data });
     } catch (e) {
       console.log(e);

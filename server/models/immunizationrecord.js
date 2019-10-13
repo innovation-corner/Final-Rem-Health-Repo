@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
   );
   ImmunizationRecord.associate = function(models) {
     // associations can be defined here
+    ImmunizationRecord.belongsTo(models.Info,{
+      foreignKey: "child",
+      as: 'childImmunized'
+    });
     
   };
   return ImmunizationRecord;

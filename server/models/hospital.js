@@ -25,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "hospitalCode",
       as: "registrations"
     });
-    Hospital.hasOne(models.User, {
-      foreignKey: "id",
-      as: "admin"
+    Hospital.belongsTo(models.User, {
+      foreignKey: "admin",
+      as: 'administrator'
     });
   };
   return Hospital;

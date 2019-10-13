@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
           "superAdmin",
           "nationalAdmin",
           "stateAdmin",
+          "HMO",
           "user"
         ),
         defaultValue: "user"
