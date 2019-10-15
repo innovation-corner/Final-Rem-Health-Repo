@@ -34,6 +34,12 @@ module.exports = {
       gender: {
         type: Sequelize.STRING
       },
+      lga: {
+        type: Sequelize.STRING
+      },
+      qrCode: {
+        type: Sequelize.STRING
+      },
       immunizationCode: {
         type: Sequelize.STRING
       },
