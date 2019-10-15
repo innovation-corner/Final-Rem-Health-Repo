@@ -149,6 +149,10 @@ module.exports = {
       const data = req.body;
       const info = await Info.create(data);
 
+      if (req.user.role == "HMO") {
+        info.hmo = req.user.id;
+      }
+
       let { code } = await stateCode.selectCode(info.state);
       let imCode;
 

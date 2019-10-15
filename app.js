@@ -32,16 +32,13 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   router.hs
 );
-app.use(
-  "/sms/",
-  passport.authenticate("jwt", { session: false }),
-  router.sms
-);
+app.use("/sms/", passport.authenticate("jwt", { session: false }), router.sms);
+app.use("/hmo/", passport.authenticate("jwt", { session: false }), router.hmo);
 
-// app.get("/", (req, res) =>
-//   res.status(200).send({
-//     message: "Welcome to the beginning of nothingness."
-//   })
-// );
+app.get("/", (req, res) =>
+  res.status(401).send({
+    message: "You shouldn't be here.\n Nice try though!"
+  })
+);
 
 module.exports = app;

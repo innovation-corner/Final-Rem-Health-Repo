@@ -1,5 +1,6 @@
 const enableCron = process.env.CRON_ENABLED || false;
-const ReminderService = require('../Services/ReminderService')
+const ReminderService = require("../Services/ReminderService");
+const cron = require("node-cron");
 
 module.exports = {
   // at 7:00 am every day
@@ -17,3 +18,5 @@ module.exports = {
     context: undefined // Custom context for onTick callback
   }
 };
+
+cron.schedule("00 00 07 * * *", ReminderService.sendImmunizationReminder());

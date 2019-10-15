@@ -278,6 +278,7 @@ module.exports = {
         Alurar hada da  (HPV Vaccine )`);
     }
   },
+  
   async newUser(email, password) {
     const message = `Hello! An account has been created for you at RemHealth.co. Your Login details are email: ${email}, password:
     ${password}`;
