@@ -198,7 +198,7 @@ module.exports = {
   async viewAll(req, res) {
     try {
       const hmos = await HMO.findAll({});
-      if (!hmos) {
+      if (!hmos.length) {
         return res.status(400).json({ message: "No record found" });
       }
       return res.status(200).json({ message: "retrieved succesfully", hmos });
