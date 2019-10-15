@@ -12,7 +12,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       child: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
+        references: {
+          model: "Infos",
+          key: "child",
+          as: "admin"
+        }
       },
       administeredBy: {
         type: Sequelize.INTEGER,
@@ -20,7 +26,7 @@ module.exports = {
         references: {
           model: "Users",
           key: "id",
-          as: "admin"
+          as: "childImmunized"
         }
       },
       createdAt: {

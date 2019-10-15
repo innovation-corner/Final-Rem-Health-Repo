@@ -20,6 +20,9 @@ module.exports = {
       lga: {
         type: Sequelize.STRING
       },
+      address: {
+        type: Sequelize.STRING
+      },
       admin: {
         type: Sequelize.INTEGER,
         references: {
