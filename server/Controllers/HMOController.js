@@ -164,7 +164,7 @@ module.exports = {
       const data = req.body;
       const { id } = req.params;
 
-      const hmo = HMO.findOne({ where: { id } });
+      const hmo = await HMO.findOne({ where: { id } });
 
       if (!hmo) {
         return res.status(400).json({ message: "Invalid id" });
@@ -182,7 +182,7 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const hmo = HMO.findOne({ where: { id } });
+      const hmo = await HMO.findOne({ where: { id } });
 
       if (!hmo) {
         return res.status(400).json({ message: "Invalid id" });
