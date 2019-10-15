@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     })
     DiseasesRecord.belongsTo(models.User,{
       foreignKey:'reportedBy',
-      as: 'reportedBy'
+      as: 'reported-by'
     })
   };
   return DiseasesRecord;
