@@ -40,8 +40,8 @@ module.exports = {
       return res.status(200).json({ message: "Data retrieved", data });
     } catch (e) {
       console.log(e);
-      e = e ||e.toString()
-      return res.status(400).json({ message: "An error occurred", e });
+      e = e || e.toString()
+      return res.status(400).json({ message: "An error occurred", e: e.toString() });
     }
   },
 
