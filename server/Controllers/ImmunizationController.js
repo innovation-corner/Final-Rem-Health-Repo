@@ -20,7 +20,7 @@ module.exports = {
         child: childId
       };
 
-      if (_.isEmpty(type) || _.isEmpty(immunizationCode)) {
+      if (_.isEmpty(type)) {
         return res.status(400).json({ message: "Incomplete parameters" });
       }
 
@@ -28,6 +28,7 @@ module.exports = {
 
       return res.status(200).json({ message: "saved" });
     } catch (e) {
+      e = e || e.toString()
       return res.status(400).json({ message: "An error occurred", e });
     }
   },
