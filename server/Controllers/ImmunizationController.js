@@ -9,10 +9,16 @@ const { generate } = require("../Services/QrCodeService");
 module.exports = {
   async create(req, res) {
     try {
-      const { type, immunizationCode } = req.body;
+      const { type } = req.body;
       const { id } = req.user;
+      const childId = req.params.id;
 
-      const data = { type, immunizationCode, administeredBy: id };
+      const data = {
+        type,
+        immunizationCode,
+        administeredBy: id,
+        child: childId
+      };
 
       if (_.isEmpty(type) || _.isEmpty(immunizationCode)) {
         return res.status(400).json({ message: "Incomplete parameters" });
@@ -105,26 +111,9 @@ module.exports = {
         return res.status(400).json({ message: "Data does not exist" });
       }
 
-      if (update.state && update.state != reqData.state) {
-        const { code } = await stateCode.selectCode(update.state);
+      await ImmunizationRecord.update(update, { where: { id } });
 
-        let imCode;
-        if (update.id < 10) {
-          imCode = code + "000" + update.id;
-        } else if (update.id >= 10 && update.id < 99) {
-          imCode = code + "00" + update.id;
-        } else if (update.id >= 100 && update.id < 999) {
-          imCode = code + "0" + update.id;
-        } else if (info.id >= 1000) {
-          imCode = code + update.id;
-        }
-        update.immunizationCode = imCode;
-        await update.save();
-      }
-
-      await Info.update(update, { where: { id } });
-
-      data = await Info.findOne({ where: { id } });
+      data = await ImmunizationRecord.findOne({ where: { id } });
 
       return res.status(200).json({ message: "Data updated", data });
     } catch (e) {
