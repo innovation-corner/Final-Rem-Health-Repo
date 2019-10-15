@@ -14,10 +14,16 @@ module.exports = {
       code: {
         type: Sequelize.STRING
       },
+      state: {
+        type: Sequelize.STRING
+      },
+      lga: {
+        type: Sequelize.STRING
+      },
       admin: {
         type: Sequelize.INTEGER,
         references: {
-          model: "User",
+          model: "Users",
           key: "id",
           as: "admin"
         }
