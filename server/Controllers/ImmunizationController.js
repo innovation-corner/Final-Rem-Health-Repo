@@ -35,13 +35,18 @@ module.exports = {
         return res.status(400).json({ message: "Invalid id" });
       }
 
-      const records = await ImmunizationRecords.findAll({where:{}})
-      const data = records
+      const records = await ImmunizationRecord.findAll({
+        where: { child: id }
+      });
+      if (!records.length) {
+        return res.status(400).json({ message: "No records found" });
+      }
+      const data = records;
       return res.status(200).json({ message: "Data retrieved", data });
     } catch (e) {
       console.log(e);
-      e = e || e.toString()
-      return res.status(400).json({ message: "An error occurred", e: e.toString() });
+      e = e || e.toString();
+      return res.status(400).json({ message: "An error occurred", e });
     }
   },
 
@@ -127,7 +132,7 @@ module.exports = {
         .status(400)
         .json({ message: "An error occurred", e: e.toString() });
     }
-  },
+  }
 
   // async create(req, res) {
   //   try {
