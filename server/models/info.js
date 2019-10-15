@@ -41,7 +41,10 @@ module.exports = (sequelize, DataTypes) => {
   );
   Info.associate = function(models) {
     // associations can be defined here
-    
+    Info.belongsTo(models.HMO,{
+      foreignKey:'hmo',
+      as: 'hmo'
+    })
   };
   return Info;
 };

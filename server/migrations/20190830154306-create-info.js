@@ -25,6 +25,14 @@ module.exports = {
           as: "PHC"
         }
       },
+      hmo: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+          key: "hmo",
+          as: "hmo"
+        }
+      },
       language: {
         type: Sequelize.STRING
       },
@@ -44,6 +52,14 @@ module.exports = {
         type: Sequelize.STRING
       },
       qrCode: {
+        type: Sequelize.STRING
+      },
+      fatherName: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      motherName: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       createdAt: {
