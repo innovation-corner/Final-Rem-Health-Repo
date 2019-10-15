@@ -32,11 +32,11 @@ module.exports = {
       const child = await Info.findOne({ where: { id } });
 
       if (!child) {
-        return res.status(400).json({ message: "An error occurred" });
+        return res.status(400).json({ message: "Invalid id" });
       }
 
       const records = await ImmunizationRecords.findAll({where:{}})
-      
+      const data = records
       return res.status(200).json({ message: "Data retrieved", data });
     } catch (e) {
       console.log(e);
