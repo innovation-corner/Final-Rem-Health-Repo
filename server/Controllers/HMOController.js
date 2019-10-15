@@ -178,6 +178,23 @@ module.exports = {
     }
   },
 
+  async view(req, res) {
+    try {
+      const { id } = req.params;
+
+      const hmo = HMO.findOne({ where: { id } });
+
+      if (!hmo) {
+        return res.status(400).json({ message: "Invalid id" });
+      }
+
+      return res.status(200).json({ message: "retrieved succesfully", hmo });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: "An error occurred", error });
+    }
+  },
+
   async viewAll(req, res) {
     try {
       const hmos = await HMO.findAll({});
