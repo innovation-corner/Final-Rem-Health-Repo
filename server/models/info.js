@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       fatherName: {
         type: DataTypes.STRING
       },
+      email: {
+        type: DataTypes.STRING
+      },
       phonenumber: {
         type: DataTypes.STRING
       },
@@ -41,10 +44,10 @@ module.exports = (sequelize, DataTypes) => {
   );
   Info.associate = function(models) {
     // associations can be defined here
-    Info.belongsTo(models.HMO,{
-      foreignKey:'hmo',
-      as: 'hmo'
-    })
+    Info.belongsTo(models.HMO, {
+      foreignKey: "hmo",
+      as: "hmo"
+    });
   };
   return Info;
 };
