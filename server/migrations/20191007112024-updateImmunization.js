@@ -2,13 +2,18 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn("DiseasesRecords", "lga", {
-      type: Sequelize.STRING,
-      allowNull: true
+    return queryInterface.addColumn("ImmunizationRecords", "administeredBy", {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      references:{
+        model: "Users",
+        key: "id",
+        as: "admin"
+      }
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn("DiseasesRecords", "lga");
+    return queryInterface.removeColumn("ImmunizationRecords", "administeredBy");
   }
 };
