@@ -15,7 +15,6 @@ module.exports = {
 
       const data = {
         type,
-        immunizationCode,
         administeredBy: id,
         child: childId
       };
