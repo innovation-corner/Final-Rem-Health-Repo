@@ -128,53 +128,53 @@ module.exports = {
     }
   },
 
-  async create(req, res) {
-    try {
-      const data = req.body;
-      const info = await Info.create(data);
+  // async create(req, res) {
+  //   try {
+  //     const data = req.body;
+  //     const info = await Info.create(data);
 
-      let { code } = await stateCode.selectCode(info.state);
-      let imCode;
+  //     let { code } = await stateCode.selectCode(info.state);
+  //     let imCode;
 
-      if (info.id < 10) {
-        imCode = code + "000" + info.id;
-      } else if (info.id >= 10 && info.id < 99) {
-        imCode = code + "00" + info.id;
-      } else if (info.id >= 100 && info.id < 999) {
-        imCode = code + "0" + info.id;
-      } else if (info.id >= 1000) {
-        imCode = code + info.id;
-      }
-      info.immunizationCode = imCode;
-      const qrCode = await generate(info.immunizationCode);
-      console.log(qrCode);
-      // info.qrCode = qrCode;
-      await info.save();
+  //     if (info.id < 10) {
+  //       imCode = code + "000" + info.id;
+  //     } else if (info.id >= 10 && info.id < 99) {
+  //       imCode = code + "00" + info.id;
+  //     } else if (info.id >= 100 && info.id < 999) {
+  //       imCode = code + "0" + info.id;
+  //     } else if (info.id >= 1000) {
+  //       imCode = code + info.id;
+  //     }
+  //     info.immunizationCode = imCode;
+  //     const qrCode = await generate(info.immunizationCode);
+  //     console.log(qrCode);
+  //     // info.qrCode = qrCode;
+  //     await info.save();
 
-      const due = moment()
-        .subtract(7, "days")
-        .startOf("day")
-        .toISOString();
-      const birthDate = moment(info.dob).toISOString();
+  //     const due = moment()
+  //       .subtract(7, "days")
+  //       .startOf("day")
+  //       .toISOString();
+  //     const birthDate = moment(info.dob).toISOString();
 
-      if (birthDate >= due) {
-        const date = moment().format("dddd, MMMM Do YYYY");
-        const message = await messageService.atBirth(info.language, info, date);
+  //     if (birthDate >= due) {
+  //       const date = moment().format("dddd, MMMM Do YYYY");
+  //       const message = await messageService.atBirth(info.language, info, date);
 
-        await sms.sendSms(message, "Remind Me", info.phonenumber);
-      }
-      const message = await messageService.onRegistration(
-        info.language,
-        info,
-        imCode
-      );
+  //       await sms.sendSms(message, "Remind Me", info.phonenumber);
+  //     }
+  //     const message = await messageService.onRegistration(
+  //       info.language,
+  //       info,
+  //       imCode
+  //     );
 
-      await sms.sendSms(message, "Remind Me", info.phonenumber);
+  //     await sms.sendSms(message, "Remind Me", info.phonenumber);
 
-      return res.status(200).json({ message: "Data saved" });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: "An error occurred", e });
-    }
-  }
+  //     return res.status(200).json({ message: "Data saved" });
+  //   } catch (error) {
+  //     console.log(error);
+  //     return res.status(400).json({ message: "An error occurred", e });
+  //   }
+  // }
 };
