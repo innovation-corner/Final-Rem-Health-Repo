@@ -2,6 +2,7 @@ const { HMO, User } = require("../models");
 const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
 const moment = require("moment");
+const _ = require('lodash');
 
 module.exports = {
   async register(req, res) {
