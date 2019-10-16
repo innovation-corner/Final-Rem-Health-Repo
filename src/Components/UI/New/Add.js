@@ -1,44 +1,36 @@
-import React, { Component, Fragment } from "react";
-import moment from "moment";
-import { Link, matchPath } from "react-router-dom";
+import React, { Fragment } from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import classnames from "classnames";
-import JwPagination from "jw-react-pagination";
-
 import {
-  Row,
   Col,
+  Row,
   Card,
-  Button,
+  CardBody,
   CardTitle,
-  CardHeader,
+  Button,
   Form,
   FormGroup,
   Label,
-  Input,
-  CardBody
+  Input
 } from "reactstrap";
 
-const max = moment().format("YYYY-MM-DD");
+import { toast, Bounce } from "react-toastify";
+import { connect } from "react-redux";
+import { setUser } from "../../../store/actions";
+import moment from "moment";
 
-export default class Data extends Component {
+class Add extends React.Component {
   state = {
-    data: {},
     loading: false,
     soo: "",
     email: "",
     language: "",
     phonenumber: "",
     dob: "",
-    qrCode: "",
-    pageOfItems: [],
+    lga: [],
+    slga: "",
     name: "",
-    gender: "",
+    gender: "Male",
     disableState: true,
-    disableInput: true,
-    button: "Edit",
-    date: "Text",
-    immunization: [],
     sor: [
       "Abia",
       "Adamawa",
@@ -77,116 +69,7 @@ export default class Data extends Component {
       "Yobe",
       "Zamfara",
       "F.C.T"
-    ],
-    id: 0,
-    cancel: false
-  };
-
-  async componentWillMount() {
-    const token = await sessionStorage.getItem("token");
-    const totData = await fetch("https://api.remhealth.co/user/view", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!totData.ok) {
-      return this.props.history.push("/login");
-    }
-
-    const { user } = await totData.json();
-    if (user.role === "superAdmin" || user.role === "nationalAdmin") {
-      this.setState({ disableState: false });
-    }
-    this.setState({
-      soo: user.state
-    });
-  }
-
-  async componentDidMount() {
-    const token = await sessionStorage.getItem("token");
-
-    const { id } = this.props.match.params;
-    const response = await fetch(`https://api.remhealth.co/info/view/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const { data } = await response.json();
-
-    const {
-      email,
-      phonenumber,
-      dob,
-      name,
-      immunizationCode,
-      gender,
-      state,
-      language
-    } = data;
-
-    await this.setState({
-      email,
-      phonenumber,
-      dob,
-      id,
-      name,
-      immunizationCode,
-      gender,
-      language,
-      soo: state
-    });
-
-    let image;
-    let randomCode = data.qrCode;
-    if (data.qrCode) {
-      const res = await fetch(
-        `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
-        {
-          method: "POST"
-        }
-      );
-
-      const images = await res.blob();
-
-      image = await URL.createObjectURL(images);
-    }
-    this.setState({ qrCode: image });
-
-    const immunizationDetails = await fetch(
-      `https://api.remhealth.co/immunization/child/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-
-    if (immunizationDetails.ok) {
-      const immunization = await immunizationDetails.json();
-
-      const immunizationData = immunization.data;
-      await this.setState({
-        immunization: immunizationData
-      });
-      console.log(immunization.data);
-    }
-  }
-
-  onChangePage(pageOfItems) {
-    this.setState({ pageOfItems });
-  }
-
-  onChangeHandler = e => {
-    e.preventDefault();
-    this.setState({ [e.target.name]: e.target.value });
+    ]
   };
 
   handleState = () => {
@@ -597,7 +480,14 @@ export default class Data extends Component {
 
       case "FCT":
         this.setState({
-          lga: ["Abaji", "Bwari", "Gwagwalada", "Kuje", "Kwali", "AMAC"]
+          lga: [
+            "Abaji",
+            "Bwari",
+            "Gwagwalada",
+            "Kuje",
+            "Kwali",
+            "AMAC"
+          ]
         });
         break;
       case "Gombe":
@@ -1224,77 +1114,47 @@ export default class Data extends Component {
     }
   };
 
-  submitHandler = e => {
-    e.preventDefault();
-    if (this.state.button == "Edit") {
-      return this.setState({
-        button: "Save",
-        disableInput: false,
-        cancel: true
-      });
-    }
-    if (this.state.button == "Save") {
-      this.setState({ loading: true });
-    }
-    fetch(`https://api.remhealth.co/info/edit/${this.state.id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        email: this.state.email,
-        phonenumber: this.state.phonenumber,
-        dob: this.state.dob,
-        gender: this.state.gender,
-        name: this.state.name,
-        language: this.state.language,
-        name: this.state.name
-      }),
+  async componentDidMount() {
+    const token = await sessionStorage.getItem("token");
+    const totData = await fetch("https://api.remhealth.co/user/view", {
+      method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       }
-    })
-      .then(res => {
-        this.setState({ loading: false, disableInput: true });
-        if (!res.ok && res.status !== 401) {
-          throw Error(res.message);
-        } else if (res.status === 401) {
-          res.json().then(res => {
-            this.setState({ error: res.message }, this.loginError);
-          });
-        } else {
-          return res.json().then(res => {
-            const { data } = res;
+    });
+    if (!totData.ok) {
+      return this.props.history.push("/login");
+    }
 
-            const {
-              email,
-              phonenumber,
-              dob,
-              name,
-              immunizationCode,
-              gender,
-              state,
-              id,
-              language
-            } = data;
+    const response = await fetch("https://api.remhealth.co/user/view", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const { user } = await response.json();
+    if (user.role === "superAdmin" || user.role === "nationalAdmin") {
+      this.setState({ disableState: false });
+    }
+    this.setState({
+      soo: user.state
+    });
+  }
 
-            this.setState({
-              email,
-              phonenumber,
-              dob,
-              id,
-              name,
-              immunizationCode,
-              gender,
-              language,
-              soo: state
-            });
-          });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ loading: false });
-        this.setState({ error: err.message }, this.loginError);
-      });
+  onChangeHandler = async e => {
+    e.preventDefault();
+    e.persist();
+
+    await this.setState({ [e.target.name]: e.target.value });
+    if ([e.target.name] == "soo") {
+      this.handleState([e.target.value]);
+      return;
+    }
   };
+
+  max = moment().format("YYYY-MM-DD");
   render() {
     return (
       <Fragment>
@@ -1306,267 +1166,194 @@ export default class Data extends Component {
           transitionEnter={false}
           transitionLeave={false}
         >
-          <div>
-            <Row>
-              <Col md="12">
-                <Card className="main-card mb-3">
-                  <CardBody>
-                    <CardTitle style={{ textAlign: "center" }}>
-                      Registration Info
-                    </CardTitle>
-                    <Form>
-                      <Row>
-                        <Col md={4}>
-                          <Row>
-                            <Col md={12}>
-                              {this.state.qrCode ? (
-                                <img src={this.state.qrCode} />
-                              ) : (
-                                "No QR Code"
-                              )}
-                            </Col>
-                          </Row>
-                        </Col>
-                        <Col md={8}>
-                          <Row form>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="name">Full Name</Label>
-                                <Input
-                                  value={this.state.name}
-                                  required
-                                  type="text"
-                                  name="name"
-                                  id="name"
-                                  placeholder="Enter full name"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="dob">Date Of Birth</Label>
-                                <Input
-                                  value={moment(this.state.dob).format(
-                                    "YYYY-MM-DD"
-                                  )}
-                                  type="date"
-                                  required
-                                  name="dob"
-                                  id="dob"
-                                  max={max}
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row form>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="state">State</Label>
-                                <Input
-                                  value={this.state.soo}
-                                  type="select"
-                                  name="soo"
-                                  id="state"
-                                  onChange={this.onChangeHandler}
-                                  disabled={
-                                    this.state.disableState ||
-                                    this.state.disableInput
-                                  }
-                                >
-                                  <option>--State--</option>
-                                  {this.state.sor.map(sors => {
-                                    return (
-                                      <option key={sors} value={sors}>
-                                        {sors}
-                                      </option>
-                                    );
-                                  })}
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="phonenumber">Phonenumber</Label>
-                                <Input
-                                  value={this.state.phonenumber}
-                                  type="text"
-                                  name="phonenumber"
-                                  id="phonenumber"
-                                  required
-                                  placeholder="Phone Number"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row form>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="gender">Gender</Label>
-                                <Input
-                                  value={this.state.gender}
-                                  type="select"
-                                  name="gender"
-                                  id="gender"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                >
-                                  <option>Male</option>
-                                  <option>Female</option>
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="language">Language</Label>
-                                <Input
-                                  value={this.state.language}
-                                  type="select"
-                                  name="language"
-                                  id="language"
-                                  placeholder="language"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                >
-                                  <option>English</option>
-                                  <option>Pidgin</option>
-                                  <option>Igbo</option>
-                                  <option>Yoruba</option>
-                                  <option>Hausa</option>
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row form>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="immunizationCode">
-                                  Immunization Code
-                                </Label>
-                                <Input
-                                  value={this.state.immunizationCode}
-                                  type="text"
-                                  name="immunizationCode"
-                                  id="immunizationCode"
-                                  onChange={this.onChangeHandler}
-                                  disabled
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="email">Email</Label>
-                                <Input
-                                  value={this.state.email}
-                                  type="email"
-                                  name="email"
-                                  id="email"
-                                  placeholder="yourmail@host.com"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          {!this.state.loading ? (
-                            <Row form>
-                              <Col md={6}>
-                                <Button
-                                  color="success"
-                                  className="mt-2"
-                                  onClick={this.submitHandler}
-                                >
-                                  {this.state.button}
-                                </Button>
-                                {this.state.cancel ? (
-                                  // <Col md={4}>
-                                  <Button
-                                    style={{ marginLeft: "5px" }}
-                                    color="warning"
-                                    className="mt-2"
-                                    onClick={() =>
-                                      this.setState({
-                                        cancel: false,
-                                        button: "Edit",
-                                        disableInput: true
-                                      })
-                                    }
-                                  >
-                                    Cancel
-                                  </Button>
-                                ) : // </Col>
-                                null}
-                              </Col>
-                            </Row>
-                          ) : (
-                            <Row form>
-                              <Col md={6}></Col>
-                              <Col md={4}>
-                                <div
-                                  className="spinner-border text-success"
-                                  role="status"
-                                >
-                                  <span className="sr-only">Loading...</span>
-                                </div>
-                              </Col>
-                            </Row>
-                          )}
-                        </Col>
-                      </Row>
-                    </Form>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md="12">
-                <Card className="main-card mb-3">
-                  <CardBody>
-                    <CardTitle style={{ textAlign: "center" }}>
-                      Immunization Info
-                    </CardTitle>
-                  </CardBody>
-                  <div className="table-responsive">
-                    <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th className="text-center">Name</th>
-                          <th className="text-center">Date</th>
-                        </tr>
-                      </thead>
-                      {this.state.immunization.map(item => {
-                        return (
-                          <tbody key={item.type}>
-                            <tr>
-                              <td className="text-center">{item.type}</td>
-                              <td className="text-center">
-                                {moment(item.createdAt).format(
-                                  "DD - MM - YYYY"
-                                )}
-                              </td>
-                            </tr>
-                          </tbody>
-                        );
-                      })}
-                    </table>
-                    {/* <JwPagination
-                      items={this.state.immunization}
-                      onChangePage={this.onChangePage}
-                      pageSize={50} 
-                    />*/}
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </div>
+          <Card className="main-card mb-3 new">
+            <CardBody>
+              <CardTitle style={{ textAlign: "center" }}>
+                Add New Data
+              </CardTitle>
+              <Form>
+                <Row form>
+                  <Col md={2}></Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="name">Full Name</Label>
+                      <Input
+                        value={this.state.name}
+                        required
+                        type="text"
+                        name="name"
+                        id="name"
+                        placeholder="Enter full name"
+                        onChange={this.onChangeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="dob">Date Of Birth</Label>
+                      <Input
+                        value={this.state.dob}
+                        type="date"
+                        required
+                        name="dob"
+                        id="dob"
+                        max={this.max}
+                        onChange={this.onChangeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row form>
+                  <Col md={2}></Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="soo">State</Label>
+                      <Input
+                        value={this.state.soo}
+                        type="select"
+                        name="soo"
+                        id="soo"
+                        onChange={this.onChangeHandler}
+                        disabled={this.state.disableState}
+                      >
+                        <option defaultValue>--State--</option>
+                        {this.state.sor.map(sors => {
+                          return (
+                            <option key={sors} value={sors}>
+                              {sors}
+                            </option>
+                          );
+                        })}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="lga">LGA</Label>
+                      <Input
+                        value={this.state.slga}
+                        type="select"
+                        name="slga"
+                        id="lga"
+                        onChange={this.onChangeHandler}
+                        disabled={
+                          this.state.disableState || this.state.soo == ""
+                        }
+                      >
+                        <option defaultValue>--select lga--</option>
+                        {this.state.lga.map(slga => {
+                          return (
+                            <option key={slga} value={slga}>
+                              {slga}
+                            </option>
+                          );
+                        })}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row form>
+                  <Col md={2}></Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="gender">Gender</Label>
+                      <Input
+                        value={this.state.gender}
+                        type="select"
+                        name="gender"
+                        id="gender"
+                        onChange={this.onChangeHandler}
+                      >
+                        <option>Male</option>
+                        <option>Female</option>
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="language">Language</Label>
+                      <Input
+                        value={this.state.language}
+                        type="select"
+                        name="language"
+                        id="language"
+                        placeholder="language"
+                        onChange={this.onChangeHandler}
+                      >
+                        <option>English</option>
+                        <option>Pidgin</option>
+                        <option>Igbo</option>
+                        <option>Yoruba</option>
+                        <option>Hausa</option>
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row form>
+                  <Col md={2}></Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="phonenumber">Phonenumber</Label>
+                      <Input
+                        value={this.state.phonenumber}
+                        type="text"
+                        name="phonenumber"
+                        id="phonenumber"
+                        required
+                        placeholder="Phone Number"
+                        onChange={this.onChangeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Label for="email">Email</Label>
+                      <Input
+                        value={this.state.email}
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="yourmail@host.com"
+                        onChange={this.onChangeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                {!this.state.loading ? (
+                  <Row form>
+                    <Col md={6}></Col>
+                    <Col md={4}>
+                      <Button
+                        color="success"
+                        className="mt-2"
+                        onClick={this.loginHandler}
+                      >
+                        Save
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : (
+                  <Row form>
+                    <Col md={6}></Col>
+                    <Col md={4}>
+                      <div
+                        className="spinner-border text-success"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+              </Form>
+            </CardBody>
+          </Card>
         </ReactCSSTransitionGroup>
       </Fragment>
     );
   }
 }
+export default connect(
+  null,
+  { setUser }
+)(Add);

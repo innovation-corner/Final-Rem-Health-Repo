@@ -27,6 +27,7 @@ class User extends React.Component {
     phonenumber: "",
     username: "",
     name: "",
+    hmo: "",
     role: "",
     password: "",
     error: "",
@@ -89,7 +90,7 @@ class User extends React.Component {
     const { user } = await totData.json();
 
     if (user.role !== "superAdmin") {
-      alert('please contact remhealth to add a new user')
+      alert("please contact remhealth to add a new user");
       return this.props.history.push("/home");
     }
   }
@@ -132,9 +133,11 @@ class User extends React.Component {
     try {
       const token = await sessionStorage.getItem("token");
       if (
-        (this.state.role !== "nationalAdmin" &&
-          (this.state.soo == "--State--" || this.state.soo == "")) &&
+        this.state.role !== "nationalAdmin" &&
+        (this.state.soo == "--State--" || this.state.soo == "") &&
         (this.state.role !== "superAdmin" &&
+          (this.state.soo == "--State--" || this.state.soo == "")) &&
+        (this.state.role !== "HMO" &&
           (this.state.soo == "--State--" || this.state.soo == ""))
       ) {
         this.setState({ error: "Please select state" }, this.errorToast);
@@ -151,9 +154,17 @@ class User extends React.Component {
         );
         return;
       }
+      if (this.state.role == "HMO" && this.state.hmo == "") {
+        this.setState({ error: "Please fill in HMO name" }, this.errorToast);
+        return;
+      }
       this.setState({ loading: true });
 
-      const res = await fetch("https://api.remhealth.co/auth/register", {
+      let url;
+      this.state.role == "HMO"
+        ? (url = "https://api.remhealth.co/hmo/register")
+        : "https://api.remhealth.co/auth/register";
+      const res = await fetch(url, {
         method: "POST",
         body: JSON.stringify({
           password: this.state.password,
@@ -161,7 +172,8 @@ class User extends React.Component {
           email: this.state.email,
           role: this.state.role,
           username: this.state.username,
-          name: this.state.name
+          name: this.state.name,
+          contactName: this.state.hmo
         }),
         headers: {
           "Content-Type": "application/json",
@@ -278,6 +290,7 @@ class User extends React.Component {
                         onChange={this.onChangeHandler}
                       >
                         <option defaultValue>user</option>
+                        <option defaultValue>HMO</option>
                         <option>stateAdmin</option>
                         <option>nationalAdmin</option>
                         <option>superAdmin</option>
@@ -296,6 +309,23 @@ class User extends React.Component {
                       />
                     </FormGroup>
                   </Col>
+                </Row>
+                <Row form>
+                  <Col md={2}></Col>
+                  {this.state.role == "HMO" ? (
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="password">HMO</Label>
+                        <Input
+                          value={this.state.hmo}
+                          type="text"
+                          name="hmo"
+                          id="hmo"
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                  ) : null}
                 </Row>
 
                 {!this.state.loading ? (

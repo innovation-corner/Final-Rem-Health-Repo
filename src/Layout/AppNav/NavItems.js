@@ -20,6 +20,16 @@ let MainNav = [
     to: "/qrCode/generate"
   },
   {
+    icon: "pe-7s-network",
+    label: "HMOs",
+    to: "/hmo"
+  },
+  {
+    icon: "pe-7s-culture",
+    label: "Hospitals",
+    to: "/hospital"
+  },
+  {
     icon: "pe-7s-users",
     label: "Add User",
     to: "/user/new"

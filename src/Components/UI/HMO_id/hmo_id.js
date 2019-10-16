@@ -31,14 +31,12 @@ export default class Data extends Component {
     phonenumber: "",
     dob: "",
     qrCode: "",
-    pageOfItems: [],
     name: "",
     gender: "",
     disableState: true,
     disableInput: true,
     button: "Edit",
     date: "Text",
-    immunization: [],
     sor: [
       "Abia",
       "Adamawa",
@@ -157,31 +155,6 @@ export default class Data extends Component {
       image = await URL.createObjectURL(images);
     }
     this.setState({ qrCode: image });
-
-    const immunizationDetails = await fetch(
-      `https://api.remhealth.co/immunization/child/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-
-    if (immunizationDetails.ok) {
-      const immunization = await immunizationDetails.json();
-
-      const immunizationData = immunization.data;
-      await this.setState({
-        immunization: immunizationData
-      });
-      console.log(immunization.data);
-    }
-  }
-
-  onChangePage(pageOfItems) {
-    this.setState({ pageOfItems });
   }
 
   onChangeHandler = e => {
@@ -1319,11 +1292,9 @@ export default class Data extends Component {
                         <Col md={4}>
                           <Row>
                             <Col md={12}>
-                              {this.state.qrCode ? (
-                                <img src={this.state.qrCode} />
-                              ) : (
-                                "No QR Code"
-                              )}
+                              {this.state.qrCode
+                                ? this.state.qrCode
+                                : "No QR Code"}
                             </Col>
                           </Row>
                         </Col>
@@ -1531,36 +1502,8 @@ export default class Data extends Component {
                     <CardTitle style={{ textAlign: "center" }}>
                       Immunization Info
                     </CardTitle>
+                    <Form></Form>
                   </CardBody>
-                  <div className="table-responsive">
-                    <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th className="text-center">Name</th>
-                          <th className="text-center">Date</th>
-                        </tr>
-                      </thead>
-                      {this.state.immunization.map(item => {
-                        return (
-                          <tbody key={item.type}>
-                            <tr>
-                              <td className="text-center">{item.type}</td>
-                              <td className="text-center">
-                                {moment(item.createdAt).format(
-                                  "DD - MM - YYYY"
-                                )}
-                              </td>
-                            </tr>
-                          </tbody>
-                        );
-                      })}
-                    </table>
-                    {/* <JwPagination
-                      items={this.state.immunization}
-                      onChangePage={this.onChangePage}
-                      pageSize={50} 
-                    />*/}
-                  </div>
                 </Card>
               </Col>
             </Row>
