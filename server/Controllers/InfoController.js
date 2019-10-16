@@ -4,7 +4,7 @@ const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
 const moment = require("moment");
 const { generate } = require("../Services/QrCodeService");
-const _ = require('lodash')
+const _ = require("lodash");
 
 module.exports = {
   async getTotalCount(req, res) {
@@ -147,7 +147,7 @@ module.exports = {
 
   async create(req, res) {
     try {
-      const data = ({
+      let data = ({
         name,
         phonenumber,
         dob,
@@ -156,16 +156,18 @@ module.exports = {
         language,
         gender
       } = req.body);
-      if(_.isEmpty(name) ||
-      _.isEmpty(phonenumber) ||
-      _.isEmpty(dob) ||
-      _.isEmpty(state) ||
-      _.isEmpty(lga) ||
-      _.isEmpty(gender) ||
-      _.isEmpty(language)
-      ){
-        return res.status(400).json({message:'Incomplete fields'})
+      if (
+        _.isEmpty(name) ||
+        _.isEmpty(phonenumber) ||
+        _.isEmpty(dob) ||
+        _.isEmpty(state) ||
+        _.isEmpty(lga) ||
+        _.isEmpty(gender) ||
+        _.isEmpty(language)
+      ) {
+        return res.status(400).json({ message: "Incomplete fields" });
       }
+      data.dob = moment(dob).format("YYYYMMDD");
 
       const info = await Info.create(data);
 

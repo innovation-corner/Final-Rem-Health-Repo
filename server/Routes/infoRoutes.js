@@ -7,6 +7,6 @@ router.get("/total", info.getTotalCount);
 router.put("/edit/:id", info.editSingle);
 router.get("/view/:id", info.listSingle);
 router.get("/date", info.getByAge);
-router.get("/add", info.create);
+router.post("/add", info.create);
 
 module.exports = router;
