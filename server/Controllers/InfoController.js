@@ -4,6 +4,7 @@ const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
 const moment = require("moment");
 const { generate } = require("../Services/QrCodeService");
+const _ = require('lodash')
 
 module.exports = {
   async getTotalCount(req, res) {
@@ -146,7 +147,26 @@ module.exports = {
 
   async create(req, res) {
     try {
-      const data = req.body;
+      const data = ({
+        name,
+        phonenumber,
+        dob,
+        state,
+        lga,
+        language,
+        gender
+      } = req.body);
+      if(_.isEmpty(name) ||
+      _.isEmpty(phonenumber) ||
+      _.isEmpty(dob) ||
+      _.isEmpty(state) ||
+      _.isEmpty(lga) ||
+      _.isEmpty(gender) ||
+      _.isEmpty(language)
+      ){
+        return res.status(400).json({message:'Incomplete fields'})
+      }
+
       const info = await Info.create(data);
 
       if (req.user.role == "HMO") {
