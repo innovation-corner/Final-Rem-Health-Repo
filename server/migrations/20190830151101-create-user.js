@@ -26,6 +26,10 @@ module.exports = {
       role: {
         type: Sequelize.STRING
       },
+      image: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
       phonenumber: {
         type: Sequelize.STRING
       },

@@ -3,6 +3,7 @@ const logger = require("morgan");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
+require("dotenv").config();
 
 require("./server/config/passport");
 const app = express();
@@ -34,8 +35,16 @@ app.use(
 );
 app.use("/sms/", passport.authenticate("jwt", { session: false }), router.sms);
 app.use("/hmo/", passport.authenticate("jwt", { session: false }), router.hmo);
-app.use("/disease/", passport.authenticate("jwt", { session: false }), router.disease);
-app.use("/immunization/", passport.authenticate("jwt", { session: false }), router.im);
+app.use(
+  "/disease/",
+  passport.authenticate("jwt", { session: false }),
+  router.disease
+);
+app.use(
+  "/immunization/",
+  passport.authenticate("jwt", { session: false }),
+  router.im
+);
 
 // app.get("/", (req, res) =>
 //   res.status(401).send({
