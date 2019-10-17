@@ -83,5 +83,16 @@ module.exports = {
       console.log(e);
       return res.status(400).json({ message: "An error occurred", e });
     }
+  },
+
+  async avatar(req, res) {
+    try {
+      const { id } = req.user;
+      const image = req.file.secure_url;
+      await User.update({ image }, { id });
+      return res.status(200).json({ message: "avatar added" });
+    } catch (e) {
+      return res.status(400).json({ message: "An error occurred", e });
+    }
   }
 };
