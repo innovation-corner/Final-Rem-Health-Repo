@@ -31,11 +31,11 @@ module.exports = {
       }
 
       if (details.password) {
-        // if (!reqUser.validPassword(details.password)) {
-        //   return res.status(400).json({
-        //     message: "Incorrect password."
-        //   });
-        // }
+        if (!reqUser.validPassword(details.oldPassword)) {
+          return res.status(400).json({
+            message: "Incorrect password."
+          });
+        }
         if (details.password.trim() === "" || details.password == '') {
           return res.status(400).json({ message: "invalid password" });
         }
