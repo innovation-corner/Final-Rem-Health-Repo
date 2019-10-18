@@ -36,7 +36,7 @@ module.exports = {
         //     message: "Incorrect password."
         //   });
         // }
-        if (details.password.trim() === "") {
+        if (details.password.trim() === "" || details.password == '') {
           return res.status(400).json({ message: "invalid password" });
         }
 
