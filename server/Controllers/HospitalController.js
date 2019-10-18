@@ -126,9 +126,7 @@ module.exports = {
 
       await Hospital.update(hosDetails, { where: { id: hospital.id } });
 
-      return res
-        .status(200)
-        .json({ message: "succesfully updated" });
+      return res.status(200).json({ message: "succesfully updated" });
     } catch (e) {
       console.log(e);
       return res.status(400).json({ message: "An error occured", e });
@@ -161,13 +159,15 @@ module.exports = {
       let query = {};
 
       const { search } = req.query;
-      query[Op.or] = [
-        { name: { [Op.like]: "%" + search + "%" } },
-        { phonenumber: search },
-        { state: search },
-        { lga: search },
-        { code: search }
-      ];
+      if (search) {
+        query[Op.or] = [
+          { name: { [Op.like]: "%" + search + "%" } },
+          { phonenumber: search },
+          { state: search },
+          { lga: search },
+          { code: search }
+        ];
+      }
       if (req.user.role == "stateAdmin") {
         const user = await User.findOne({ where: { id: req.user.id } });
         query = {
