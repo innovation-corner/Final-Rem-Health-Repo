@@ -183,11 +183,13 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const hmo = await HMO.findOne({ where: { id } });
+      let hmo = await HMO.findOne({ where: { id } });
 
       if (!hmo) {
         return res.status(400).json({ message: "Invalid id" });
       }
+      const admin = await User.findOne({ where: { id: hmo.admin } });
+      hmo.admin = admin;
 
       return res.status(200).json({ message: "retrieved succesfully", hmo });
     } catch (error) {
