@@ -3,6 +3,7 @@ const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
 const moment = require("moment");
 const _ = require("lodash");
+const JwtService = require("../modules/auth.module");
 
 module.exports = {
   async register(req, res) {
