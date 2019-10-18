@@ -23,14 +23,14 @@ class Add extends React.Component {
     loading: false,
     soo: "",
     email: "",
-    language: "",
-    phonenumber: "",
     username: "",
     name: "",
+    file: null,
     password: "",
     oldPassword: "",
     disableState: true,
-    passwordRequired: false
+    passwordRequired: false,
+    id: ""
   };
   async componentDidMount() {
     const token = await sessionStorage.getItem("token");
@@ -53,22 +53,110 @@ class Add extends React.Component {
       soo: user.state,
       name: user.name,
       email: user.email,
-      username: user.username
+      username: user.username,
+      id: user.id
     });
   }
 
   onChangeHandler = e => {
     e.preventDefault();
-    if ([e.target.name] == "password" && e.target.value !== "") {
+    if ([e.target.name] == "password" || e.target.value !== "") {
       this.setState({
         passwordRequired: true,
         [e.target.name]: e.target.value
+      });
+    } else if ([e.target.name] == "file") {
+      return this.setState({
+        [e.target.name]: e.target.files[0]
       });
     } else {
       this.setState({
         [e.target.name]: e.target.value,
         passwordRequired: false
       });
+    }
+  };
+
+  errorToast = error =>
+    (this.toastId = toast(error, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "error",
+      hideProgressBar: true
+    }));
+
+  successToast = m =>
+    (this.toastId = toast(m, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "success",
+      hideProgressBar: true
+    }));
+
+  onSubmitHandler = async e => {
+    e.preventDefault();
+    const token = await sessionStorage.getItem("token");
+    this.setState({ loading: true });
+    try {
+      if (this.state.file) {
+        try {
+          const res = await fetch("https://api.remhealth.co/user/avatar", {
+            method: "PUT",
+            body: JSON.stringify({
+              file: this.state.file
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
+            }
+          });
+          const resj = await res.json();
+          console.log(resj);
+        } catch (error) {
+          this.setState({ loading: false });
+          return this.errorToast(error);
+        }
+      }
+      let data = {
+        email: this.state.email,
+        username: this.state.username,
+        gender: this.state.gender,
+        name: this.state.name,
+        soo: this.state.soo,
+        oldPassword: this.state.oldPassword
+      };
+      if (this.state.password !== "") {
+        data.password = this.state.password;
+      }
+      const res = await fetch(
+        `https://api.remhealth.co/user/edit/${this.state.id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      console.log(data);
+      if (!res.ok) {
+        const response = await res.json();
+        console.log(response);
+        throw new Error(response.message);
+      }
+      this.setState({ loading: false });
+      this.successToast("profile updated");
+      this.setState({
+        password: ''
+      });
+    } catch (error) {
+      this.setState({ loading: false });
+      console.log(error.message);
+      // error = error.toString()
+      return this.errorToast(error.message);
     }
   };
 
@@ -177,6 +265,21 @@ class Add extends React.Component {
                     </FormGroup>
                   </Col>
                 </Row>
+                <Row form>
+                  <Col md={2}></Col>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="oldPassword">Profile Image</Label>
+                      <Input
+                        value={this.state.file}
+                        type="file"
+                        name="file"
+                        id="file"
+                        onChange={this.onChangeHandler}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
 
                 {!this.state.loading ? (
                   <Row form>
@@ -185,7 +288,7 @@ class Add extends React.Component {
                       <Button
                         color="success"
                         className="mt-2"
-                        onClick={this.loginHandler}
+                        onClick={this.onSubmitHandler}
                       >
                         Save
                       </Button>

@@ -1169,7 +1169,7 @@ class Add extends React.Component {
           <Card className="main-card mb-3 new">
             <CardBody>
               <CardTitle style={{ textAlign: "center" }}>
-                Add New Data
+                Add New Hospital
               </CardTitle>
               <Form>
                 <Row form>

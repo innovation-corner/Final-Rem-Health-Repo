@@ -1285,7 +1285,7 @@ export default class Data extends Component {
                 <Card className="main-card mb-3">
                   <CardBody>
                     <CardTitle style={{ textAlign: "center" }}>
-                      Registration Info
+                      Registration Infos
                     </CardTitle>
                     <Form>
                       <Row>

@@ -1523,9 +1523,7 @@ export default class Data extends Component {
       if (this.state.slga !== "") {
         param = this.state.slga;
       }
-      console.log(param)
-      console.log(this.state.soo)
-      console.log(this.state.slga)
+
       const token = sessionStorage.getItem("token");
       const res = await fetch(`${url}?search=${param}`, {
         method: "GET",
@@ -1933,7 +1931,6 @@ export default class Data extends Component {
                           <option defaultValue>OPV 2</option>
                           <option defaultValue>Rotarix 2</option>
                           <option defaultValue>PCV 2</option>
-                          <option defaultValue>OPV 2</option>
                           <option defaultValue>Pentavalent 2</option>
                           <option defaultValue>OPV 3</option>
                           <option defaultValue>PCV 3</option>
@@ -2005,7 +2002,7 @@ export default class Data extends Component {
                       </thead>
                       {this.state.pageOfItems.map(item => {
                         return (
-                          <tbody key={item.name}>
+                          <tbody key={item.immunizationCode}>
                             <tr>
                               <td className="text-center text-muted">
                                 #{item.id}

@@ -20,7 +20,32 @@ import {
 } from "reactstrap";
 
 const max = moment().format("YYYY-MM-DD");
-
+const list = [
+  "BCG",
+  "HBV 1",
+  "OPV",
+  "OPV 1",
+  "PCV 1",
+  "Rotarix 1",
+  "Pentavalent 1",
+  "OPV 2",
+  "Rotarix 2",
+  "PCV 2",
+  "Pentavalent 2",
+  "OPV 3",
+  "PCV 3",
+  "IPV",
+  "Rotarix 3",
+  "Pentavalent 3",
+  "Vitamin A1",
+  "Measles Vaccine",
+  "Yellow Fever Vaccine",
+  "Meningitis Vaccine",
+  "Vitamin A2",
+  "OPV Booster",
+  "Measles 2 Vaccine",
+  "Typhoid Vaccine"
+];
 export default class Data extends Component {
   state = {
     data: {},
@@ -172,9 +197,44 @@ export default class Data extends Component {
     if (immunizationDetails.ok) {
       const immunization = await immunizationDetails.json();
 
-      const immunizationData = immunization.data;
+      const list = [
+        "BCG",
+        "HBV 1",
+        "OPV",
+        "OPV 1",
+        "PCV 1",
+        "Rotarix 1",
+        "Pentavalent 1",
+        "OPV 2",
+        "Rotarix 2",
+        "PCV 2",
+        "OPV 2",
+        "Pentavalent 2",
+        "OPV 3",
+        "PCV 3",
+        "IPV",
+        "Rotarix 3",
+        "Pentavalent 3",
+        "Vitamin A1",
+        "Measles Vaccine",
+        "Yellow Fever Vaccine",
+        "Meningitis Vaccine",
+        "Vitamin A2",
+        "OPV Booster",
+        "Measles 2 Vaccine",
+        "Typhoid Vaccine"
+      ];
+
+      let color = "rgba(255,0,0,0.3)";
+
+      immunization.data.forEach(im => {
+        if (list.includes(im.name)) {
+          // return im.color =
+        }
+      });
+
       await this.setState({
-        immunization: immunizationData
+        immunization: immunization.data
       });
       console.log(immunization.data);
     }
@@ -1533,23 +1593,29 @@ export default class Data extends Component {
                     </CardTitle>
                   </CardBody>
                   <div className="table-responsive">
-                    <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                    <table className="align-middle mb-0 table table-striped table-hover">
                       <thead>
                         <tr>
                           <th className="text-center">Name</th>
-                          <th className="text-center">Date</th>
+                          <th className="text-center">Date Immunized</th>
                         </tr>
                       </thead>
-                      {this.state.immunization.map(item => {
+                      {list.map(item => {
+                        let color = 'rgba(255, 0, 0, 0.4)';
+                        let date = "-";
+                        this.state.immunization.forEach(im => {
+                          if (item == im.type) {
+                            color = 'rgba(0, 255, 0, 0.5)'
+                            date = moment(im.createdAt).format(
+                              "DD - MM - YYYY"
+                            );
+                          }
+                        });
                         return (
-                          <tbody key={item.type}>
-                            <tr>
-                              <td className="text-center">{item.type}</td>
-                              <td className="text-center">
-                                {moment(item.createdAt).format(
-                                  "DD - MM - YYYY"
-                                )}
-                              </td>
+                          <tbody key={item}>
+                            <tr style={{ backgroundColor: color }}>
+                              <td className="text-center">{item}</td>
+                              <td className="text-center">{date}</td>
                             </tr>
                           </tbody>
                         );

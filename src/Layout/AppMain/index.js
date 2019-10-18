@@ -129,7 +129,7 @@ const AppMain = () => {
       >
         <Route path="/hospital/new" component={NewHospital} />
       </Suspense>
-      
+
       <Suspense
         fallback={
           <div className="loader-container">
@@ -139,7 +139,7 @@ const AppMain = () => {
           </div>
         }
       >
-        <Route path="/hospital" component={Hospital} />
+        <Route exact path="/hospital" component={Hospital} />
       </Suspense>
 
       <Suspense
@@ -151,7 +151,7 @@ const AppMain = () => {
           </div>
         }
       >
-        <Route path="/hmo" component={HMO} />
+        <Route exact path="/hmo" component={HMO} />
       </Suspense>
 
       <Suspense
@@ -175,7 +175,7 @@ const AppMain = () => {
           </div>
         }
       >
-        <Route path="/hospital/:id" component={Hospital_id} />
+        <Route exact path="/hospital/:id/view" component={Hospital_id} />
       </Suspense>
 
       <Suspense
