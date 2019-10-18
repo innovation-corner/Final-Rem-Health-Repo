@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   HMO.associate = function(models) {
     // associations can be defined here
+    HMO.belongsTo(models.User,{
+      foreignKey:'admin',
+      as:'hmo'
+    })
   };
   return HMO;
 };
