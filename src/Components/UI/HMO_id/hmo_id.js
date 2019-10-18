@@ -25,12 +25,11 @@ export default class Data extends Component {
   state = {
     data: {},
     loading: false,
-    soo: "",
+    adminName: "",
     email: "",
-    language: "",
+    address: "",
     phonenumber: "",
     dob: "",
-    qrCode: "",
     name: "",
     gender: "",
     disableState: true,
@@ -107,7 +106,7 @@ export default class Data extends Component {
     const token = await sessionStorage.getItem("token");
 
     const { id } = this.props.match.params;
-    const response = await fetch(`https://api.remhealth.co/info/view/${id}`, {
+    const response = await fetch(`https://api.remhealth.co/hmo/view/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -115,46 +114,19 @@ export default class Data extends Component {
       }
     });
 
-    const { data } = await response.json();
-
-    const {
-      email,
-      phonenumber,
-      dob,
-      name,
-      immunizationCode,
-      gender,
-      state,
-      language
-    } = data;
+    const { hmo } = await response.json();
+    console.log(hmo);
+    const { createdAt, name, admin, address } = hmo;
 
     await this.setState({
-      email,
-      phonenumber,
-      dob,
+      email: admin.email,
+      dob: createdAt,
       id,
+      address,
       name,
-      immunizationCode,
-      gender,
-      language,
-      soo: state
+      adminName: admin.name,
+      phonenumber: admin.phonenumber
     });
-
-    let image;
-    let randomCode = data.qrCode;
-    if (data.qrCode) {
-      const res = await fetch(
-        `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
-        {
-          method: "POST"
-        }
-      );
-
-      const images = await res.blob();
-
-      image = await URL.createObjectURL(images);
-    }
-    this.setState({ qrCode: image });
   }
 
   onChangeHandler = e => {
@@ -1212,13 +1184,8 @@ export default class Data extends Component {
     fetch(`https://api.remhealth.co/info/edit/${this.state.id}`, {
       method: "PUT",
       body: JSON.stringify({
-        email: this.state.email,
-        phonenumber: this.state.phonenumber,
-        dob: this.state.dob,
-        gender: this.state.gender,
         name: this.state.name,
-        language: this.state.language,
-        name: this.state.name
+        address: this.state.address
       }),
       headers: {
         "Content-Type": "application/json"
@@ -1236,28 +1203,11 @@ export default class Data extends Component {
           return res.json().then(res => {
             const { data } = res;
 
-            const {
-              email,
-              phonenumber,
-              dob,
-              name,
-              immunizationCode,
-              gender,
-              state,
-              id,
-              language
-            } = data;
+            const { name, address } = data;
 
             this.setState({
-              email,
-              phonenumber,
-              dob,
-              id,
               name,
-              immunizationCode,
-              gender,
-              language,
-              soo: state
+              address
             });
           });
         }
@@ -1285,24 +1235,16 @@ export default class Data extends Component {
                 <Card className="main-card mb-3">
                   <CardBody>
                     <CardTitle style={{ textAlign: "center" }}>
-                      Registration Info
+                      HMO Info
                     </CardTitle>
                     <Form>
                       <Row>
-                        <Col md={4}>
-                          <Row>
-                            <Col md={12}>
-                              {this.state.qrCode
-                                ? this.state.qrCode
-                                : "No QR Code"}
-                            </Col>
-                          </Row>
-                        </Col>
-                        <Col md={8}>
+                        <Col md={2}></Col>
+                        <Col md={10}>
                           <Row form>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="name">Full Name</Label>
+                                <Label for="name"> Name</Label>
                                 <Input
                                   value={this.state.name}
                                   required
@@ -1317,7 +1259,7 @@ export default class Data extends Component {
                             </Col>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="dob">Date Of Birth</Label>
+                                <Label for="dob">Date Of Registration</Label>
                                 <Input
                                   value={moment(this.state.dob).format(
                                     "YYYY-MM-DD"
@@ -1328,7 +1270,7 @@ export default class Data extends Component {
                                   id="dob"
                                   max={max}
                                   onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
+                                  disabled
                                 />
                               </FormGroup>
                             </Col>
@@ -1336,27 +1278,15 @@ export default class Data extends Component {
                           <Row form>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="state">State</Label>
+                                <Label for="adminName">Admin</Label>
                                 <Input
-                                  value={this.state.soo}
-                                  type="select"
-                                  name="soo"
-                                  id="state"
+                                  value={this.state.adminName}
+                                  type="text"
+                                  name="adminName"
+                                  id="adminName"
                                   onChange={this.onChangeHandler}
-                                  disabled={
-                                    this.state.disableState ||
-                                    this.state.disableInput
-                                  }
-                                >
-                                  <option>--State--</option>
-                                  {this.state.sor.map(sors => {
-                                    return (
-                                      <option key={sors} value={sors}>
-                                        {sors}
-                                      </option>
-                                    );
-                                  })}
-                                </Input>
+                                  disabled
+                                />
                               </FormGroup>
                             </Col>
                             <Col md={6}>
@@ -1370,65 +1300,12 @@ export default class Data extends Component {
                                   required
                                   placeholder="Phone Number"
                                   onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row form>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="gender">Gender</Label>
-                                <Input
-                                  value={this.state.gender}
-                                  type="select"
-                                  name="gender"
-                                  id="gender"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                >
-                                  <option>Male</option>
-                                  <option>Female</option>
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="language">Language</Label>
-                                <Input
-                                  value={this.state.language}
-                                  type="select"
-                                  name="language"
-                                  id="language"
-                                  placeholder="language"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                >
-                                  <option>English</option>
-                                  <option>Pidgin</option>
-                                  <option>Igbo</option>
-                                  <option>Yoruba</option>
-                                  <option>Hausa</option>
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row form>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="immunizationCode">
-                                  Immunization Code
-                                </Label>
-                                <Input
-                                  value={this.state.immunizationCode}
-                                  type="text"
-                                  name="immunizationCode"
-                                  id="immunizationCode"
-                                  onChange={this.onChangeHandler}
                                   disabled
                                 />
                               </FormGroup>
                             </Col>
+                          </Row>
+                          <Row form>
                             <Col md={6}>
                               <FormGroup>
                                 <Label for="email">Email</Label>
@@ -1438,6 +1315,20 @@ export default class Data extends Component {
                                   name="email"
                                   id="email"
                                   placeholder="yourmail@host.com"
+                                  onChange={this.onChangeHandler}
+                                  disabled
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="address">Address</Label>
+                                <Input
+                                  value={this.state.address}
+                                  type="text-area"
+                                  name="address"
+                                  id="address"
+                                  placeholder="address"
                                   onChange={this.onChangeHandler}
                                   disabled={this.state.disableInput}
                                 />
@@ -1490,19 +1381,6 @@ export default class Data extends Component {
                         </Col>
                       </Row>
                     </Form>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md="12">
-                <Card className="main-card mb-3">
-                  <CardBody>
-                    <CardTitle style={{ textAlign: "center" }}>
-                      Immunization Info
-                    </CardTitle>
-                    <Form></Form>
                   </CardBody>
                 </Card>
               </Col>

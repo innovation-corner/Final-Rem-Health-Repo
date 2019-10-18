@@ -186,7 +186,7 @@ export default class Data extends Component {
 
     const length = await totData.json();
 
-    if (totData.statusText == "ok") {
+    if (totData.ok) {
       const totalData = length.hmos;
 
       await this.setState({
@@ -2036,7 +2036,7 @@ export default class Data extends Component {
 
                                 <td className="text-center">
                                   <Link
-                                    to={`/hmo/${item.id}`}
+                                    to={`/hmos/${item.id}`}
                                     params={{ id: item.id }}
                                   >
                                     view

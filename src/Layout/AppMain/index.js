@@ -163,7 +163,7 @@ const AppMain = () => {
           </div>
         }
       >
-        <Route path="/hmo/:id" component={HMO_id} />
+        <Route path="/hmos/:id" component={HMO_id} />
       </Suspense>
 
       <Suspense

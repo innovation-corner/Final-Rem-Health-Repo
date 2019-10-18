@@ -177,7 +177,7 @@ export default class Data extends Component {
       role: user.role
     });
 
-    const totData = await fetch(`https://api.remhealth.co/hospital/view/all`, {
+    const totData = await fetch(`https://api.remhealth.co/hospital/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -189,7 +189,7 @@ export default class Data extends Component {
 
     const length = await totData.json();
 
-    if (totData.statusText == "ok") {
+    if (totData.ok) {
       const totalData = length.hospitals;
 
       await this.setState({
@@ -1338,7 +1338,7 @@ export default class Data extends Component {
     if (this.state.input != "") {
       const token = sessionStorage.getItem("token");
       await fetch(
-        `https://api.remhealth.co/info/list?search=${this.state.input}`,
+        `https://api.remhealth.co/hospital/all?search=${this.state.input}`,
         {
           method: "GET",
           headers: {
@@ -1352,14 +1352,16 @@ export default class Data extends Component {
             this.setState(
               { totalData: [], error: "No Data Found" },
               this.noData
-            );
+              );
+              res.json().then(res=>console.log(res))
             return;
           }
           return res.json();
         })
         .then(res => {
+          console.log(res)
           this.setState(
-            { totalData: res.data.rows, message: "Data retrieved" },
+            { totalData: res.hospitals, message: "Data retrieved" },
             this.retrievedData
           );
         });

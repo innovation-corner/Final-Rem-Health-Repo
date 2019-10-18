@@ -23,13 +23,13 @@ class Add extends React.Component {
     loading: false,
     soo: "",
     email: "",
-    language: "",
+    password: "",
     phonenumber: "",
-    dob: "",
+    contactName: "",
     lga: [],
     slga: "",
     name: "",
-    gender: "Male",
+    address: "",
     disableState: true,
     sor: [
       "Abia",
@@ -71,6 +71,24 @@ class Add extends React.Component {
       "F.C.T"
     ]
   };
+
+  errorToast = error =>
+    (this.toastId = toast(error, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "error",
+      hideProgressBar: true
+    }));
+
+  successToast = m =>
+    (this.toastId = toast(m, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "success",
+      hideProgressBar: true
+    }));
 
   handleState = () => {
     let states = this.state.soo;
@@ -480,14 +498,7 @@ class Add extends React.Component {
 
       case "FCT":
         this.setState({
-          lga: [
-            "Abaji",
-            "Bwari",
-            "Gwagwalada",
-            "Kuje",
-            "Kwali",
-            "AMAC"
-          ]
+          lga: ["Abaji", "Bwari", "Gwagwalada", "Kuje", "Kwali", "AMAC"]
         });
         break;
       case "Gombe":
@@ -1154,7 +1165,58 @@ class Add extends React.Component {
     }
   };
 
-  max = moment().format("YYYY-MM-DD");
+  onSubmitHandler = async e => {
+    e.preventDefault();
+    const token = sessionStorage.getItem("token");
+    this.setState({ loading: true });
+    try {
+      let data = {
+        email: this.state.email,
+        password: this.state.password,
+        contactName: this.state.contactName,
+        address: this.state.address,
+        contactName: this.state.contactName,
+        name: this.state.name,
+        state: this.state.soo,
+        phonenumber: this.state.phonenumber,
+        lga: this.state.slga
+      };
+
+      const res = await fetch(`https://api.remhealth.co/hospital/add`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(data);
+      if (!res.ok) {
+        const response = await res.json();
+        console.log(response);
+        throw new Error(response.message);
+      }
+      this.setState({ loading: false });
+      this.successToast("user added");
+      this.setState({
+        soo: "",
+        email: "",
+        password: "",
+        phonenumber: "",
+        contactName: "",
+        lga: [],
+        slga: "",
+        name: "",
+        address: ""
+      });
+    } catch (error) {
+      this.setState({ loading: false });
+      console.log(error.message);
+      // error = error.toString()
+      return this.errorToast(error.message);
+    }
+  };
+
   render() {
     return (
       <Fragment>
@@ -1176,28 +1238,28 @@ class Add extends React.Component {
                   <Col md={2}></Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="name">Full Name</Label>
+                      <Label for="name">Hospital Name</Label>
                       <Input
                         value={this.state.name}
                         required
                         type="text"
                         name="name"
                         id="name"
-                        placeholder="Enter full name"
+                        placeholder="Enter Hospital name"
                         onChange={this.onChangeHandler}
                       />
                     </FormGroup>
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="dob">Date Of Birth</Label>
+                      <Label for="contactName">Admin Name</Label>
                       <Input
-                        value={this.state.dob}
-                        type="date"
+                        value={this.state.contactName}
+                        type="text"
                         required
-                        name="dob"
-                        id="dob"
-                        max={this.max}
+                        name="contactName"
+                        placeholder="Enter full name"
+                        id="contactName"
                         onChange={this.onChangeHandler}
                       />
                     </FormGroup>
@@ -1256,36 +1318,28 @@ class Add extends React.Component {
                   <Col md={2}></Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="gender">Gender</Label>
+                      <Label for="address">Address</Label>
                       <Input
-                        value={this.state.gender}
-                        type="select"
-                        name="gender"
-                        id="gender"
+                        value={this.state.address}
+                        type="text-area"
+                        name="address"
+                        placeholder="Enter Adress"
+                        id="address"
                         onChange={this.onChangeHandler}
-                      >
-                        <option>Male</option>
-                        <option>Female</option>
-                      </Input>
+                      />
                     </FormGroup>
                   </Col>
                   <Col md={4}>
                     <FormGroup>
-                      <Label for="language">Language</Label>
+                      <Label for="password">Password</Label>
                       <Input
-                        value={this.state.language}
-                        type="select"
-                        name="language"
-                        id="language"
-                        placeholder="language"
+                        value={this.state.password}
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="password"
                         onChange={this.onChangeHandler}
-                      >
-                        <option>English</option>
-                        <option>Pidgin</option>
-                        <option>Igbo</option>
-                        <option>Yoruba</option>
-                        <option>Hausa</option>
-                      </Input>
+                      />
                     </FormGroup>
                   </Col>
                 </Row>
@@ -1326,7 +1380,7 @@ class Add extends React.Component {
                       <Button
                         color="success"
                         className="mt-2"
-                        onClick={this.loginHandler}
+                        onClick={this.onSubmitHandler}
                       >
                         Save
                       </Button>

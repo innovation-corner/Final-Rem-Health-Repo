@@ -26,6 +26,7 @@ class User extends React.Component {
     language: "",
     phonenumber: "",
     username: "",
+    address: "",
     name: "",
     hmo: "",
     role: "",
@@ -120,7 +121,7 @@ class User extends React.Component {
     }));
 
   successToast = () =>
-    (this.toastId = toast(this.state.error, {
+    (this.toastId = toast(this.state.success, {
       transition: Bounce,
       autoClose: 5000,
       position: "top-right",
@@ -154,27 +155,36 @@ class User extends React.Component {
         );
         return;
       }
-      if (this.state.role == "HMO" && this.state.hmo == "") {
-        this.setState({ error: "Please fill in HMO name" }, this.errorToast);
+      if (
+        this.state.role == "HMO" &&
+        (this.state.hmo == "" || this.state.address == "")
+      ) {
+        this.setState(
+          { error: "Please fill in HMO name and Address" },
+          this.errorToast
+        );
         return;
       }
       this.setState({ loading: true });
 
       let url;
+      let data = {
+        password: this.state.password,
+        state: this.state.soo,
+        email: this.state.email,
+        role: this.state.role,
+        username: this.state.username,
+        address: this.state.address,
+        name: this.state.name,
+        contactName: this.state.hmo,
+        phonenumber: this.state.phonenumber
+      };
       this.state.role == "HMO"
         ? (url = "https://api.remhealth.co/hmo/register")
         : "https://api.remhealth.co/auth/register";
       const res = await fetch(url, {
         method: "POST",
-        body: JSON.stringify({
-          password: this.state.password,
-          soo: this.state.soo,
-          email: this.state.email,
-          role: this.state.role,
-          username: this.state.username,
-          name: this.state.name,
-          contactName: this.state.hmo
-        }),
+        body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
@@ -187,7 +197,7 @@ class User extends React.Component {
 
         return this.setState({ error: response.message }, this.errorToast);
       }
-      this.setState({ error: res.message }, this.errorToast);
+      console.log(response)
       return this.setState({ error: response.message }, this.successToast);
     } catch (e) {
       console.log(e);
@@ -310,9 +320,9 @@ class User extends React.Component {
                     </FormGroup>
                   </Col>
                 </Row>
-                <Row form>
-                  <Col md={2}></Col>
-                  {this.state.role == "HMO" ? (
+                {this.state.role == "HMO" ? (
+                  <Row form>
+                    <Col md={2}></Col>
                     <Col md={4}>
                       <FormGroup>
                         <Label for="password">HMO</Label>
@@ -321,6 +331,35 @@ class User extends React.Component {
                           type="text"
                           name="hmo"
                           id="hmo"
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="address">Address</Label>
+                        <Input
+                          value={this.state.address}
+                          type="text-area"
+                          name="address"
+                          id="address"
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                ) : null}
+                <Row form>
+                  <Col md={2}></Col>
+                  {this.state.role == "HMO" ? (
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="phonenumber">Phonenumber</Label>
+                        <Input
+                          value={this.state.phonenumber}
+                          type="text"
+                          name="phonenumber"
+                          id="phonenumber"
                           onChange={this.onChangeHandler}
                         />
                       </FormGroup>

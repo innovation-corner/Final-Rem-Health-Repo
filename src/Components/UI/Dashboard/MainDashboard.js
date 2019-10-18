@@ -619,7 +619,7 @@ export default class MainDashboard extends PureComponent {
                   </div>
                   <div className="widget-subheading"> </div>
                   <div className="widget-description text-white">
-                    <span className="pl-1">{`< twenty four months old`}</span>
+                    <span className="pl-1">{`< twelve months old`}</span>
                   </div>
                 </div>
               </Col>
