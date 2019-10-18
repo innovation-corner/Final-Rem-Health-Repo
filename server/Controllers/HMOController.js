@@ -2,7 +2,7 @@ const { HMO, User } = require("../models");
 const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
 const moment = require("moment");
-const _ = require('lodash');
+const _ = require("lodash");
 
 module.exports = {
   async register(req, res) {
@@ -30,7 +30,7 @@ module.exports = {
       }
 
       const hmoDetails = {
-        name,
+        name: contactName,
         phonenumber,
         email,
         address
@@ -53,7 +53,7 @@ module.exports = {
       }
 
       const data = {
-        name: contactName,
+        name,
         email,
         username,
         phonenumber,
@@ -69,7 +69,7 @@ module.exports = {
         role: user.role
       });
 
-      hosDetails.admin = user.id;
+      hmoDetails.admin = user.id;
       const hmo = await HMO.create(hmoDetails);
 
       const responseObj = { user, token, hmo };
