@@ -5,6 +5,6 @@ const hs = require("../Controllers/HospitalController");
 router.post("/add", hs.create);
 router.put("/edit/:id", hs.edit);
 router.get("/view/:id", hs.view);
-router.get("/view/all", hs.viewAll);
+router.get("/all", hs.viewAll);
 
 module.exports = router;
