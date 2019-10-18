@@ -3,7 +3,9 @@ module.exports = (sequelize, DataTypes) => {
   const ImmunizationRecord = sequelize.define(
     "ImmunizationRecord",
     {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      lat: DataTypes.STRING,
+      lon: DataTypes.STRING
     },
     {}
   );

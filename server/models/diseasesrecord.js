@@ -4,6 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     state: DataTypes.STRING,
     lga: DataTypes.STRING,
+    lat: DataTypes.STRING,
+    lon: DataTypes.STRING,
   }, {});
   DiseasesRecord.associate = function(models) {
     // associations can be defined here
