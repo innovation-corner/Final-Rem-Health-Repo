@@ -1,7 +1,7 @@
 const { User } = require("../models");
 // const JwtService = require("../modules/auth.module");
 // const passport = require("passport");
-// const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   async list(req, res) {
@@ -23,7 +23,7 @@ module.exports = {
   async edit(req, res) {
     try {
       const { id } = req.params;
-      const details = req.body;
+      let details = req.body;
 
       const reqUser = await User.findOne({ where: { id } });
       if (!reqUser) {
@@ -31,14 +31,20 @@ module.exports = {
       }
 
       if (details.password) {
-        if (!reqUser.validPassword(details.password)) {
-          return res.status(400).json({
-            message: "Incorrect password."
-          });
-        }
+        // if (!reqUser.validPassword(details.password)) {
+        //   return res.status(400).json({
+        //     message: "Incorrect password."
+        //   });
+        // }
         if (details.password.trim() === "") {
           return res.status(400).json({ message: "invalid password" });
         }
+
+        details.password = bcrypt.hashSync(
+          details.password,
+          bcrypt.genSaltSync(8),
+          null
+        );
       }
 
       await User.update(details, {
