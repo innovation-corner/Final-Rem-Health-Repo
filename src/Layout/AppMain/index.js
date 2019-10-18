@@ -175,7 +175,7 @@ const AppMain = () => {
           </div>
         }
       >
-        <Route exact path="/hospital/:id/view" component={Hospital_id} />
+        <Route exact path="/hospitals/:id" component={Hospital_id} />
       </Suspense>
 
       <Suspense

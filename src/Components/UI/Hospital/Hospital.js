@@ -2068,7 +2068,7 @@ export default class Data extends Component {
 
                                 <td className="text-center">
                                   <Link
-                                    to={`/hmo/${item.id}`}
+                                    to={`/hospitals/${item.id}`}
                                     params={{ id: item.id }}
                                   >
                                     view

@@ -27,10 +27,11 @@ export default class Data extends Component {
     loading: false,
     soo: "",
     email: "",
-    language: "",
+    lga: [],
+    slga: "",
     phonenumber: "",
-    dob: "",
-    qrCode: "",
+    adminName: "",
+    address: "",
     name: "",
     gender: "",
     disableState: true,
@@ -107,54 +108,50 @@ export default class Data extends Component {
     const token = await sessionStorage.getItem("token");
 
     const { id } = this.props.match.params;
-    const response = await fetch(`https://api.remhealth.co/info/view/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+    const response = await fetch(
+      `https://api.remhealth.co/hospital/view/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
       }
-    });
+    );
 
-    const { data } = await response.json();
+    const { hospital } = await response.json();
 
-    const {
-      email,
-      phonenumber,
-      dob,
-      name,
-      immunizationCode,
-      gender,
-      state,
-      language
-    } = data;
-
+    console.log(hospital);
+    const { admin, name, code, state, lga, address } = hospital;
+    // address: "no 30, Igando street"
+    // admin:
+    // createdAt: "2019-10-18T19:02:08.000Z"
+    // email: "cclinix@mail.com"
+    // id: 6
+    // name: "Test User"
+    // phonenumber: "08123123123"
+    // role: "user"
+    // state: "Lagos"
+    // updatedAt: "2019-10-18T19:02:08.000Z"
+    // username: "08123123123"
+    // __proto__: Object
+    // code: "LA-IBE-0001"
+    // createdAt: "2019-10-18T19:02:08.000Z"
+    // id: 1
+    // lga: "Ibeju-Lekki"
+    // name: "Carlson Clinics"
+    // state: "Lagos"
     await this.setState({
-      email,
-      phonenumber,
-      dob,
+      email: admin.email,
+      phonenumber: admin.phonenumber,
       id,
       name,
-      immunizationCode,
-      gender,
-      language,
+      address,
+      slga: lga,
+      adminName: admin.name,
+      immunizationCode: code,
       soo: state
     });
-
-    let image;
-    let randomCode = data.qrCode;
-    if (data.qrCode) {
-      const res = await fetch(
-        `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${randomCode}&margin=2`,
-        {
-          method: "POST"
-        }
-      );
-
-      const images = await res.blob();
-
-      image = await URL.createObjectURL(images);
-    }
-    this.setState({ qrCode: image });
   }
 
   onChangeHandler = e => {
@@ -719,7 +716,7 @@ export default class Data extends Component {
             "Kumbotso",
             "Kunchi",
             "Kura",
-            "Madobi",
+            "MaadminNamei",
             "Makoda",
             "Minjibir",
             "Nasarawa",
@@ -1212,13 +1209,8 @@ export default class Data extends Component {
     fetch(`https://api.remhealth.co/info/edit/${this.state.id}`, {
       method: "PUT",
       body: JSON.stringify({
-        email: this.state.email,
-        phonenumber: this.state.phonenumber,
-        dob: this.state.dob,
-        gender: this.state.gender,
+        address: this.state.address,
         name: this.state.name,
-        language: this.state.language,
-        name: this.state.name
       }),
       headers: {
         "Content-Type": "application/json"
@@ -1237,27 +1229,13 @@ export default class Data extends Component {
             const { data } = res;
 
             const {
-              email,
-              phonenumber,
-              dob,
               name,
-              immunizationCode,
-              gender,
-              state,
-              id,
-              language
+              address
             } = data;
 
             this.setState({
-              email,
-              phonenumber,
-              dob,
-              id,
               name,
-              immunizationCode,
-              gender,
-              language,
-              soo: state
+              address,
             });
           });
         }
@@ -1285,24 +1263,16 @@ export default class Data extends Component {
                 <Card className="main-card mb-3">
                   <CardBody>
                     <CardTitle style={{ textAlign: "center" }}>
-                      Registration Infos
+                      Hospital
                     </CardTitle>
                     <Form>
                       <Row>
-                        <Col md={4}>
-                          <Row>
-                            <Col md={12}>
-                              {this.state.qrCode
-                                ? this.state.qrCode
-                                : "No QR Code"}
-                            </Col>
-                          </Row>
-                        </Col>
-                        <Col md={8}>
+                        <Col md={2}></Col>
+                        <Col md={10}>
                           <Row form>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="name">Full Name</Label>
+                                <Label for="name">Name</Label>
                                 <Input
                                   value={this.state.name}
                                   required
@@ -1317,18 +1287,15 @@ export default class Data extends Component {
                             </Col>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="dob">Date Of Birth</Label>
+                                <Label for="adminName">Admin</Label>
                                 <Input
-                                  value={moment(this.state.dob).format(
-                                    "YYYY-MM-DD"
-                                  )}
-                                  type="date"
+                                  value={this.state.adminName}
+                                  type="text"
                                   required
-                                  name="dob"
-                                  id="dob"
-                                  max={max}
+                                  name="adminName"
+                                  id="adminName"
                                   onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
+                                  disabled
                                 />
                               </FormGroup>
                             </Col>
@@ -1336,12 +1303,12 @@ export default class Data extends Component {
                           <Row form>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="state">State</Label>
+                                <Label for="soo">State</Label>
                                 <Input
                                   value={this.state.soo}
                                   type="select"
                                   name="soo"
-                                  id="state"
+                                  id="soo"
                                   onChange={this.onChangeHandler}
                                   disabled={
                                     this.state.disableState ||
@@ -1360,6 +1327,32 @@ export default class Data extends Component {
                               </FormGroup>
                             </Col>
                             <Col md={6}>
+                              <Label for="lga">LGA</Label>
+                              <Input
+                                value={this.state.slga}
+                                type="select"
+                                name="slga"
+                                id="lga"
+                                onChange={this.onChangeHandler}
+                                disabled={
+                                  this.state.disableState ||
+                                  this.state.soo == "" ||
+                                  this.state.disableInput
+                                }
+                              >
+                                <option defaultValue>{this.state.slga}</option>
+                                {this.state.lga.map(slga => {
+                                  return (
+                                    <option key={slga} value={slga}>
+                                      {slga}
+                                    </option>
+                                  );
+                                })}
+                              </Input>
+                            </Col>
+                          </Row>
+                          <Row form>
+                            <Col md={6}>
                               <FormGroup>
                                 <Label for="phonenumber">Phonenumber</Label>
                                 <Input
@@ -1370,6 +1363,20 @@ export default class Data extends Component {
                                   required
                                   placeholder="Phone Number"
                                   onChange={this.onChangeHandler}
+                                  disabled
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="address">Address</Label>
+                                <Input
+                                  value={this.state.address}
+                                  type="text-area"
+                                  name="address"
+                                  id="address"
+                                  placeholder="address"
+                                  onChange={this.onChangeHandler}
                                   disabled={this.state.disableInput}
                                 />
                               </FormGroup>
@@ -1378,46 +1385,8 @@ export default class Data extends Component {
                           <Row form>
                             <Col md={6}>
                               <FormGroup>
-                                <Label for="gender">Gender</Label>
-                                <Input
-                                  value={this.state.gender}
-                                  type="select"
-                                  name="gender"
-                                  id="gender"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                >
-                                  <option>Male</option>
-                                  <option>Female</option>
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="language">Language</Label>
-                                <Input
-                                  value={this.state.language}
-                                  type="select"
-                                  name="language"
-                                  id="language"
-                                  placeholder="language"
-                                  onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
-                                >
-                                  <option>English</option>
-                                  <option>Pidgin</option>
-                                  <option>Igbo</option>
-                                  <option>Yoruba</option>
-                                  <option>Hausa</option>
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row form>
-                            <Col md={6}>
-                              <FormGroup>
                                 <Label for="immunizationCode">
-                                  Immunization Code
+                                  Hospital Code
                                 </Label>
                                 <Input
                                   value={this.state.immunizationCode}
@@ -1439,7 +1408,7 @@ export default class Data extends Component {
                                   id="email"
                                   placeholder="yourmail@host.com"
                                   onChange={this.onChangeHandler}
-                                  disabled={this.state.disableInput}
+                                  disabled
                                 />
                               </FormGroup>
                             </Col>
@@ -1490,19 +1459,6 @@ export default class Data extends Component {
                         </Col>
                       </Row>
                     </Form>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md="12">
-                <Card className="main-card mb-3">
-                  <CardBody>
-                    <CardTitle style={{ textAlign: "center" }}>
-                      Immunization Info
-                    </CardTitle>
-                    <Form></Form>
                   </CardBody>
                 </Card>
               </Col>
