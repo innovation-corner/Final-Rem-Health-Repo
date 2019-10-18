@@ -175,7 +175,7 @@ module.exports = {
         };
       }
 
-      const hospitals = await Hospital.findAll({ where: { query } });
+      const hospitals = await Hospital.findAll({ where: query });
       if (!hospitals.length) {
         return res.status(400).json({ message: "No hospitals" });
       }
