@@ -162,7 +162,6 @@ module.exports = {
       if (search) {
         query[Op.or] = [
           { name: { [Op.like]: "%" + search + "%" } },
-          { phonenumber: search },
           { state: search },
           { lga: search },
           { code: search }
