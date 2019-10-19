@@ -6,6 +6,8 @@ import classnames from "classnames";
 import JwPagination from "jw-react-pagination";
 import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
 
+import Map from "../Map/Map";
+
 import {
   Row,
   Col,
@@ -39,6 +41,7 @@ export default class Data extends Component {
     activeTab1: "11",
     tooltipOpen: false,
     name: "",
+    showMap: false,
     input: "",
     dateTo: "",
     error: "",
@@ -67,6 +70,7 @@ export default class Data extends Component {
     dateRange: false,
     ageRange: false,
     lga: [],
+    zoom: null,
     slga: "",
     sor: [
       "Abia",
@@ -106,7 +110,17 @@ export default class Data extends Component {
       "Yobe",
       "Zamfara",
       "F.C.T"
-    ]
+    ],
+    locations: []
+  };
+
+  modalHandler = (e, lat, lng) => {
+    e.preventDefault();
+    const locations = [{ lat, lng }];
+    // this.setState({ locations, initial: locations[0] });
+    this.state.showMap
+      ? this.setState({ showMap: false, zoom: null })
+      : this.setState({ locations }, this.setState({ showMap: true }));
   };
 
   toggle = () => this.setState({ tooltipOpen: !this.state.tooltipOpen });
@@ -185,8 +199,6 @@ export default class Data extends Component {
       }
     });
 
-    console.log(totData);
-
     const length = await totData.json();
 
     if (totData.ok) {
@@ -196,9 +208,27 @@ export default class Data extends Component {
         totalData
       });
     }
-    console.log(length);
   }
 
+  mapHandler = e => {
+    const loc = this.state.totalData
+      .filter(data => {
+        return data.lon !== null && data.lat !== null;
+      })
+      .map(data => {
+        return {
+          lat: data.lat,
+          lng: data.lon
+        };
+      });
+    this.setState(
+      { locations: loc, zoom: 5 },
+
+      this.state.showMap
+        ? this.setState({ showMap: false, zoom: null })
+        : this.setState({ showMap: true })
+    );
+  };
   handleState = () => {
     let states = this.state.soo;
     switch (states) {
@@ -1354,13 +1384,11 @@ export default class Data extends Component {
               { totalData: [], error: "No Data Found" },
               this.noData
             );
-            res.json().then(res => console.log(res));
             return;
           }
           return res.json();
         })
         .then(res => {
-          console.log(res);
           this.setState(
             { totalData: res.hospitals, message: "Data retrieved" },
             this.retrievedData
@@ -1405,7 +1433,6 @@ export default class Data extends Component {
         case "BCG":
         case "HBV 1":
         case "OPV":
-          console.log("hello");
           dateFrom = moment()
             .subtract(7, "days")
             .startOf("week")
@@ -1542,9 +1569,6 @@ export default class Data extends Component {
       if (this.state.slga !== "") {
         param = this.state.slga;
       }
-      console.log(param);
-      console.log(this.state.soo);
-      console.log(this.state.slga);
       const token = sessionStorage.getItem("token");
       const res = await fetch(`${url}?search=${param}`, {
         method: "GET",
@@ -1576,7 +1600,6 @@ export default class Data extends Component {
         .toISOString();
     }
 
-    console.log(this.state.searchCriteria, url);
     const start = moment(dateFrom);
     const end = moment(dateTo);
     if (start.diff(end, "days") > 0) {
@@ -1604,7 +1627,6 @@ export default class Data extends Component {
           return res.json();
         })
         .then(res => {
-          console.log(res);
           const data = res.data.rows ? res.data.rows : res.data;
           this.setState(
             {
@@ -2036,13 +2058,17 @@ export default class Data extends Component {
                         />
                       </div>
                       <div className="btn-actions-pane-right">
-                        <div role="group" className="btn-group-sm btn-group">
+                        <div
+                          onClick={this.mapHandler}
+                          role="group"
+                          className="btn-group-sm btn-group"
+                        >
                           {/* <Link to="/new">
                             <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
                               <i className="pe-7s-plus btn-icon-wrapper"> </i>
                             </button>
                           </Link> */}
-                          Add New Data
+                          View Map Data
                         </div>
                       </div>
                     </div>
@@ -2065,13 +2091,15 @@ export default class Data extends Component {
                                 <td className="text-center">{item.state}</td>
                                 <td className="text-center">{item.lga}</td>
 
-                                <td className="text-center">
-                                  <Link
-                                    to={`/hospitals/${item.id}`}
-                                    params={{ id: item.id }}
-                                  >
-                                    view
-                                  </Link>
+                                <td
+                                  className="text-center"
+                                  onClick={e => {
+                                    this.modalHandler(e, item.lat, item.lon);
+                                  }}
+                                >
+                                  {item.lat ? (
+                                    <i className="pe-7s-map-marker"></i>
+                                  ) : null}
                                 </td>
                               </tr>
                             </tbody>
@@ -2088,6 +2116,15 @@ export default class Data extends Component {
                 )}
               </Col>
             </Row>
+            {this.state.locations.length > 0 ? (
+              <Map
+                initial={this.state.locations[0]}
+                clicked={this.modalHandler}
+                shows={this.state.showMap}
+                stores={this.state.locations}
+                zoom={this.state.zoom}
+              />
+            ) : null}
           </div>
         </ReactCSSTransitionGroup>
       </Fragment>
