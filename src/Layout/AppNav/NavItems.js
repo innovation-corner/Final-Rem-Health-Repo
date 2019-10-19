@@ -30,6 +30,11 @@ let MainNav = [
     to: "/hospital"
   },
   {
+    icon: "pe-7s-signal",
+    label: "Diseases",
+    to: "/reported-diseases"
+  },
+  {
     icon: "pe-7s-users",
     label: "Add User",
     to: "/user/new"

@@ -265,7 +265,7 @@ class Add extends React.Component {
                     </FormGroup>
                   </Col>
                 </Row>
-                <Row form>
+                {/* <Row form>
                   <Col md={2}></Col>
                   <Col md={6}>
                     <FormGroup>
@@ -279,7 +279,7 @@ class Add extends React.Component {
                       />
                     </FormGroup>
                   </Col>
-                </Row>
+                </Row> */}
 
                 {!this.state.loading ? (
                   <Row form>

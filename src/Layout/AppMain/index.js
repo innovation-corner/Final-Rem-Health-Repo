@@ -16,6 +16,7 @@ const HMO = lazy(() => import("../../Components/UI/HMO/"));
 const HMO_id = lazy(() => import("../../Components/UI/HMO_id/"));
 const Hospital = lazy(() => import("../../Components/UI/Hospital/"));
 const NewHospital = lazy(() => import("../../Components/UI/New"));
+const List = lazy(() => import("../../Components/UI/Diseases/"));
 const Hospital_id = lazy(() => import("../../Components/UI/Hospital_id/"));
 
 const AppMain = () => {
@@ -188,6 +189,18 @@ const AppMain = () => {
         }
       >
         <Route path="/profile" component={Profile} />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="loader-container">
+            <div className="loader-container-inner">
+              <h6 className="mt-3">Please wait ...</h6>
+            </div>
+          </div>
+        }
+      >
+        <Route path="/reported-diseases" component={List} />
       </Suspense>
 
       <Route exact path="/" render={() => <Redirect to="/home" />} />

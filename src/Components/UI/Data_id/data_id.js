@@ -236,7 +236,6 @@ export default class Data extends Component {
       await this.setState({
         immunization: immunization.data
       });
-      console.log(immunization.data);
     }
   }
 
@@ -1350,7 +1349,6 @@ export default class Data extends Component {
         }
       })
       .catch(err => {
-        console.log(err);
         this.setState({ loading: false });
         this.setState({ error: err.message }, this.loginError);
       });
@@ -1601,7 +1599,7 @@ export default class Data extends Component {
                         </tr>
                       </thead>
                       {list.map(item => {
-                        let color = 'rgba(255, 0, 0, 0.4)';
+                        let color = '';
                         let date = "-";
                         this.state.immunization.forEach(im => {
                           if (item == im.type) {
