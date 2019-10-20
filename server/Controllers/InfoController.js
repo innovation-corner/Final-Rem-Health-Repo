@@ -262,7 +262,7 @@ module.exports = {
       return res.status(200).json({ message: "Got ya", data });
     } catch (error) {
       error = error || error.toString();
-      return res.status(400).json({ message: "An error occurred", error });
+      return res.status(400).json({ message: "An error occurred", error:error.toString() });
     }
   }
 };
