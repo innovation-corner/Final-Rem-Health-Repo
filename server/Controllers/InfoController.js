@@ -233,7 +233,7 @@ module.exports = {
       };
 
       let search = [];
-      asyncForEach(values, async value => {
+      await asyncForEach(values, async value => {
         if (value.name == "dob") {
           switch (value.type) {
             case "between":
