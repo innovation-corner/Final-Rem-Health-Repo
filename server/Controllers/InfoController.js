@@ -224,7 +224,7 @@ module.exports = {
   async complexSearch(req, res) {
     try {
       const { values } = req.body;
-      const criteria = {};
+      let criteria = {};
 
       const asyncForEach = async (array, cb) => {
         for (let index = 0; index < array.length; index++) {
@@ -232,7 +232,7 @@ module.exports = {
         }
       };
 
-      const search = {};
+      let search = {};
       asyncForEach(values, async value => {
         if (value.name == "dob") {
           switch (value.type) {
