@@ -136,7 +136,7 @@ module.exports = {
 
       await Info.update(update, { where: { immunizationCode: id } });
 
-      data = await Info.findOne({ where: { id } });
+      data = await Info.findOne({ where: { immunizationCode: id } });
 
       return res.status(200).json({ message: "Data updated", data });
     } catch (e) {
