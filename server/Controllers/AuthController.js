@@ -1,7 +1,12 @@
-const { User } = require("../models");
+const { User, Hospital } = require("../models");
 const JwtService = require("../modules/auth.module");
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
+const _ = require("lodash");
+const {
+  assignStateCode,
+  assignLga
+} = require("../Services/HospitalCodeService");
 
 module.exports = {
   async register(req, res) {
@@ -148,6 +153,106 @@ module.exports = {
       return res.status(200).json({ message: "valid code", user });
     } catch (error) {
       return res.status(400).json({ message: "An error occured" });
+    }
+  },
+  
+  async create(req, res) {
+    try {
+      const {
+        name,
+        phonenumber,
+        email,
+        password,
+        address,
+        state,
+        lga,
+        contactName
+      } = req.body;
+
+      if (
+        _.isEmpty(name) ||
+        _.isEmpty(phonenumber) ||
+        _.isEmpty(email) ||
+        _.isEmpty(password) ||
+        _.isEmpty(address) ||
+        _.isEmpty(state) ||
+        _.isEmpty(lga) ||
+        _.isEmpty(contactName)
+      ) {
+        return res.status(400).json({ message: "missing fields" });
+      }
+
+      const hosDetails = {
+        name,
+        phonenumber,
+        email,
+        address,
+        state,
+        lga
+      };
+
+      const checkUserEmail = await User.findOne({
+        where: { email }
+      });
+
+      const checkPhone = await User.findOne({
+        where: { phonenumber }
+      });
+
+      if (checkPhone) {
+        return res.status(400).json({ message: "Phonenumber already exists" });
+      }
+
+      if (checkUserEmail) {
+        return res.status(400).json({ message: "email already exists" });
+      }
+
+      const data = {
+        name: contactName,
+        email,
+        username: phonenumber, //user can log in with phonennumber as username
+        phonenumber,
+        password,
+        state
+      };
+
+      const user = await User.create(data);
+      const token = await JwtService.issueToken({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      });
+
+      hosDetails.admin = user.id;
+      const hospital = await Hospital.create(hosDetails);
+      let stateCode = await assignStateCode(state);
+      let lgaCcode = await assignLga(lga);
+      let hsCode;
+      // return console.log(stateCode,lgaCcode)
+
+      if (hospital.id < 10) {
+        hsCode = "000" + hospital.id;
+      } else if (hospital.id >= 10 && hospital.id < 99) {
+        hsCode = "00" + hospital.id;
+      } else if (hospital.id >= 100 && hospital.id < 999) {
+        hsCode = "0" + hospital.id;
+      } else if (hospital.id >= 1000) {
+        hsCode = hospital.id;
+      }
+      hospital.code = `${stateCode}-${lgaCcode}-${hsCode}`;
+      // hospital.admin = user.id
+      console.log(hosDetails);
+      await hospital.save();
+
+      const responseObj = { user, token, hospital };
+
+      return res
+        .status(200)
+        .json({ message: "registration successful", responseObj });
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({ message: "An error occured", e });
     }
   },
 
