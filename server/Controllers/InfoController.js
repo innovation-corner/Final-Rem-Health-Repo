@@ -232,37 +232,41 @@ module.exports = {
         }
       };
 
-      let search = {};
+      let search = [];
       asyncForEach(values, async value => {
         if (value.name == "dob") {
           switch (value.type) {
             case "between":
-              search.dob = { [Op.between]: [value.value[0], value.value[1]] };
+              search.push({
+                dob: { [Op.between]: [value.value[0], value.value[1]] }
+              });
               break;
             case "equals":
-              search.dob = { value };
+              search.push({ dob: value });
           }
         }
         if (value.name == "state") {
-          search.state = value.value;
+          search.push({ state: value.value });
         }
         if (value.name == "lga") {
-          search.lga = value.value;
+          search.push({ lga: value.value });
         }
         if (value.name == "createdAt") {
-          search.createdAt = value.value;
+          search.push({ createdAt: value.value });
         }
         if (value.name == "gender") {
-          search.gender = value.value;
+          search.push({ gender: value.value });
         }
       });
-      criteria = search;
+      criteria[Op.and] = search;
 
       const data = await Info.findAll({ where: criteria });
       return res.status(200).json({ message: "Got ya", data });
     } catch (error) {
       error = error || error.toString();
-      return res.status(400).json({ message: "An error occurred", error:error.toString() });
+      return res
+        .status(400)
+        .json({ message: "An error occurred", error: error.toString() });
     }
   }
 };
