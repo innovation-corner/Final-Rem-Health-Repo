@@ -8,5 +8,6 @@ router.put("/edit/:id", info.editSingle);
 router.get("/view/:id", info.listSingle);
 router.get("/date", info.getByAge);
 router.post("/add", info.create);
+router.post("/query", info.complexSearch);
 
 module.exports = router;

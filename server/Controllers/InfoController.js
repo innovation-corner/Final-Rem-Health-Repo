@@ -111,7 +111,7 @@ module.exports = {
       const update = req.body;
       let data;
 
-      const reqData = await Info.findOne({ where: { id } });
+      const reqData = await Info.findOne({ where: { immunizationCode: id } });
 
       if (!reqData) {
         return res.status(400).json({ message: "Data does not exist" });
@@ -131,10 +131,10 @@ module.exports = {
           imCode = code + update.id;
         }
         update.immunizationCode = imCode;
-        await update.save();
+        // await update.save();
       }
 
-      await Info.update(update, { where: { id } });
+      await Info.update(update, { where: { immunizationCode: id } });
 
       data = await Info.findOne({ where: { id } });
 
@@ -217,6 +217,47 @@ module.exports = {
       return res.status(200).json({ message: "Data saved" });
     } catch (error) {
       console.log(error);
+      return res.status(400).json({ message: "An error occurred", error });
+    }
+  },
+
+  async complexSearch(req, res) {
+    try {
+      const { values } = req.body;
+      const criteria = {};
+
+      const asyncForEach = async (array, cb) => {
+        for (let index = 0; index < array.length; index++) {
+          await cb(array[index], index, array);
+        }
+      };
+
+      asyncForEach(values, async value => {
+        const search = {};
+        if (value.name == "dob") {
+          switch (value.type) {
+            case "between":
+              search.dob = { [Op.between]: [value.value[0], value.value[1]] };
+              break;
+            case "equals":
+              search.dob = { value };
+          }
+        }
+        if (value.name == "state") {
+          search.state = value.value;
+        }
+        if (value.name == "lga") {
+          search.lga = value.value;
+        }
+        if (value.name == "createdAt") {
+          search.createdAt = value.value;
+        }
+        if (value.name == "gender") {
+          search.gender = value.value;
+        }
+      });
+    } catch (error) {
+      error = error || error.toString();
       return res.status(400).json({ message: "An error occurred", error });
     }
   }
