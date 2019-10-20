@@ -232,8 +232,8 @@ module.exports = {
         }
       };
 
+      const search = {};
       asyncForEach(values, async value => {
-        const search = {};
         if (value.name == "dob") {
           switch (value.type) {
             case "between":
@@ -256,6 +256,10 @@ module.exports = {
           search.gender = value.value;
         }
       });
+      criteria = search;
+
+      const data = await Info.findAll({ where: criteria });
+      return res.status(200).json({ message: "Got ya", data });
     } catch (error) {
       error = error || error.toString();
       return res.status(400).json({ message: "An error occurred", error });
