@@ -261,7 +261,10 @@ module.exports = {
       criteria[Op.and] = search;
 
       const data = await Info.findAll({ where: criteria });
-      return res.status(200).json({ message: "Got ya", data:{data,criteria} });
+      if (!data.length) {
+        return res.status(400).json({ message: "No data" });
+      }
+      return res.status(200).json({ message: "Got ya", data });
     } catch (error) {
       error = error || error.toString();
       return res
