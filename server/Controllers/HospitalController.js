@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const { User, Hospital } = require("../models");
+const { User, Hospital, Info } = require("../models");
 const JwtService = require("../modules/auth.module");
 const { Op } = require("sequelize");
 const {
@@ -65,7 +65,8 @@ module.exports = {
         username: phonenumber, //user can log in with phonennumber as username
         phonenumber,
         password,
-        state
+        state,
+        role: 'hospitalAdmin'
       };
 
       const user = await User.create(data);
@@ -186,6 +187,58 @@ module.exports = {
       console.log(error);
       error = error || error.toString();
       return res.status(400).json({ message: "An error occured", error });
+    }
+  },
+
+  async complexSearch(req, res) {
+    try {
+      const { values } = req.body;
+      let criteria = {};
+
+      const asyncForEach = async (array, cb) => {
+        for (let index = 0; index < array.length; index++) {
+          await cb(array[index], index, array);
+        }
+      };
+
+      let search = [];
+      await asyncForEach(values, async value => {
+        if (value.name == "dob") {
+          switch (value.type) {
+            case "between":
+              search.push({
+                dob: { [Op.between]: [value.value[0], value.value[1]] }
+              });
+              break;
+            case "equals":
+              search.push({ dob: value });
+          }
+        }
+        if (value.name == "state") {
+          search.push({ state: value.value });
+        }
+        if (value.name == "lga") {
+          search.push({ lga: value.value });
+        }
+        if (value.name == "createdAt") {
+          search.push({ createdAt: value.value });
+        }
+        if (value.name == "gender") {
+          search.push({ gender: value.value });
+        }
+      });
+      criteria[Op.and] = search;
+
+      const data = await Info.findAll({ where: criteria });
+      if (!data.length) {
+        return res.status(400).json({ message: "No data" });
+      }
+      return res.status(200).json({ message: "Data retrieved", data });
+    } catch (error) {
+      error = error || error.toString();
+      return res
+        .status(400)
+        .json({ message: "An error occurred", error: error.toString() });
     }
   }
 };

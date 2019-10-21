@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "hmo",
       as: "hmos"
     });
+    Info.belongsTo(models.Hospital, {
+      foreignKey: "hospitalCode",
+      as: "hospital"
+    });
   };
   return Info;
 };
