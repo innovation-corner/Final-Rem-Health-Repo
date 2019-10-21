@@ -1580,7 +1580,7 @@ export default class Data extends Component {
       if (res.ok) {
         const { data } = await res.json();
         this.setState(
-          { totalData: data.rows, message: "Data retrieved" },
+          { totalData: data, message: "Data retrieved" },
           this.retrievedData
         );
         return;

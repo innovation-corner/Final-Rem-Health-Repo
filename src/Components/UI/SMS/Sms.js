@@ -5,7 +5,7 @@ import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import classnames from "classnames";
 import JwPagination from "jw-react-pagination";
 import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
-
+import DynamicInputs from "../DynamicInputs/DynamicInput";
 import {
   Row,
   Col,
@@ -36,20 +36,87 @@ export default class Data extends Component {
   state = {
     dropdownOpen: false,
     activeTab1: "11",
+    total: 0,
     name: "",
+    cats: [{ name: "", age: "" }],
     role: "",
     input: "",
     message: "",
-    dateTo: "",
     error: "",
+    activeSearch: false,
     message: "",
+    totalData: [],
+    inputs: [
+      {
+        dateTo: "",
+        dateFrom: "",
+        gender: "Male",
+        dateRangeType: "Registration",
+        ageSearch: "",
+        ageType: "Days",
+        ageFromType: "Days",
+        disableState: true,
+        ageFrom: "",
+        ageToType: "Days",
+        ageTo: "",
+        vaccine: "BCG",
+        searchCriteria: "",
+        searchByAge: false,
+        searchByGender: false,
+        searchByVaccine: false,
+        dateRange: false,
+        searchByState: false,
+        searchByLga: false,
+        ageRange: false,
+        soo: "Abia",
+        sor: [
+          "Abia",
+          "Adamawa",
+          "Akwa Ibom",
+          "Anambra",
+          "Bayelsa",
+          "Bauchi",
+          "Benue",
+          "Borno",
+          "Cross River",
+          "Delta",
+          "Ebonyi",
+          "Edo",
+          "Ekiti",
+          "Enugu",
+          "Gombe",
+          "Imo",
+          "Jigawa",
+          "Kaduna",
+          "Katsina",
+          "Kano",
+          "Kebbi",
+          "Kogi",
+          "Kwara",
+          "Lagos",
+          "Nassarawa",
+          "Niger",
+          "Ogun",
+          "Ondo",
+          "Osun",
+          "Oyo",
+          "Plateau",
+          "Rivers",
+          "Sokoto",
+          "Taraba",
+          "Yobe",
+          "Zamfara",
+          "F.C.T"
+        ],
+        slga: "",
+        lga: []
+      }
+    ],
+    dateTo: "",
     dateFrom: "",
     gender: "Male",
-    activeSearch: false,
-    totalData: [],
     dateRangeType: "Registration",
     ageSearch: "",
-    pageOfItems: [],
     ageType: "Days",
     ageFromType: "Days",
     disableState: true,
@@ -65,9 +132,10 @@ export default class Data extends Component {
     searchByState: false,
     searchByLga: false,
     ageRange: false,
+    slga: "",
+    pageOfItems: [],
     soo: "Abia",
     lga: [],
-    slga: "",
     sor: [
       "Abia",
       "Adamawa",
@@ -109,8 +177,80 @@ export default class Data extends Component {
     ]
   };
 
-  noData = () =>
-    (this.toastId = toast(this.state.error, {
+  addCat = e => {
+    this.setState(prevState => ({
+      inputs: [
+        ...prevState.inputs,
+        {
+          dateTo: "",
+          dateFrom: "",
+          gender: "Male",
+          dateRangeType: "Registration",
+          ageSearch: "",
+          ageType: "Days",
+          ageFromType: "Days",
+          disableState: true,
+          ageFrom: "",
+          ageToType: "Days",
+          ageTo: "",
+          vaccine: "BCG",
+          searchCriteria: "",
+          searchByAge: false,
+          searchByGender: false,
+          searchByVaccine: false,
+          dateRange: false,
+          searchByState: false,
+          searchByLga: false,
+          ageRange: false,
+          soo: "Abia",
+          slga: "",
+          sor: [
+            "Abia",
+            "Adamawa",
+            "Akwa Ibom",
+            "Anambra",
+            "Bayelsa",
+            "Bauchi",
+            "Benue",
+            "Borno",
+            "Cross River",
+            "Delta",
+            "Ebonyi",
+            "Edo",
+            "Ekiti",
+            "Enugu",
+            "Gombe",
+            "Imo",
+            "Jigawa",
+            "Kaduna",
+            "Katsina",
+            "Kano",
+            "Kebbi",
+            "Kogi",
+            "Kwara",
+            "Lagos",
+            "Nassarawa",
+            "Niger",
+            "Ogun",
+            "Ondo",
+            "Osun",
+            "Oyo",
+            "Plateau",
+            "Rivers",
+            "Sokoto",
+            "Taraba",
+            "Yobe",
+            "Zamfara",
+            "F.C.T"
+          ],
+          lga: []
+        }
+      ]
+    }));
+  };
+
+  noData = (msg) =>
+    (this.toastId = toast(msg, {
       transition: Bounce,
       autoClose: 3000,
       position: "top-right",
@@ -118,8 +258,8 @@ export default class Data extends Component {
       hideProgressBar: true
     }));
 
-  retrievedData = () =>
-    (this.toastId = toast(this.state.message, {
+  retrievedData = (msg) =>
+    (this.toastId = toast(msg, {
       transition: Bounce,
       autoClose: 3000,
       position: "top-right",
@@ -127,1038 +267,1011 @@ export default class Data extends Component {
       hideProgressBar: true
     }));
 
-  handleState = () => {
-    let states = this.state.soo;
+  handleState = id => {
+    let inputs = [...this.state.inputs];
+    console.log(inputs[id]);
+    console.log(id);
+    let states = inputs[id]["soo form-control"];
+    console.log(states);
     switch (states) {
       case "Abia":
-        this.setState({
-          lga: [
-            "Aba North",
-            "Aba South",
-            "Arochukwu",
-            "Bende",
-            "Ikwuano",
-            "Isiala Ngwa North",
-            "Isiala Ngwa South",
-            "Isuikwuato",
-            "Obi Ngwa",
-            "Ohafia",
-            "Osisioma",
-            "Ugwunagbo",
-            "Ukwa East",
-            "Ukwa West",
-            "Umuahia North",
-            "muahia South",
-            "Umu Nneochi"
-          ]
-        });
+        inputs[id].lga = [
+          "Aba North",
+          "Aba South",
+          "Arochukwu",
+          "Bende",
+          "Ikwuano",
+          "Isiala Ngwa North",
+          "Isiala Ngwa South",
+          "Isuikwuato",
+          "Obi Ngwa",
+          "Ohafia",
+          "Osisioma",
+          "Ugwunagbo",
+          "Ukwa East",
+          "Ukwa West",
+          "Umuahia North",
+          "muahia South",
+          "Umu Nneochi"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Adamawa":
-        this.setState({
-          lga: [
-            "Demsa",
-            "Fufure",
-            "Ganye",
-            "Gayuk",
-            "Gombi",
-            "Grie",
-            "Hong",
-            "Jada",
-            "Larmurde",
-            "Madagali",
-            "Maiha",
-            "Mayo Belwa",
-            "Michika",
-            "Mubi North",
-            "Mubi South",
-            "Numan",
-            "Shelleng",
-            "Song",
-            "Toungo",
-            "Yola North",
-            "Yola South"
-          ]
-        });
+        inputs[id].lga = [
+          "Demsa",
+          "Fufure",
+          "Ganye",
+          "Gayuk",
+          "Gombi",
+          "Grie",
+          "Hong",
+          "Jada",
+          "Larmurde",
+          "Madagali",
+          "Maiha",
+          "Mayo Belwa",
+          "Michika",
+          "Mubi North",
+          "Mubi South",
+          "Numan",
+          "Shelleng",
+          "Song",
+          "Toungo",
+          "Yola North",
+          "Yola South"
+        ];
+        this.setState({ inputs });
         break;
 
       case "AkwaIbom":
-        this.setState({
-          lga: [
-            "Abak",
-            "Eastern Obolo",
-            "Eket",
-            "Esit Eket",
-            "Essien Udim",
-            "Etim Ekpo",
-            "Etinan",
-            "Ibeno",
-            "Ibesikpo Asutan",
-            "Ibiono-Ibom",
-            "Ika",
-            "Ikono",
-            "Ikot Abasi",
-            "Ikot Ekpene",
-            "Ini",
-            "Itu",
-            "Mbo",
-            "Mkpat-Enin",
-            "Nsit-Atai",
-            "Nsit-Ibom",
-            "Nsit-Ubium",
-            "Obot Akara",
-            "Okobo",
-            "Onna",
-            "Oron",
-            "Oruk Anam",
-            "Udung-Uko",
-            "Ukanafun",
-            "Uruan",
-            "Urue-Offong Oruko",
-            "Uyo"
-          ]
-        });
+        inputs[id].lga = [
+          "Abak",
+          "Eastern Obolo",
+          "Eket",
+          "Esit Eket",
+          "Essien Udim",
+          "Etim Ekpo",
+          "Etinan",
+          "Ibeno",
+          "Ibesikpo Asutan",
+          "Ibiono-Ibom",
+          "Ika",
+          "Ikono",
+          "Ikot Abasi",
+          "Ikot Ekpene",
+          "Ini",
+          "Itu",
+          "Mbo",
+          "Mkpat-Enin",
+          "Nsit-Atai",
+          "Nsit-Ibom",
+          "Nsit-Ubium",
+          "Obot Akara",
+          "Okobo",
+          "Onna",
+          "Oron",
+          "Oruk Anam",
+          "Udung-Uko",
+          "Ukanafun",
+          "Uruan",
+          "Urue-Offong Oruko",
+          "Uyo"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Anambra":
-        this.setState({
-          lga: [
-            "Aguata",
-            "Anambra East",
-            "Anambra West",
-            "Anaocha",
-            "Awka North",
-            "Awka South",
-            "Ayamelum",
-            "Dunukofia",
-            "Ekwusigo",
-            "Idemili North",
-            "Idemili South",
-            "Ihiala",
-            "Njikoka",
-            "Nnewi North",
-            "Nnewi South",
-            "Ogbaru",
-            "Onitsha North",
-            "Onitsha South",
-            "Orumba North",
-            "Orumba South",
-            "Oyi"
-          ]
-        });
+        inputs[id].lga = [
+          "Aguata",
+          "Anambra East",
+          "Anambra West",
+          "Anaocha",
+          "Awka North",
+          "Awka South",
+          "Ayamelum",
+          "Dunukofia",
+          "Ekwusigo",
+          "Idemili North",
+          "Idemili South",
+          "Ihiala",
+          "Njikoka",
+          "Nnewi North",
+          "Nnewi South",
+          "Ogbaru",
+          "Onitsha North",
+          "Onitsha South",
+          "Orumba North",
+          "Orumba South",
+          "Oyi"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Bauchi":
-        this.setState({
-          lga: [
-            "Alkaleri",
-            "Bauchi",
-            "Bogoro",
-            "Damban",
-            "Darazo",
-            "Dass",
-            "Gamawa",
-            "Ganjuwa",
-            "Giade",
-            "Itas-Gadau",
-            "Jama are",
-            "Katagum",
-            "Kirfi",
-            "Misau",
-            "Ningi",
-            "Shira",
-            "Tafawa Balewa",
-            " Toro",
-            " Warji",
-            " Zaki"
-          ]
-        });
+        inputs[id].lga = [
+          "Alkaleri",
+          "Bauchi",
+          "Bogoro",
+          "Damban",
+          "Darazo",
+          "Dass",
+          "Gamawa",
+          "Ganjuwa",
+          "Giade",
+          "Itas-Gadau",
+          "Jama are",
+          "Katagum",
+          "Kirfi",
+          "Misau",
+          "Ningi",
+          "Shira",
+          "Tafawa Balewa",
+          " Toro",
+          " Warji",
+          " Zaki"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Bayelsa":
-        this.setState({
-          lga: [
-            "Brass",
-            "Ekeremor",
-            "Kolokuma Opokuma",
-            "Nembe",
-            "Ogbia",
-            "Sagbama",
-            "Southern Ijaw",
-            "Yenagoa"
-          ]
-        });
+        inputs[id].lga = [
+          "Brass",
+          "Ekeremor",
+          "Kolokuma Opokuma",
+          "Nembe",
+          "Ogbia",
+          "Sagbama",
+          "Southern Ijaw",
+          "Yenagoa"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Benue":
-        this.setState({
-          lga: [
-            "Agatu",
-            "Apa",
-            "Ado",
-            "Buruku",
-            "Gboko",
-            "Guma",
-            "Gwer East",
-            "Gwer West",
-            "Katsina-Ala",
-            "Konshisha",
-            "Kwande",
-            "Logo",
-            "Makurdi",
-            "Obi",
-            "Ogbadibo",
-            "Ohimini",
-            "Oju",
-            "Okpokwu",
-            "Oturkpo",
-            "Tarka",
-            "Ukum",
-            "Ushongo",
-            "Vandeikya"
-          ]
-        });
+        inputs[id].lga = [
+          "Agatu",
+          "Apa",
+          "Ado",
+          "Buruku",
+          "Gboko",
+          "Guma",
+          "Gwer East",
+          "Gwer West",
+          "Katsina-Ala",
+          "Konshisha",
+          "Kwande",
+          "Logo",
+          "Makurdi",
+          "Obi",
+          "Ogbadibo",
+          "Ohimini",
+          "Oju",
+          "Okpokwu",
+          "Oturkpo",
+          "Tarka",
+          "Ukum",
+          "Ushongo",
+          "Vandeikya"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Borno":
-        this.setState({
-          lga: [
-            "Abadam",
-            "Askira-Uba",
-            "Bama",
-            "Bayo",
-            "Biu",
-            "Chibok",
-            "Damboa",
-            "Dikwa",
-            "Gubio",
-            "Guzamala",
-            "Gwoza",
-            "Hawul",
-            "Jere",
-            "Kaga",
-            "Kala-Balge",
-            "Konduga",
-            "Kukawa",
-            "Kwaya Kusar",
-            "Mafa",
-            "Magumeri",
-            "Maiduguri",
-            "Marte",
-            "Mobbar",
-            "Monguno",
-            "Ngala",
-            "Nganzai",
-            "Shani"
-          ]
-        });
+        inputs[id].lga = [
+          "Abadam",
+          "Askira-Uba",
+          "Bama",
+          "Bayo",
+          "Biu",
+          "Chibok",
+          "Damboa",
+          "Dikwa",
+          "Gubio",
+          "Guzamala",
+          "Gwoza",
+          "Hawul",
+          "Jere",
+          "Kaga",
+          "Kala-Balge",
+          "Konduga",
+          "Kukawa",
+          "Kwaya Kusar",
+          "Mafa",
+          "Magumeri",
+          "Maiduguri",
+          "Marte",
+          "Mobbar",
+          "Monguno",
+          "Ngala",
+          "Nganzai",
+          "Shani"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Cross River":
-        this.setState({
-          lga: [
-            "Abi",
-            "Akamkpa",
-            "Akpabuyo",
-            "Bakassi",
-            "Bekwarra",
-            "Biase",
-            "Boki",
-            "Calabar Municipal",
-            "Calabar South",
-            "Etung",
-            "Ikom",
-            "Obanliku",
-            "Obubra",
-            "Obudu",
-            "Odukpani",
-            "Ogoja",
-            "Yakuur",
-            "Yala"
-          ]
-        });
+        inputs[id].lga = [
+          "Abi",
+          "Akamkpa",
+          "Akpabuyo",
+          "Bakassi",
+          "Bekwarra",
+          "Biase",
+          "Boki",
+          "Calabar Municipal",
+          "Calabar South",
+          "Etung",
+          "Ikom",
+          "Obanliku",
+          "Obubra",
+          "Obudu",
+          "Odukpani",
+          "Ogoja",
+          "Yakuur",
+          "Yala"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Delta":
-        this.setState({
-          lga: [
-            "Aniocha North",
-            "Aniocha South",
-            "Bomadi",
-            "Burutu",
-            "Ethiope East",
-            "Ethiope West",
-            "Ika North East",
-            "Ika South",
-            "Isoko North",
-            "Isoko South",
-            "Ndokwa East",
-            "Ndokwa West",
-            "Okpe",
-            "Oshimili North",
-            "Oshimili South",
-            "Patani",
-            "Sapele",
-            "Udu",
-            "Ughelli North",
-            "Ughelli South",
-            "Ukwuani",
-            "Uvwie",
-            "Warri North",
-            "Warri South",
-            "Warri South West"
-          ]
-        });
+        inputs[id].lga = [
+          "Aniocha North",
+          "Aniocha South",
+          "Bomadi",
+          "Burutu",
+          "Ethiope East",
+          "Ethiope West",
+          "Ika North East",
+          "Ika South",
+          "Isoko North",
+          "Isoko South",
+          "Ndokwa East",
+          "Ndokwa West",
+          "Okpe",
+          "Oshimili North",
+          "Oshimili South",
+          "Patani",
+          "Sapele",
+          "Udu",
+          "Ughelli North",
+          "Ughelli South",
+          "Ukwuani",
+          "Uvwie",
+          "Warri North",
+          "Warri South",
+          "Warri South West"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Ebonyi":
-        this.setState({
-          lga: [
-            "Abakaliki",
-            "Afikpo North",
-            "Afikpo South",
-            "Ebonyi",
-            "Ezza North",
-            "Ezza South",
-            "Ikwo",
-            "Ishielu",
-            "Ivo",
-            "Izzi",
-            "Ohaozara",
-            "Ohaukwu",
-            "Onicha"
-          ]
-        });
+        inputs[id].lga = [
+          "Abakaliki",
+          "Afikpo North",
+          "Afikpo South",
+          "Ebonyi",
+          "Ezza North",
+          "Ezza South",
+          "Ikwo",
+          "Ishielu",
+          "Ivo",
+          "Izzi",
+          "Ohaozara",
+          "Ohaukwu",
+          "Onicha"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Edo":
-        this.setState({
-          lga: [
-            "Akoko-Edo",
-            "Egor",
-            "Esan Central",
-            "Esan North-East",
-            "Esan South-East",
-            "Esan West",
-            "Etsako Central",
-            "Etsako East",
-            "Etsako West",
-            "Igueben",
-            "Ikpoba Okha",
-            "Orhionmwon",
-            "Oredo",
-            "Ovia North-East",
-            "Ovia South-West",
-            "Owan East",
-            "Owan West",
-            "Uhunmwonde"
-          ]
-        });
+        inputs[id].lga = [
+          "Akoko-Edo",
+          "Egor",
+          "Esan Central",
+          "Esan North-East",
+          "Esan South-East",
+          "Esan West",
+          "Etsako Central",
+          "Etsako East",
+          "Etsako West",
+          "Igueben",
+          "Ikpoba Okha",
+          "Orhionmwon",
+          "Oredo",
+          "Ovia North-East",
+          "Ovia South-West",
+          "Owan East",
+          "Owan West",
+          "Uhunmwonde"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Ekiti":
-        this.setState({
-          lga: [
-            "Ado Ekiti",
-            "Efon",
-            "Ekiti East",
-            "Ekiti South-West",
-            "Ekiti West",
-            "Emure",
-            "Gbonyin",
-            "Ido Osi",
-            "Ijero",
-            "Ikere",
-            "Ikole",
-            "Ilejemeje",
-            "Irepodun-Ifelodun",
-            "Ise-Orun",
-            "Moba",
-            "Oye"
-          ]
-        });
+        inputs[id].lga = [
+          "Ado Ekiti",
+          "Efon",
+          "Ekiti East",
+          "Ekiti South-West",
+          "Ekiti West",
+          "Emure",
+          "Gbonyin",
+          "Ido Osi",
+          "Ijero",
+          "Ikere",
+          "Ikole",
+          "Ilejemeje",
+          "Irepodun-Ifelodun",
+          "Ise-Orun",
+          "Moba",
+          "Oye"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Rivers":
-        this.setState({
-          lga: [
-            "Port Harcourt",
-            "Obio-Akpor",
-            "Okrika",
-            "Ogu–Bolo",
-            "Eleme",
-            "Tai",
-            "Gokana",
-            "Khana",
-            "Oyigbo",
-            "Opobo–Nkoro",
-            "Andoni",
-            "Bonny",
-            "Degema",
-            "Asari-Toru",
-            "Akuku-Toru",
-            "Abua–Odual",
-            "Ahoada West",
-            "Ahoada East",
-            "Ogba–Egbema–Ndoni",
-            "Emohua",
-            "Ikwerre",
-            "Etche",
-            "Omuma"
-          ]
-        });
+        inputs[id].lga = [
+          "Port Harcourt",
+          "Obio-Akpor",
+          "Okrika",
+          "Ogu–Bolo",
+          "Eleme",
+          "Tai",
+          "Gokana",
+          "Khana",
+          "Oyigbo",
+          "Opobo–Nkoro",
+          "Andoni",
+          "Bonny",
+          "Degema",
+          "Asari-Toru",
+          "Akuku-Toru",
+          "Abua–Odual",
+          "Ahoada West",
+          "Ahoada East",
+          "Ogba–Egbema–Ndoni",
+          "Emohua",
+          "Ikwerre",
+          "Etche",
+          "Omuma"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Enugu":
-        this.setState({
-          lga: [
-            "Aninri",
-            "Awgu",
-            "Enugu East",
-            "Enugu North",
-            "Enugu South",
-            "Ezeagu",
-            "Igbo Etiti",
-            "Igbo Eze North",
-            "Igbo Eze South",
-            "Isi Uzo",
-            "Nkanu East",
-            "Nkanu West",
-            "Nsukka",
-            "Oji River",
-            "Udenu",
-            "Udi",
-            "Uzo Uwani"
-          ]
-        });
+        inputs[id].lga = [
+          "Aninri",
+          "Awgu",
+          "Enugu East",
+          "Enugu North",
+          "Enugu South",
+          "Ezeagu",
+          "Igbo Etiti",
+          "Igbo Eze North",
+          "Igbo Eze South",
+          "Isi Uzo",
+          "Nkanu East",
+          "Nkanu West",
+          "Nsukka",
+          "Oji River",
+          "Udenu",
+          "Udi",
+          "Uzo Uwani"
+        ];
+        this.setState({ inputs });
         break;
 
       case "FCT":
-        this.setState({
-          lga: ["Abaji", "Bwari", "Gwagwalada", "Kuje", "Kwali", "AMAC"]
-        });
+        inputs[id].lga = [
+          "Abaji",
+          "Bwari",
+          "Gwagwalada",
+          "Kuje",
+          "Kwali",
+          "AMAC"
+        ];
+        this.setState({ inputs });
         break;
       case "Gombe":
-        this.setState({
-          lga: [
-            "Akko",
-            "Balanga",
-            "Billiri",
-            "Dukku",
-            "Funakaye",
-            "Gombe",
-            "Kaltungo",
-            "Kwami",
-            "Nafada",
-            "Shongom",
-            "Yamaltu-Deba"
-          ]
-        });
+        inputs[id].lga = [
+          "Akko",
+          "Balanga",
+          "Billiri",
+          "Dukku",
+          "Funakaye",
+          "Gombe",
+          "Kaltungo",
+          "Kwami",
+          "Nafada",
+          "Shongom",
+          "Yamaltu-Deba"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Imo":
-        this.setState({
-          lga: [
-            "Aboh Mbaise",
-            "Ahiazu Mbaise",
-            "Ehime Mbano",
-            "Ezinihitte",
-            "Ideato North",
-            "Ideato South",
-            "Ihitte-Uboma",
-            "Ikeduru",
-            "Isiala Mbano",
-            "Isu",
-            "Mbaitoli",
-            "Ngor Okpala",
-            "Njaba",
-            "Nkwerre",
-            "Nwangele",
-            "Obowo",
-            "Oguta",
-            "Ohaji-Egbema",
-            "Okigwe",
-            "Orlu",
-            "Orsu",
-            "Oru East",
-            "Oru West",
-            "Owerri Municipal",
-            "Owerri North",
-            "Owerri West",
-            "Unuimo"
-          ]
-        });
+        inputs[id].lga = [
+          "Aboh Mbaise",
+          "Ahiazu Mbaise",
+          "Ehime Mbano",
+          "Ezinihitte",
+          "Ideato North",
+          "Ideato South",
+          "Ihitte-Uboma",
+          "Ikeduru",
+          "Isiala Mbano",
+          "Isu",
+          "Mbaitoli",
+          "Ngor Okpala",
+          "Njaba",
+          "Nkwerre",
+          "Nwangele",
+          "Obowo",
+          "Oguta",
+          "Ohaji-Egbema",
+          "Okigwe",
+          "Orlu",
+          "Orsu",
+          "Oru East",
+          "Oru West",
+          "Owerri Municipal",
+          "Owerri North",
+          "Owerri West",
+          "Unuimo"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Jigawa":
-        this.setState({
-          lga: [
-            "Auyo",
-            "Babura",
-            "Biriniwa",
-            "Birnin Kudu",
-            "Buji",
-            "Dutse",
-            "Gagarawa",
-            "Garki",
-            "Gumel",
-            "Guri",
-            "Gwaram",
-            "Gwiwa",
-            "Hadejia",
-            "Jahun",
-            "Kafin Hausa",
-            "Kazaure",
-            "Kiri Kasama",
-            "Kiyawa",
-            "Kaugama",
-            "Maigatari",
-            "Malam Madori",
-            "Miga",
-            "Ringim",
-            "Roni",
-            "Sule Tankarkar",
-            "Taura",
-            "Yankwashi"
-          ]
-        });
+        inputs[id].lga = [
+          "Auyo",
+          "Babura",
+          "Biriniwa",
+          "Birnin Kudu",
+          "Buji",
+          "Dutse",
+          "Gagarawa",
+          "Garki",
+          "Gumel",
+          "Guri",
+          "Gwaram",
+          "Gwiwa",
+          "Hadejia",
+          "Jahun",
+          "Kafin Hausa",
+          "Kazaure",
+          "Kiri Kasama",
+          "Kiyawa",
+          "Kaugama",
+          "Maigatari",
+          "Malam Madori",
+          "Miga",
+          "Ringim",
+          "Roni",
+          "Sule Tankarkar",
+          "Taura",
+          "Yankwashi"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Kaduna":
-        this.setState({
-          lga: [
-            "Birnin Gwari",
-            "Chikun",
-            "Giwa",
-            "Igabi",
-            "Ikara",
-            "Jaba",
-            "Jema'a",
-            "Kachia",
-            "Kaduna North",
-            "Kaduna South",
-            "Kagarko",
-            "Kajuru",
-            "Kaura",
-            "Kauru",
-            "Kubau",
-            "Kudan",
-            "Lere",
-            "Makarfi",
-            "Sabon Gari",
-            "Sanga",
-            "Soba",
-            "Zangon Kataf",
-            "Zaria"
-          ]
-        });
+        inputs[id].lga = [
+          "Birnin Gwari",
+          "Chikun",
+          "Giwa",
+          "Igabi",
+          "Ikara",
+          "Jaba",
+          "Jema'a",
+          "Kachia",
+          "Kaduna North",
+          "Kaduna South",
+          "Kagarko",
+          "Kajuru",
+          "Kaura",
+          "Kauru",
+          "Kubau",
+          "Kudan",
+          "Lere",
+          "Makarfi",
+          "Sabon Gari",
+          "Sanga",
+          "Soba",
+          "Zangon Kataf",
+          "Zaria"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Kano":
-        this.setState({
-          lga: [
-            "Ajingi",
-            "Albasu",
-            "Bagwai",
-            "Bebeji",
-            "Bichi",
-            "Bunkure",
-            "Dala",
-            "Dambatta",
-            "Dawakin Kudu",
-            "Dawakin Tofa",
-            "Doguwa",
-            "Fagge",
-            "Gabasawa",
-            "Garko",
-            "Garun Mallam",
-            "Gaya",
-            "Gezawa",
-            "Gwale",
-            "Gwarzo",
-            "Kabo",
-            "Kano Municipal",
-            "Karaye",
-            "Kibiya",
-            "Kiru",
-            "Kumbotso",
-            "Kunchi",
-            "Kura",
-            "Madobi",
-            "Makoda",
-            "Minjibir",
-            "Nasarawa",
-            "Rano",
-            "Rimin Gado",
-            "Rogo",
-            "Shanono",
-            "Sumaila",
-            "Takai",
-            "Tarauni",
-            "Tofa",
-            "Tsanyawa",
-            "Tudun Wada",
-            "Ungogo",
-            "Warawa",
-            "Wudil"
-          ]
-        });
+        inputs[id].lga = [
+          "Ajingi",
+          "Albasu",
+          "Bagwai",
+          "Bebeji",
+          "Bichi",
+          "Bunkure",
+          "Dala",
+          "Dambatta",
+          "Dawakin Kudu",
+          "Dawakin Tofa",
+          "Doguwa",
+          "Fagge",
+          "Gabasawa",
+          "Garko",
+          "Garun Mallam",
+          "Gaya",
+          "Gezawa",
+          "Gwale",
+          "Gwarzo",
+          "Kabo",
+          "Kano Municipal",
+          "Karaye",
+          "Kibiya",
+          "Kiru",
+          "Kumbotso",
+          "Kunchi",
+          "Kura",
+          "Madobi",
+          "Makoda",
+          "Minjibir",
+          "Nasarawa",
+          "Rano",
+          "Rimin Gado",
+          "Rogo",
+          "Shanono",
+          "Sumaila",
+          "Takai",
+          "Tarauni",
+          "Tofa",
+          "Tsanyawa",
+          "Tudun Wada",
+          "Ungogo",
+          "Warawa",
+          "Wudil"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Katsina":
-        this.setState({
-          lga: [
-            "Bakori",
-            "Batagarawa",
-            "Batsari",
-            "Baure",
-            "Bindawa",
-            "Charanchi",
-            "Dandume",
-            "Danja",
-            "Dan Musa",
-            "Daura",
-            "Dutsi",
-            "Dutsin Ma",
-            "Faskari",
-            "Funtua",
-            "Ingawa",
-            "Jibia",
-            "Kafur",
-            "Kaita",
-            "Kankara",
-            "Kankia",
-            "Katsina",
-            "Kurfi",
-            "Kusada",
-            "Mai Adua",
-            "Malumfashi",
-            "Mani",
-            "Mashi",
-            "Matazu",
-            "Musawa",
-            "Rimi",
-            "Sabuwa",
-            "Safana",
-            "Sandamu",
-            "Zango"
-          ]
-        });
+        inputs[id].lga = [
+          "Bakori",
+          "Batagarawa",
+          "Batsari",
+          "Baure",
+          "Bindawa",
+          "Charanchi",
+          "Dandume",
+          "Danja",
+          "Dan Musa",
+          "Daura",
+          "Dutsi",
+          "Dutsin Ma",
+          "Faskari",
+          "Funtua",
+          "Ingawa",
+          "Jibia",
+          "Kafur",
+          "Kaita",
+          "Kankara",
+          "Kankia",
+          "Katsina",
+          "Kurfi",
+          "Kusada",
+          "Mai Adua",
+          "Malumfashi",
+          "Mani",
+          "Mashi",
+          "Matazu",
+          "Musawa",
+          "Rimi",
+          "Sabuwa",
+          "Safana",
+          "Sandamu",
+          "Zango"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Kebbi":
-        this.setState({
-          lga: [
-            "Aleiro",
-            "Arewa Dandi",
-            "Argungu",
-            "Augie",
-            "Bagudo",
-            "Birnin Kebbi",
-            "Bunza",
-            "Dandi",
-            "Fakai",
-            "Gwandu",
-            "Jega",
-            "Kalgo",
-            "Koko Besse",
-            "Maiyama",
-            "Ngaski",
-            "Sakaba",
-            "Shanga",
-            "Suru",
-            "Wasagu Danko",
-            "Yauri",
-            "Zuru"
-          ]
-        });
+        inputs[id].lga = [
+          "Aleiro",
+          "Arewa Dandi",
+          "Argungu",
+          "Augie",
+          "Bagudo",
+          "Birnin Kebbi",
+          "Bunza",
+          "Dandi",
+          "Fakai",
+          "Gwandu",
+          "Jega",
+          "Kalgo",
+          "Koko Besse",
+          "Maiyama",
+          "Ngaski",
+          "Sakaba",
+          "Shanga",
+          "Suru",
+          "Wasagu Danko",
+          "Yauri",
+          "Zuru"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Kogi":
-        this.setState({
-          lga: [
-            "Adavi",
-            "Ajaokuta",
-            "Ankpa",
-            "Bassa",
-            "Dekina",
-            "Ibaji",
-            "Idah",
-            "Igalamela Odolu",
-            "Ijumu",
-            "Kabba Bunu",
-            "Kogi",
-            "Lokoja",
-            "Mopa Muro",
-            "Ofu",
-            "Ogori Magongo",
-            "Okehi",
-            "Okene",
-            "Olamaboro",
-            "Omala",
-            "Yagba East",
-            "Yagba West"
-          ]
-        });
+        inputs[id].lga = [
+          "Adavi",
+          "Ajaokuta",
+          "Ankpa",
+          "Bassa",
+          "Dekina",
+          "Ibaji",
+          "Idah",
+          "Igalamela Odolu",
+          "Ijumu",
+          "Kabba Bunu",
+          "Kogi",
+          "Lokoja",
+          "Mopa Muro",
+          "Ofu",
+          "Ogori Magongo",
+          "Okehi",
+          "Okene",
+          "Olamaboro",
+          "Omala",
+          "Yagba East",
+          "Yagba West"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Kwara":
-        this.setState({
-          lga: [
-            "Asa",
-            "Baruten",
-            "Edu",
-            "Ekiti",
-            "Ifelodun",
-            "Ilorin East",
-            "Ilorin South",
-            "Ilorin West",
-            "Irepodun",
-            "Isin",
-            "Kaiama",
-            "Moro",
-            "Offa",
-            "Oke Ero",
-            "Oyun",
-            "Pategi"
-          ]
-        });
+        inputs[id].lga = [
+          "Asa",
+          "Baruten",
+          "Edu",
+          "Ekiti",
+          "Ifelodun",
+          "Ilorin East",
+          "Ilorin South",
+          "Ilorin West",
+          "Irepodun",
+          "Isin",
+          "Kaiama",
+          "Moro",
+          "Offa",
+          "Oke Ero",
+          "Oyun",
+          "Pategi"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Lagos":
-        this.setState({
-          lga: [
-            "Agege",
-            "Ajeromi-Ifelodun",
-            "Alimosho",
-            "Amuwo-Odofin",
-            "Apapa",
-            "Badagry",
-            "Epe",
-            "Eti Osa",
-            "Ibeju-Lekki",
-            "Ifako-Ijaiye",
-            "Ikeja",
-            "Ikorodu",
-            "Kosofe",
-            "Lagos Island",
-            "Lagos Mainland",
-            "Mushin",
-            "Ojo",
-            "Oshodi-Isolo",
-            "Shomolu",
-            "Surulere"
-          ]
-        });
+        inputs[id].lga = [
+          "Agege",
+          "Ajeromi-Ifelodun",
+          "Alimosho",
+          "Amuwo-Odofin",
+          "Apapa",
+          "Badagry",
+          "Epe",
+          "Eti Osa",
+          "Ibeju-Lekki",
+          "Ifako-Ijaiye",
+          "Ikeja",
+          "Ikorodu",
+          "Kosofe",
+          "Lagos Island",
+          "Lagos Mainland",
+          "Mushin",
+          "Ojo",
+          "Oshodi-Isolo",
+          "Shomolu",
+          "Surulere"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Nasarawa":
-        this.setState({
-          lga: [
-            "Akwanga",
-            "Awe",
-            "Doma",
-            "Karu",
-            "Keana",
-            "Keffi",
-            "Kokona",
-            "Lafia",
-            "Nasarawa",
-            "Nasarawa Egon",
-            "Obi",
-            "Toto",
-            "Wamba"
-          ]
-        });
+        inputs[id].lga = [
+          "Akwanga",
+          "Awe",
+          "Doma",
+          "Karu",
+          "Keana",
+          "Keffi",
+          "Kokona",
+          "Lafia",
+          "Nasarawa",
+          "Nasarawa Egon",
+          "Obi",
+          "Toto",
+          "Wamba"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Niger":
-        this.setState({
-          lga: [
-            "Agaie",
-            "Agwara",
-            "Bida",
-            "Borgu",
-            "Bosso",
-            "Chanchaga",
-            "Edati",
-            "Gbako",
-            "Gurara",
-            "Katcha",
-            "Kontagora",
-            "Lapai",
-            "Lavun",
-            "Magama",
-            "Mariga",
-            "Mashegu",
-            "Mokwa",
-            "Moya",
-            "Paikoro",
-            "Rafi",
-            "Rijau",
-            "Shiroro",
-            "Suleja",
-            "Tafa",
-            "Wushishi"
-          ]
-        });
+        inputs[id].lga = [
+          "Agaie",
+          "Agwara",
+          "Bida",
+          "Borgu",
+          "Bosso",
+          "Chanchaga",
+          "Edati",
+          "Gbako",
+          "Gurara",
+          "Katcha",
+          "Kontagora",
+          "Lapai",
+          "Lavun",
+          "Magama",
+          "Mariga",
+          "Mashegu",
+          "Mokwa",
+          "Moya",
+          "Paikoro",
+          "Rafi",
+          "Rijau",
+          "Shiroro",
+          "Suleja",
+          "Tafa",
+          "Wushishi"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Ogun":
-        this.setState({
-          lga: [
-            "Abeokuta North",
-            "Abeokuta South",
-            "Ado-Odo Ota",
-            "Egbado North",
-            "Egbado South",
-            "Ewekoro",
-            "Ifo",
-            "Ijebu East",
-            "Ijebu North",
-            "Ijebu North East",
-            "Ijebu Ode",
-            "Ikenne",
-            "Imeko Afon",
-            "Ipokia",
-            "Obafemi Owode",
-            "Odeda",
-            "Odogbolu",
-            "Ogun Waterside",
-            "Remo North",
-            "Shagamu"
-          ]
-        });
+        inputs[id].lga = [
+          "Abeokuta North",
+          "Abeokuta South",
+          "Ado-Odo Ota",
+          "Egbado North",
+          "Egbado South",
+          "Ewekoro",
+          "Ifo",
+          "Ijebu East",
+          "Ijebu North",
+          "Ijebu North East",
+          "Ijebu Ode",
+          "Ikenne",
+          "Imeko Afon",
+          "Ipokia",
+          "Obafemi Owode",
+          "Odeda",
+          "Odogbolu",
+          "Ogun Waterside",
+          "Remo North",
+          "Shagamu"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Ondo":
-        this.setState({
-          lga: [
-            "Akoko North-East",
-            "Akoko North-West",
-            "Akoko South-West",
-            "Akoko South-East",
-            "Akure North",
-            "Akure South",
-            "Ese Odo",
-            "Idanre",
-            "Ifedore",
-            "Ilaje",
-            "Ile Oluji-Okeigbo",
-            "Irele",
-            "Odigbo",
-            "Okitipupa",
-            "Ondo East",
-            "Ondo West",
-            "Ose",
-            "Owo"
-          ]
-        });
+        inputs[id].lga = [
+          "Akoko North-East",
+          "Akoko North-West",
+          "Akoko South-West",
+          "Akoko South-East",
+          "Akure North",
+          "Akure South",
+          "Ese Odo",
+          "Idanre",
+          "Ifedore",
+          "Ilaje",
+          "Ile Oluji-Okeigbo",
+          "Irele",
+          "Odigbo",
+          "Okitipupa",
+          "Ondo East",
+          "Ondo West",
+          "Ose",
+          "Owo"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Osun":
-        this.setState({
-          lga: [
-            "Atakunmosa East",
-            "Atakunmosa West",
-            "Aiyedaade",
-            "Aiyedire",
-            "Boluwaduro",
-            "Boripe",
-            "Ede North",
-            "Ede South",
-            "Ife Central",
-            "Ife East",
-            "Ife North",
-            "Ife South",
-            "Egbedore",
-            "Ejigbo",
-            "Ifedayo",
-            "Ifelodun",
-            "Ila",
-            "Ilesa East",
-            "Ilesa West",
-            "Irepodun",
-            "Irewole",
-            "Isokan",
-            "Iwo",
-            "Obokun",
-            "Odo Otin",
-            "Ola Oluwa",
-            "Olorunda",
-            "Oriade",
-            "Orolu",
-            "Osogbo"
-          ]
-        });
+        inputs[id].lga = [
+          "Atakunmosa East",
+          "Atakunmosa West",
+          "Aiyedaade",
+          "Aiyedire",
+          "Boluwaduro",
+          "Boripe",
+          "Ede North",
+          "Ede South",
+          "Ife Central",
+          "Ife East",
+          "Ife North",
+          "Ife South",
+          "Egbedore",
+          "Ejigbo",
+          "Ifedayo",
+          "Ifelodun",
+          "Ila",
+          "Ilesa East",
+          "Ilesa West",
+          "Irepodun",
+          "Irewole",
+          "Isokan",
+          "Iwo",
+          "Obokun",
+          "Odo Otin",
+          "Ola Oluwa",
+          "Olorunda",
+          "Oriade",
+          "Orolu",
+          "Osogbo"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Oyo":
-        this.setState({
-          lga: [
-            "Afijio",
-            "Akinyele",
-            "Atiba",
-            "Atisbo",
-            "Egbeda",
-            "Ibadan North",
-            "Ibadan North-East",
-            "Ibadan North-West",
-            "Ibadan South-East",
-            "Ibadan South-West",
-            "Ibarapa Central",
-            "Ibarapa East",
-            "Ibarapa North",
-            "Ido",
-            "Irepo",
-            "Iseyin",
-            "Itesiwaju",
-            "Iwajowa",
-            "Kajola",
-            "Lagelu",
-            "Ogbomosho North",
-            "Ogbomosho South",
-            "Ogo Oluwa",
-            "Olorunsogo",
-            "Oluyole",
-            "Ona Ara",
-            "Orelope",
-            "Ori Ire",
-            "Oyo",
-            "Oyo East",
-            "Saki East",
-            "Saki West",
-            "Surulere"
-          ]
-        });
+        inputs[id].lga = [
+          "Afijio",
+          "Akinyele",
+          "Atiba",
+          "Atisbo",
+          "Egbeda",
+          "Ibadan North",
+          "Ibadan North-East",
+          "Ibadan North-West",
+          "Ibadan South-East",
+          "Ibadan South-West",
+          "Ibarapa Central",
+          "Ibarapa East",
+          "Ibarapa North",
+          "Ido",
+          "Irepo",
+          "Iseyin",
+          "Itesiwaju",
+          "Iwajowa",
+          "Kajola",
+          "Lagelu",
+          "Ogbomosho North",
+          "Ogbomosho South",
+          "Ogo Oluwa",
+          "Olorunsogo",
+          "Oluyole",
+          "Ona Ara",
+          "Orelope",
+          "Ori Ire",
+          "Oyo",
+          "Oyo East",
+          "Saki East",
+          "Saki West",
+          "Surulere"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Plateau":
-        this.setState({
-          lga: [
-            "Bokkos",
-            "Barkin Ladi",
-            "Bassa",
-            "Jos East",
-            "Jos North",
-            "Jos South",
-            "Kanam",
-            "Kanke",
-            "Langtang South",
-            "Langtang North",
-            "Mangu",
-            "Mikang",
-            "Pankshin",
-            "Qua an Pan",
-            "Riyom",
-            "Shendam",
-            "Wase"
-          ]
-        });
+        inputs[id].lga = [
+          "Bokkos",
+          "Barkin Ladi",
+          "Bassa",
+          "Jos East",
+          "Jos North",
+          "Jos South",
+          "Kanam",
+          "Kanke",
+          "Langtang South",
+          "Langtang North",
+          "Mangu",
+          "Mikang",
+          "Pankshin",
+          "Qua an Pan",
+          "Riyom",
+          "Shendam",
+          "Wase"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Sokoto":
-        this.setState({
-          lga: [
-            "Binji",
-            "Bodinga",
-            "Dange Shuni",
-            "Gada",
-            "Goronyo",
-            "Gudu",
-            "Gwadabawa",
-            "Illela",
-            "Isa",
-            "Kebbe",
-            "Kware",
-            "Rabah",
-            "Sabon Birni",
-            "Shagari",
-            "Silame",
-            "Sokoto North",
-            "Sokoto South",
-            "Tambuwal",
-            "Tangaza",
-            "Tureta",
-            "Wamako",
-            "Wurno",
-            "Yabo"
-          ]
-        });
+        inputs[id].lga = [
+          "Binji",
+          "Bodinga",
+          "Dange Shuni",
+          "Gada",
+          "Goronyo",
+          "Gudu",
+          "Gwadabawa",
+          "Illela",
+          "Isa",
+          "Kebbe",
+          "Kware",
+          "Rabah",
+          "Sabon Birni",
+          "Shagari",
+          "Silame",
+          "Sokoto North",
+          "Sokoto South",
+          "Tambuwal",
+          "Tangaza",
+          "Tureta",
+          "Wamako",
+          "Wurno",
+          "Yabo"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Taraba":
-        this.setState({
-          lga: [
-            "Ardo Kola",
-            "Bali",
-            "Donga",
-            "Gashaka",
-            "Gassol",
-            "Ibi",
-            "Jalingo",
-            "Karim Lamido",
-            "Kumi",
-            "Lau",
-            "Sardauna",
-            "Takum",
-            "Ussa",
-            "Wukari",
-            "Yorro",
-            "Zing"
-          ]
-        });
+        inputs[id].lga = [
+          "Ardo Kola",
+          "Bali",
+          "Donga",
+          "Gashaka",
+          "Gassol",
+          "Ibi",
+          "Jalingo",
+          "Karim Lamido",
+          "Kumi",
+          "Lau",
+          "Sardauna",
+          "Takum",
+          "Ussa",
+          "Wukari",
+          "Yorro",
+          "Zing"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Yobe":
-        this.setState({
-          lga: [
-            "Bade",
-            "Bursari",
-            "Damaturu",
-            "Fika",
-            "Fune",
-            "Geidam",
-            "Gujba",
-            "Gulani",
-            "Jakusko",
-            "Karasuwa",
-            "Machina",
-            "Nangere",
-            "Nguru",
-            "Potiskum",
-            "Tarmuwa",
-            "Yunusari",
-            "Yusufari"
-          ]
-        });
+        inputs[id].lga = [
+          "Bade",
+          "Bursari",
+          "Damaturu",
+          "Fika",
+          "Fune",
+          "Geidam",
+          "Gujba",
+          "Gulani",
+          "Jakusko",
+          "Karasuwa",
+          "Machina",
+          "Nangere",
+          "Nguru",
+          "Potiskum",
+          "Tarmuwa",
+          "Yunusari",
+          "Yusufari"
+        ];
+        this.setState({ inputs });
         break;
 
       case "Zamfara":
-        this.setState({
-          lga: [
-            "Anka",
-            "Bakura",
-            "Birnin Magaji Kiyaw",
-            "Bukkuyum",
-            "Bungudu",
-            "Gummi",
-            "Gusau",
-            "Kaura Namoda",
-            "Maradun",
-            "Maru",
-            "Shinkafi",
-            "Talata Mafara",
-            "Chafe",
-            "Zurmi"
-          ]
-        });
+        inputs[id].lga = [
+          "Anka",
+          "Bakura",
+          "Birnin Magaji Kiyaw",
+          "Bukkuyum",
+          "Bungudu",
+          "Gummi",
+          "Gusau",
+          "Kaura Namoda",
+          "Maradun",
+          "Maru",
+          "Shinkafi",
+          "Talata Mafara",
+          "Chafe",
+          "Zurmi"
+        ];
+        this.setState({ inputs });
         break;
 
       default:
-        this.setState({
-          lga: []
-        });
+        inputs[id].lga = [];
+        this.setState({ inputs });
     }
   };
 
@@ -1226,98 +1339,96 @@ export default class Data extends Component {
     this.setState({ pageOfItems });
   }
 
-  criteriaHandler = () => {
-    switch (this.state.searchCriteria) {
+  criteriaHandler = id => {
+    let inputs = [...this.state.inputs];
+
+    switch (this.state.inputs[id]["searchCriteria form-control"]) {
       case "Age":
-        this.setState({
-          searchByAge: true,
-          searchByGender: false,
-          ageRange: false,
-          searchByVaccine: false,
-          dateRange: false,
-          searchByState: false,
-          searchByLga: false
-        });
+        inputs[id]["searchByAge"] = true;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
       case "Gender":
-        this.setState({
-          searchByGender: true,
-          ageRange: false,
-          searchByAge: false,
-          searchByVaccine: false,
-          dateRange: false,
-          searchByState: false,
-          searchByLga: false
-        });
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = true;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
       case "Vaccine":
-        this.setState({
-          searchByVaccine: true,
-          ageRange: false,
-          searchByAge: false,
-          searchByGender: false,
-          dateRange: false,
-          searchByState: false,
-          searchByLga: false
-        });
+        inputs[id]["searchByVaccine"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
       case "Date Range":
-        return this.setState({
-          dateRange: true,
-          searchByAge: false,
-          ageRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: false
-        });
+        inputs[id]["dateRange"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
+        break;
 
       case "Age Range":
-        return this.setState({
-          ageRange: true,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: false
-        });
+        inputs[id]["ageRange"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
+        break;
 
       case "State":
-        return this.setState({
-          ageRange: false,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: true,
-          searchByLga: false
-        });
+        inputs[id]["searchByState"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
+        break;
 
       case "LGA":
-        return this.setState({
-          ageRange: false,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: true
-        });
+        inputs[id]["searchByLga"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        this.setState({ inputs });
+        break;
 
       default:
-        return this.setState({
-          ageRange: false,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: false
-        });
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
     }
   };
@@ -1369,7 +1480,7 @@ export default class Data extends Component {
         this.state.dateRangeType == "Registration") ||
       this.state.searchCriteria == "Vaccine";
 
-    let dateFrom, dateTo;
+    // let dateFrom, dateTo;
 
     if (dates) {
       url = "https://api.remhealth.co/info/date";
@@ -1377,220 +1488,496 @@ export default class Data extends Component {
       url = "https://api.remhealth.co/info/list";
     }
 
-    if (this.state.searchCriteria == "Age Range") {
-      dateFrom = moment()
-        .subtract(this.state.ageFrom, this.state.ageFromType)
-        .toISOString();
-      dateTo = moment()
-        .subtract(this.state.ageTo, this.state.ageToType)
-        .toISOString();
-    } else if (this.state.searchCriteria == "Date Range") {
-      dateFrom = this.state.dateFrom;
-      dateTo = this.state.dateTo;
-    } else if (this.state.searchCriteria == "Vaccine") {
-      switch (this.state.vaccine) {
-        case "BCG":
-        case "HBV 1":
-        case "OPV":
-          console.log("hello");
-          dateFrom = moment()
-            .subtract(7, "days")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment().toISOString();
-          break;
+    let { inputs } = this.state;
+    let all = [];
 
-        case "OPV 1":
-        case "PCV 1":
-        case "Rotarix 1":
-        case "Pentavalent 1":
-          dateFrom = moment()
-            .subtract(6, "weeks")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment()
-            .subtract(6, "weeks")
-            .endOf("weeks")
-            .toISOString();
-          break;
-
-        case "OPV 2":
-        case "Rotarix 2":
-        case "PCV 2":
-        case "Pentavalent 2":
-          dateFrom = moment()
-            .subtract(10, "weeks")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment()
-            .subtract(10, "weeks")
-            .endOf("week")
-            .toISOString();
-          break;
-
-        case "OPV 3":
-        case "PCV 3":
-        case "IPV":
-        case "Pentavalent 3":
-          dateFrom = moment()
-            .subtract(14, "weeks")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment()
-            .subtract(14, "weeks")
-            .endOf("week")
-            .toISOString();
-          break;
-
-        case "Vitamin A1":
-          dateFrom = moment()
-            .subtract(6, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(6, "months")
-            .endOf("month")
-            .toISOString();
-          break;
-
-        case "Measles Vaccine":
-        case "Yellow Fever Vaccine":
-          dateFrom = moment()
-            .subtract(9, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(9, "months")
-            .endOf("month")
-            .toISOString();
-          break;
-
-        case "Meningitis Vaccine":
-        case "Vitamin A2":
-        case "OPV booster":
-          dateFrom = moment()
-            .subtract(12, "months")
-            .toISOString();
-          dateTo = moment()
-            .endOf("weeks")
-            .toISOString();
-          break;
-
-        case "Measles 2":
-          dateFrom = moment()
-            .subtract(18, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(12, "months")
-            .endOf("month")
-            .toISOString();
-          break;
-
-        case "Typhoid Vaccine":
-          dateFrom = moment()
-            .subtract(24, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(24, "months")
-            .endOf("month")
-            .toISOString();
-          break;
+    const asyncForEach = async (array, cb) => {
+      for (let index = 0; index < array.length; index++) {
+        await cb(array[index], index, array);
       }
-    } else if (this.state.searchCriteria == "Gender") {
-      if (this.state.gender != "") {
-        const token = sessionStorage.getItem("token");
-        const res = await fetch(`${url}?search=${this.state.gender}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          }
+    };
+
+    await asyncForEach(inputs, async query => {
+      console.log(query["searchCriteria form-control"]);
+      if (query["searchCriteria form-control"] == "Age") {
+        const dateFrom = moment()
+          .subtract(
+            query["ageSearch form-control"],
+            query["ageType form-control"]
+          )
+          .startOf(query["ageType form-control"])
+          .toISOString();
+        const dateTo = moment()
+          .subtract(
+            query["ageSearch form-control"],
+            query["ageType form-control"] || "days"
+          )
+          .endOf(query["ageType form-control"] || "day")
+          .toISOString();
+
+        console.log("done!!!-------", dateFrom, dateTo);
+        console.log("done!!!-------", query["ageType form-control"]);
+        return all.push({
+          name: "dob",
+          type: "between",
+          value: [dateFrom, dateTo]
         });
-        if (res.ok) {
-          const { data } = await res.json();
-          this.setState(
-            { totalData: data.rows, message: "Data retrieved" },
-            this.retrievedData
-          );
-          return;
-        }
-        this.setState({ totalData: [], error: "No data found" }, this.noData);
       }
-    } else if (this.state.searchCriteria == "Age") {
-      console.log("hi");
-      dateFrom = moment()
-        .subtract(this.state.ageSearch, this.state.ageType)
-        .startOf(this.state.ageType)
-        .format("YYYY-MM-DD");
-      dateTo = moment()
-        .subtract(this.state.ageSearch, this.state.ageType)
-        .endOf(this.state.ageType)
-        .toISOString();
-    }
 
-    console.log(this.state.searchCriteria, url);
-    const start = moment(dateFrom);
-    const end = moment(dateTo);
-    if (start.diff(end, "days") > 0) {
-      this.setState({ error: "Please check the dates" }, this.noData);
+      if (query["searchCriteria form-control"] == "Gender") {
+        // just in case there's no selected gender, default is male
+        const input = query["gender form-control"] || "Male";
+        all.push({ name: "gender", type: "equals", value: input });
+        return;
+      }
+      if (query["searchCriteria form-control"] == "Age Range") {
+        const dateFrom = moment()
+          .subtract(
+            query["ageFrom form-control"],
+            query["ageFromType form-control"]
+          )
+          .toISOString();
+        const dateTo = moment()
+          .subtract(
+            query["ageTo form-control"],
+            query["ageToType form-control"]
+          )
+          .toISOString();
+        return all.push({
+          name: "dob",
+          type: "between",
+          value: [dateFrom, dateTo]
+        });
+      }
+      if (query["searchCriteria form-control"] == "Date Range") {
+        const dateFrom = query["dateFrom form-control"];
+        const dateTo = query["dateTo form-control"];
+        if (query["dateRangeType form-control"] == "Registration") {
+          return all.push({
+            name: "createdAt",
+            type: "between",
+            value: [dateFrom, dateTo]
+          });
+        }
+        return all.push({
+          name: "dob",
+          type: "between",
+          value: [dateFrom, dateTo]
+        });
+      }
+
+      if (query["searchCriteria form-control"] == "Vaccine") {
+        let dateFrom, dateTo;
+        switch (query["vaccine form-control"]) {
+          case "BCG":
+          case "HBV 1":
+          case "OPV":
+            dateFrom = moment()
+              .subtract(7, "days")
+              .startOf("week")
+              .toISOString();
+            dateTo = moment().toISOString();
+            break;
+
+          case "OPV 1":
+          case "PCV 1":
+          case "Rotarix 1":
+          case "Pentavalent 1":
+            dateFrom = moment()
+              .subtract(6, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = moment()
+              .subtract(6, "weeks")
+              .endOf("weeks")
+              .toISOString();
+            break;
+
+          case "OPV 2":
+          case "Rotarix 2":
+          case "PCV 2":
+          case "Pentavalent 2":
+            dateFrom = moment()
+              .subtract(10, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = moment()
+              .subtract(10, "weeks")
+              .endOf("week")
+              .toISOString();
+            break;
+
+          case "OPV 3":
+          case "PCV 3":
+          case "IPV":
+          case "Pentavalent 3":
+            dateFrom = moment()
+              .subtract(14, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = moment()
+              .subtract(14, "weeks")
+              .endOf("week")
+              .toISOString();
+            break;
+
+          case "Vitamin A1":
+            dateFrom = moment()
+              .subtract(6, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = moment()
+              .subtract(6, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Measles Vaccine":
+          case "Yellow Fever Vaccine":
+            dateFrom = moment()
+              .subtract(9, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = moment()
+              .subtract(9, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Meningitis Vaccine":
+          case "Vitamin A2":
+          case "OPV booster":
+            dateFrom = moment()
+              .subtract(12, "months")
+              .toISOString();
+            dateTo = moment()
+              .endOf("weeks")
+              .toISOString();
+            break;
+
+          case "Measles 2":
+            dateFrom = moment()
+              .subtract(18, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = moment()
+              .subtract(12, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Typhoid Vaccine":
+            dateFrom = moment()
+              .subtract(24, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = moment()
+              .subtract(24, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+        }
+        return all.push({
+          name: "dob",
+          type: "between",
+          value: [dateTo, dateFrom]
+        });
+      }
+      if (query["searchCriteria form-control"] == "State") {
+        const state = query["soo form-control"];
+        return all.push({
+          name: "state",
+          type: "equals",
+          value: state
+        });
+      }
+
+      if (query["searchCriteria form-control"] == "Lga") {
+        const lga = query["slga form-control"];
+        return all.push({
+          name: "lga",
+          type: "equals",
+          value: lga
+        });
+      }
+
+      // return console.log('done!',all)
+    });
+    // console.log("done!", all);
+    // return alert("done!", all);
+
+    const token = sessionStorage.getItem("token");
+    const res = await fetch(`https://api.remhealth.co/info/query`, {
+      method: "POST",
+      body: JSON.stringify({
+        values: all
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const response = await res.json();
+    console.log(response);
+    if(!res.ok){
+      this.setState({total:0})
+      this.noData('No results found!')
       return;
     }
 
-    if (dateFrom != "" && dateFrom != "") {
-      const token = sessionStorage.getItem("token");
-      await fetch(`${url}?dateFrom=${dateFrom}&dateTo=${dateTo}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          if (res.status != 200) {
-            this.setState(
-              { totalData: [], error: "No data found" },
-              this.noData
-            );
-            return;
-          }
-          return res.json();
-        })
-        .then(res => {
-          console.log(res);
-          const data = res.data.rows ? res.data.rows : res.data;
-          this.setState(
-            {
-              totalData: data,
-              message: "Data retrieved"
-            },
-            this.retrievedData
-          );
-        });
-      return;
-    }
-    this.setState({ error: "Please select dates" }, this.noData);
+    this.setState({total:response.data.length})
+    let recipients =[];
+     response.data.map(datum=>{
+      return recipients.push(datum.phonenumber)
+    })
+    this.setState({recipients});
+    this.retrievedData(`${response.data.length} results found`)
+    return;
+    // if (this.state.searchCriteria == "Vaccine") {
+    //   switch (this.state.vaccine) {
+    //     case "BCG":
+    //     case "HBV 1":
+    //     case "OPV":
+    //       console.log("hello");
+    //       dateFrom = moment()
+    //         .subtract(7, "days")
+    //         .startOf("week")
+    //         .toISOString();
+    //       dateTo = moment().toISOString();
+    //       break;
+
+    //     case "OPV 1":
+    //     case "PCV 1":
+    //     case "Rotarix 1":
+    //     case "Pentavalent 1":
+    //       dateFrom = moment()
+    //         .subtract(6, "weeks")
+    //         .startOf("week")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .subtract(6, "weeks")
+    //         .endOf("weeks")
+    //         .toISOString();
+    //       break;
+
+    //     case "OPV 2":
+    //     case "Rotarix 2":
+    //     case "PCV 2":
+    //     case "Pentavalent 2":
+    //       dateFrom = moment()
+    //         .subtract(10, "weeks")
+    //         .startOf("week")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .subtract(10, "weeks")
+    //         .endOf("week")
+    //         .toISOString();
+    //       break;
+
+    //     case "OPV 3":
+    //     case "PCV 3":
+    //     case "IPV":
+    //     case "Pentavalent 3":
+    //       dateFrom = moment()
+    //         .subtract(14, "weeks")
+    //         .startOf("week")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .subtract(14, "weeks")
+    //         .endOf("week")
+    //         .toISOString();
+    //       break;
+
+    //     case "Vitamin A1":
+    //       dateFrom = moment()
+    //         .subtract(6, "months")
+    //         .startOf("month")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .subtract(6, "months")
+    //         .endOf("month")
+    //         .toISOString();
+    //       break;
+
+    //     case "Measles Vaccine":
+    //     case "Yellow Fever Vaccine":
+    //       dateFrom = moment()
+    //         .subtract(9, "months")
+    //         .startOf("month")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .subtract(9, "months")
+    //         .endOf("month")
+    //         .toISOString();
+    //       break;
+
+    //     case "Meningitis Vaccine":
+    //     case "Vitamin A2":
+    //     case "OPV booster":
+    //       dateFrom = moment()
+    //         .subtract(12, "months")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .endOf("weeks")
+    //         .toISOString();
+    //       break;
+
+    //     case "Measles 2":
+    //       dateFrom = moment()
+    //         .subtract(18, "months")
+    //         .startOf("month")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .subtract(12, "months")
+    //         .endOf("month")
+    //         .toISOString();
+    //       break;
+
+    //     case "Typhoid Vaccine":
+    //       dateFrom = moment()
+    //         .subtract(24, "months")
+    //         .startOf("month")
+    //         .toISOString();
+    //       dateTo = moment()
+    //         .subtract(24, "months")
+    //         .endOf("month")
+    //         .toISOString();
+    //       break;
+    //   }
+    // } else if (this.state.searchCriteria == "Gender") {
+    //   if (this.state.gender != "") {
+    //     const token = sessionStorage.getItem("token");
+    //     const res = await fetch(`${url}?search=${this.state.gender}`, {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${token}`
+    //       }
+    //     });
+    //     if (res.ok) {
+    //       const { data } = await res.json();
+    //       this.setState(
+    //         { totalData: data.rows, message: "Data retrieved" },
+    //         this.retrievedData
+    //       );
+    //       return;
+    //     }
+    //     this.setState({ totalData: [], error: "No data found" }, this.noData);
+    //   }
+    // } else if (this.state.searchCriteria == "Age") {
+    //   console.log("hi");
+    //   dateFrom = moment()
+    //     .subtract(this.state.ageSearch, this.state.ageType)
+    //     .startOf(this.state.ageType)
+    //     .format("YYYY-MM-DD");
+    //   dateTo = moment()
+    //     .subtract(this.state.ageSearch, this.state.ageType)
+    //     .endOf(this.state.ageType)
+    //     .toISOString();
+    // }
+
+    // // console.log(this.state.searchCriteria, url);
+    // const start = moment(dateFrom);
+    // const end = moment(dateTo);
+    // if (start.diff(end, "days") > 0) {
+    //   this.setState({ error: "Please check the dates" }, this.noData);
+    //   return;
+    // }
+
+    // if (dateFrom != "" && dateFrom != "") {
+    //   const token = sessionStorage.getItem("token");
+    //   await fetch(`${url}?dateFrom=${dateFrom}&dateTo=${dateTo}`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token}`
+    //     }
+    //   })
+    //     .then(res => {
+    //       if (res.status != 200) {
+    //         this.setState(
+    //           { totalData: [], error: "No data found" },
+    //           this.noData
+    //         );
+    //         return;
+    //       }
+    //       return res.json();
+    //     })
+    //     .then(res => {
+    //       console.log(res);
+    //       const data = res.data.rows ? res.data.rows : res.data;
+    //       this.setState(
+    //         {
+    //           totalData: data,
+    //           message: "Data retrieved"
+    //         },
+    //         this.retrievedData
+    //       );
+    //     });
+    //   return;
+    // }
+    // this.setState({ error: "Please select dates" }, this.noData);
   };
 
   onChangeHandler = async e => {
     e.preventDefault();
     e.persist();
-
-    await this.setState({ [e.target.name]: e.target.value });
-    if ([e.target.name] == "soo") {
-      this.handleState([e.target.value]);
-      return;
+    console.log(e.target.className);
+    if (
+      [
+        "dateTo form-control",
+        "dateFrom form-control",
+        "gender form-control",
+        "dateRangeType form-control",
+        "ageSearch form-control",
+        "ageType form-control",
+        "ageFromType form-control",
+        "disableState form-control",
+        "ageFrom form-control",
+        "ageToType form-control",
+        "ageTo form-control",
+        "vaccine form-control",
+        "searchCriteria form-control",
+        "searchByAge form-control",
+        ,
+        "searchByGender form-control",
+        ,
+        "searchByVaccine form-control",
+        ,
+        "soo form-control",
+        "dateRange form-control",
+        ,
+        "searchByState form-control",
+        ,
+        "searchByLga form-control",
+        ,
+        "ageRange form-control",
+        ,
+        "slga form-control"
+      ].includes(e.target.className)
+    ) {
+      let inputs = [...this.state.inputs];
+      inputs[e.target.dataset.id][e.target.className] = e.target.value;
+      console.log(e.target.value);
+      this.setState({ inputs }, () => console.log(this.state.inputs));
+      if ([e.target.name] == "soo" + e.target.dataset.id) {
+        this.handleState(e.target.dataset.id);
+        return;
+      }
+    } else {
+      console.log(e.target.value);
+      await this.setState({ [e.target.name]: e.target.value });
     }
-    this.criteriaHandler();
+    this.criteriaHandler(e.target.dataset.id);
   };
 
   buttonHandler = e => {
     e.preventDefault();
     this.setState({ activeSearch: !this.state.activeSearch });
   };
-
   render() {
+    let { inputs, role } = this.state;
+    console.log(this.state.inputs);
     return (
       <Fragment>
         <ReactCSSTransitionGroup
@@ -1604,356 +1991,25 @@ export default class Data extends Component {
           <div>
             <Row>
               <Col md="12">
-                <Row form>
-                  <Col md={3}>
-                    <FormGroup>
-                      <Label for="dob">Choose Recipients</Label>
-                      <Input
-                        value={this.state.searchCriteria}
-                        type="select"
-                        required
-                        name="searchCriteria"
-                        id="searchCriteria"
-                        max={max}
-                        onChange={this.onChangeHandler}
-                      >
-                        <option defaultValue></option>
-                        <option>Age</option>
-                        <option>Gender</option>
-                        <option>Vaccine</option>
-                        <option>Age Range</option>
-                        <option>Date Range</option>
-                        {this.state.role == "superAdmin" ||
-                        this.state.role == "nationalAdmin" ? (
-                          <option>State</option>
-                        ) : null}
-                        {this.state.role == "stateAdmin" ||
-                        this.state.role == "user" ? (
-                          <option>LGA</option>
-                        ) : null}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row form>
-                  {this.state.dateRange ? (
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="dateFrom">From</Label>
-                        <Input
-                          value={this.state.dateFrom}
-                          type="date"
-                          required
-                          name="dateFrom"
-                          id="dateFrom"
-                          max={max}
-                          onChange={this.onChangeHandler}
-                        />
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.dateRange ? (
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="dateTo">To</Label>
-                        <Input
-                          value={this.state.dateTo}
-                          type="date"
-                          required
-                          name="dateTo"
-                          id="dateTo"
-                          max={max}
-                          onChange={this.onChangeHandler}
-                        />
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.dateRange ? (
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="dateRangeType">Type</Label>
-                        <Input
-                          value={this.state.dateRangeType}
-                          type="select"
-                          required
-                          name="dateRangeType"
-                          id="dateRangeType"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option defaultValue>Registration</option>
-                          <option>Date Of Birth</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByAge ? (
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="ageSearch">Select Age</Label>
-                        <Input
-                          value={this.state.ageSearch}
-                          type="number"
-                          required
-                          name="ageSearch"
-                          id="ageSearch"
-                          onChange={this.onChangeHandler}
-                        />
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByAge ? (
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="ageType">Type</Label>
-                        <Input
-                          value={this.state.ageType}
-                          type="select"
-                          required
-                          name="ageType"
-                          id="ageType"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option defaultValue>Days</option>
-                          <option>Weeks</option>
-                          <option>Months</option>
-                          <option>Years</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.ageRange ? (
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="ageFrom">From</Label>
-                        <Input
-                          value={this.state.ageFrom}
-                          type="number"
-                          required
-                          name="ageFrom"
-                          id="ageFrom"
-                          onChange={this.onChangeHandler}
-                        />
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.ageRange ? (
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="ageFromType">Range Type</Label>
-                        <Input
-                          value={this.state.ageFromType}
-                          type="select"
-                          required
-                          name="ageFromType"
-                          id="ageFromType"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option defaultValue>Days</option>
-                          <option>Weeks</option>
-                          <option>Months</option>
-                          <option>Years</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.ageRange ? (
-                    <Col style={{ textAlign: "center" }} md={1}>
-                      -
-                    </Col>
-                  ) : null}
-                  {this.state.ageRange ? (
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="ageTo">To</Label>
-                        <Input
-                          value={this.state.ageTo}
-                          type="number"
-                          required
-                          name="ageTo"
-                          id="ageTo"
-                          onChange={this.onChangeHandler}
-                        />
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.ageRange ? (
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="ageToType">Range Type</Label>
-                        <Input
-                          value={this.state.ageToType}
-                          type="select"
-                          required
-                          name="ageToType"
-                          id="ageToType"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option defaultValue>Days</option>
-                          <option>Weeks</option>
-                          <option>Months</option>
-                          <option>Years</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByGender ? (
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="gender">Gender</Label>
-                        <Input
-                          value={this.state.gender}
-                          type="select"
-                          required
-                          name="gender"
-                          id="gender"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option defaultValue>Male</option>
-                          <option defaultValue>Female</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByState ? (
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="soo">State</Label>
-                        <Input
-                          value={this.state.soo}
-                          type="select"
-                          name="soo"
-                          id="soo"
-                          onChange={this.onChangeHandler}
-                          disabled={this.state.disableState}
-                        >
-                          <option>--State--</option>
-                          {this.state.sor.map(sors => {
-                            return (
-                              <option key={sors} value={sors}>
-                                {sors}
-                              </option>
-                            );
-                          })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByState ? (
-                    <Col md={4}>
-                      <FormGroup>
-                        <Label for="lga">Local Government Area</Label>
-                        <Input
-                          value={this.state.slga}
-                          type="select"
-                          name="slga"
-                          id="lga"
-                          onChange={this.onChangeHandler}
-                          disabled={
-                            this.state.disableState || this.state.soo == ""
-                          }
-                        >
-                          <option defaultValue>--select lga--</option>
-                          {this.state.lga.map(slga => {
-                            return (
-                              <option key={slga} value={slga}>
-                                {slga}
-                              </option>
-                            );
-                          })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByLga ? (
-                    <Col md={4}>
-                      <FormGroup>
-                        <Label for="slga">Local Government Area</Label>
-                        <Input
-                          value={this.state.slga}
-                          type="select"
-                          name="slga"
-                          id="lga"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option>--select lga--</option>
-                          {this.state.lga.map(slga => {
-                            return (
-                              <option key={slga} value={slga}>
-                                {slga}
-                              </option>
-                            );
-                          })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByGender ? (
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="gender">Gender</Label>
-                        <Input
-                          value={this.state.gender}
-                          type="select"
-                          required
-                          name="gender"
-                          id="gender"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option defaultValue>Male</option>
-                          <option defaultValue>Female</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                  {this.state.searchByVaccine ? (
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="vaccine">Vaccine</Label>
-                        <Input
-                          value={this.state.vaccine}
-                          type="select"
-                          required
-                          name="vaccine"
-                          id="vaccine"
-                          onChange={this.onChangeHandler}
-                        >
-                          <option defaultValue>BCG</option>
-                          <option defaultValue>HBV 1</option>
-                          <option defaultValue>OPV</option>
-                          <option defaultValue>OPV 1</option>
-                          <option defaultValue>PCV 1</option>
-                          <option defaultValue>Rotarix 1</option>
-                          <option defaultValue>Pentavalent 1</option>
-                          <option defaultValue>OPV 2</option>
-                          <option defaultValue>Rotarix 2</option>
-                          <option defaultValue>PCV 2</option>
-                          <option defaultValue>OPV 2</option>
-                          <option defaultValue>Pentavalent 2</option>
-                          <option defaultValue>OPV 3</option>
-                          <option defaultValue>PCV 3</option>
-                          <option defaultValue>IPV</option>
-                          <option defaultValue>Rotarix 3</option>
-                          <option defaultValue>Pentavalent 3</option>
-                          <option defaultValue>Vitamin A1</option>
-                          <option defaultValue>Measles Vaccine</option>
-                          <option defaultValue>Yellow Fever Vaccine</option>
-                          <option defaultValue>Meningitis Vaccine</option>
-                          <option defaultValue>Vitamin A2</option>
-                          <option defaultValue>OPV Booster</option>
-                          <option defaultValue>Measles 2 Vaccine</option>
-                          <option defaultValue>Typhoid Vaccine</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  ) : null}
-                </Row>
+                <div md={12}>
+                  <DynamicInputs
+                    inputs={inputs}
+                    onChangeHandler={this.onChangeHandler}
+                    role={role}
+                  />
+                </div>
                 <Row>
+                  <Col md={3}>
+                    <Button color="info" onClick={this.addCat}>
+                      Add query
+                    </Button>
+                  </Col>
                   <Col md={3}>
                     <FormGroup>
                       {/* <Label for="submit"></Label> */}
                       <Button
                         onClick={this.filterHandler}
-                        disabled={this.state.searchCriteria == ""}
+                        // disabled={this.state.searchCriteria == ""}
                         color="warning"
                       >
                         Filter
@@ -1961,6 +2017,7 @@ export default class Data extends Component {
                     </FormGroup>
                   </Col>
                 </Row>
+                Total Recipients: {this.state.total}
                 <Card className="main-card mb-3">
                   <div className="table-responsive">
                     <Row>

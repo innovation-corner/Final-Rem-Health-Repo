@@ -4,6 +4,7 @@ import { Link, matchPath } from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import classnames from "classnames";
 import JwPagination from "jw-react-pagination";
+import Map from "../Map/Map";
 
 import {
   Row,
@@ -104,7 +105,10 @@ export default class Data extends Component {
       "F.C.T"
     ],
     id: 0,
-    cancel: false
+    cancel: false,
+    locations:[],
+    showMap:false,
+    zoom:null
   };
 
   async componentWillMount() {
@@ -1353,6 +1357,16 @@ export default class Data extends Component {
         this.setState({ error: err.message }, this.loginError);
       });
   };
+
+  modalHandler = (e, lat, lng) => {
+    e.preventDefault();
+    const locations = [{ lat, lng }];
+    // this.setState({ locations, initial: locations[0] });
+    this.state.showMap
+      ? this.setState({ showMap: false, zoom: null })
+      : this.setState({ locations }, this.setState({ showMap: true }));
+  };
+
   render() {
     return (
       <Fragment>
@@ -1599,11 +1613,11 @@ export default class Data extends Component {
                         </tr>
                       </thead>
                       {list.map(item => {
-                        let color = '';
+                        let color = "";
                         let date = "-";
                         this.state.immunization.forEach(im => {
                           if (item == im.type) {
-                            color = 'rgba(0, 255, 0, 0.5)'
+                            color = "rgba(0, 255, 0, 0.5)";
                             date = moment(im.createdAt).format(
                               "DD - MM - YYYY"
                             );
@@ -1614,6 +1628,16 @@ export default class Data extends Component {
                             <tr style={{ backgroundColor: color }}>
                               <td className="text-center">{item}</td>
                               <td className="text-center">{date}</td>
+                              <td
+                                className="text-center"
+                                onClick={e => {
+                                  this.modalHandler(e, item.lat, item.lon);
+                                }}
+                              >
+                                {item.lat ? (
+                                  <i className="pe-7s-map-marker"></i>
+                                ) : null}
+                              </td>
                             </tr>
                           </tbody>
                         );
@@ -1628,6 +1652,15 @@ export default class Data extends Component {
                 </Card>
               </Col>
             </Row>
+            {this.state.locations.length > 0 ? (
+              <Map
+                initial={this.state.locations[0]}
+                clicked={this.modalHandler}
+                shows={this.state.showMap}
+                stores={this.state.locations}
+                zoom={this.state.zoom}
+              />
+            ) : null}
           </div>
         </ReactCSSTransitionGroup>
       </Fragment>

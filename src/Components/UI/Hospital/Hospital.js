@@ -2032,7 +2032,7 @@ export default class Data extends Component {
                       </div>
                       <div className="btn-actions-pane-right">
                         <div role="group" className="btn-group-sm btn-group">
-                          <Link to="/new">
+                          <Link to="/hospital/new">
                             <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
                               <i className="pe-7s-plus btn-icon-wrapper"> </i>
                             </button>
