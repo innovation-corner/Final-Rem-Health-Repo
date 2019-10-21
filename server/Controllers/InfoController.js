@@ -1,4 +1,4 @@
-const { Info, User } = require("../models");
+const { Info, User, Hospital } = require("../models");
 const { Op } = require("sequelize");
 const stateCode = require("../Services/stateService");
 const messageService = require("../Services/NotificationService");
@@ -9,7 +9,22 @@ const _ = require("lodash");
 
 module.exports = {
   async getTotalCount(req, res) {
-    const data = await Info.findAndCountAll({});
+    let criteria = {};
+    if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
+      criteria.state = user.state;
+    }
+
+    if (user.role == "HMO") {
+      criteria.hmo = id;
+    }
+    if (req.user.role == "hospitalAdmin") {
+      const hospital = await Hospital.findOne({
+        where: { admin: req.user.id }
+      });
+
+      criteria.hospitalCode = hospital.code;
+    }
+    const data = await Info.findAndCountAll({ where: criteria });
 
     return res.json({ message: "Data retrieved", data });
   },
@@ -27,7 +42,14 @@ module.exports = {
       }
 
       if (user.role == "HMO") {
-        creiteria = { hmo: id };
+        criteria = { hmo: id };
+      }
+      if (req.user.role == "hospitalAdmin") {
+        const hospital = await Hospital.findOne({
+          where: { admin: req.user.id }
+        });
+
+        criteria.hospitalCode = hospital.code;
       }
 
       if (search) {
@@ -69,9 +91,19 @@ module.exports = {
       const user = await User.findOne({ where: { id: req.user.id } });
 
       if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
-        criteria = { state: user.state };
+        criteria.state = user.state;
       }
 
+      if (user.role == "HMO") {
+        criteria.hmo = id;
+      }
+      if (req.user.role == "hospitalAdmin") {
+        const hospital = await Hospital.findOne({
+          where: { admin: req.user.id }
+        });
+
+        criteria.hospitalCode = hospital.code;
+      }
       criteria.dob = { [Op.between]: [dateFrom, dateTo] };
 
       const data = await Info.findAll({ where: criteria });
@@ -176,6 +208,14 @@ module.exports = {
         info.hmo = req.user.id;
       }
 
+      if (req.user.role == "hospitalAdmin") {
+        const hospital = await Hospital.findOne({
+          where: { admin: req.user.id }
+        });
+
+        info.hospitalCode = hospital.code;
+      }
+
       let { code } = await stateCode.selectCode(info.state);
       let imCode;
 
@@ -233,6 +273,11 @@ module.exports = {
       };
 
       let search = [];
+
+      if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
+        search.push({ state: user.state });
+      }
+
       await asyncForEach(values, async value => {
         if (value.name == "dob") {
           switch (value.type) {
@@ -264,7 +309,7 @@ module.exports = {
       if (!data.length) {
         return res.status(400).json({ message: "No data" });
       }
-      return res.status(200).json({ message: "Got ya", data });
+      return res.status(200).json({ message: "Data retrieved", data });
     } catch (error) {
       error = error || error.toString();
       return res
