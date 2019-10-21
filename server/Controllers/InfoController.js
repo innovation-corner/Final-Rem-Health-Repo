@@ -10,11 +10,11 @@ const _ = require("lodash");
 module.exports = {
   async getTotalCount(req, res) {
     let criteria = {};
-    if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
+    if (req.user.role !== "superAdmin" && req.user.role !== "nationalAdmin") {
       criteria.state = user.state;
     }
 
-    if (user.role == "HMO") {
+    if (req.user.role == "HMO") {
       criteria.hmo = id;
     }
     if (req.user.role == "hospitalAdmin") {
@@ -44,7 +44,7 @@ module.exports = {
       if (user.role == "HMO") {
         criteria = { hmo: id };
       }
-      if (req.user.role == "hospitalAdmin") {
+      if (user.role == "hospitalAdmin") {
         const hospital = await Hospital.findOne({
           where: { admin: req.user.id }
         });
