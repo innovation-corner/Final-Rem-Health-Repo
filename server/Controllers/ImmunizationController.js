@@ -11,7 +11,7 @@ module.exports = {
     try {
       const { type } = req.body;
       const { id } = req.user;
-      const childId = req.params.id;
+      const immunizationCode = req.params.id;
 
       const data = {
         type,
@@ -23,7 +23,7 @@ module.exports = {
         return res.status(400).json({ message: "Incomplete parameters" });
       }
 
-      const child = await Info.findOne({ where: { id: childId } });
+      const child = await Info.findOne({ where: { immunizationCode } });
 
       if (!child) {
         return res.status(400).json({ message: "Incomplete child id" });
