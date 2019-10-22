@@ -106,9 +106,9 @@ export default class Data extends Component {
     ],
     id: 0,
     cancel: false,
-    locations:[],
-    showMap:false,
-    zoom:null
+    locations: [],
+    showMap: false,
+    zoom: null
   };
 
   async componentWillMount() {
@@ -229,14 +229,30 @@ export default class Data extends Component {
         "Typhoid Vaccine"
       ];
 
-      let color = "rgba(255,0,0,0.3)";
+      let color = "";
+      let immunizationData = [];
 
-      immunization.data.forEach(im => {
-        if (list.includes(im.name)) {
-          // return im.color =
-        }
-      });
-
+      // immunization.data.forEach(im => {
+      //   if (list.includes(im.name)) {
+      //     return (im.color = "rgba(0, 255, 0, 0.5)");
+      //   }
+      // });
+// This piece of code is irrelevant atm but i think it has a future
+      // await list.map(item => {
+      //   immunization.data.forEach(im => {
+      //     if (item == im.type) {
+      //       immunizationData.push({
+      //         type: item,
+      //         color: "rgba(0, 255, 0, 0.5)",
+      //         date: im.createdAt,
+      //         lat: im.lat,
+      //         lng: im.lon
+      //       });
+      //     } else {
+      //       immunizationData.push({ type: item, color: "", date: "-" });
+      //     }
+      //   });
+      // });
       await this.setState({
         immunization: immunization.data
       });

@@ -249,7 +249,7 @@ export default class Data extends Component {
     }));
   };
 
-  noData = (msg) =>
+  noData = msg =>
     (this.toastId = toast(msg, {
       transition: Bounce,
       autoClose: 3000,
@@ -258,7 +258,7 @@ export default class Data extends Component {
       hideProgressBar: true
     }));
 
-  retrievedData = (msg) =>
+  retrievedData = msg =>
     (this.toastId = toast(msg, {
       transition: Bounce,
       autoClose: 3000,
@@ -1719,19 +1719,20 @@ export default class Data extends Component {
     });
     const response = await res.json();
     console.log(response);
-    if(!res.ok){
-      this.setState({total:0})
-      this.noData('No results found!')
+    if (!res.ok) {
+      this.setState({ total: 0 });
+      this.noData("No results found!");
       return;
     }
 
-    this.setState({total:response.data.length})
-    let recipients =[];
-     response.data.map(datum=>{
-      return recipients.push(datum.phonenumber)
-    })
-    this.setState({recipients});
-    this.retrievedData(`${response.data.length} results found`)
+    this.setState({ total: response.data.length });
+    let recipients = [];
+    response.data.map(datum => {
+      return recipients.push(datum.phonenumber);
+    });
+    this.setState({ recipients });
+    console.log(recipients);
+    this.retrievedData(`${response.data.length} results found`);
     return;
     // if (this.state.searchCriteria == "Vaccine") {
     //   switch (this.state.vaccine) {
@@ -1971,13 +1972,21 @@ export default class Data extends Component {
     this.criteriaHandler(e.target.dataset.id);
   };
 
+  sendMessage = async e => {
+    e.preventDefault();
+    const { message } = this.state;
+    if (message == ''){
+      return;
+    }
+    
+  };
+
   buttonHandler = e => {
     e.preventDefault();
     this.setState({ activeSearch: !this.state.activeSearch });
   };
   render() {
     let { inputs, role } = this.state;
-    console.log(this.state.inputs);
     return (
       <Fragment>
         <ReactCSSTransitionGroup
@@ -2021,7 +2030,26 @@ export default class Data extends Component {
                 <Card className="main-card mb-3">
                   <div className="table-responsive">
                     <Row>
-                      <Col md="3"></Col>
+                      <Col md="1"></Col>
+                      <Col md="3">
+                        <Row
+                          style={{ marginTop: "10px", marginBottom: "10px" }}
+                        >
+                          <Label for="recipients">Recipients</Label>
+                          <Input
+                            value={this.state.recipients}
+                            type="textarea"
+                            required
+                            disabled
+                            name="recipients"
+                            id="recipients"
+                            onChange={this.onChangeHandler}
+                            style={{ fontSize: "12px" }}
+                            rows="6"
+                          />
+                        </Row>
+                      </Col>
+                      <Col md="1"></Col>
                       <Col md="6">
                         <Row
                           style={{ marginTop: "10px", marginBottom: "10px" }}
@@ -2036,8 +2064,8 @@ export default class Data extends Component {
                             onChange={this.onChangeHandler}
                           />
                           <Button
-                            onClick={this.filterHandler}
-                            disabled={this.state.searchCriteria == ""}
+                            onClick={this.sendMessage}
+                            disabled={this.state.total < 1}
                             color="success"
                             style={{ marginTop: "10px", marginBottom: "10px" }}
                           >
