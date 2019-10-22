@@ -159,7 +159,7 @@ module.exports = {
           imCode = code + "00" + update.id;
         } else if (update.id >= 100 && update.id < 999) {
           imCode = code + "0" + update.id;
-        } else if (info.id >= 1000) {
+        } else if (update.id >= 1000) {
           imCode = code + update.id;
         }
         update.immunizationCode = imCode;
