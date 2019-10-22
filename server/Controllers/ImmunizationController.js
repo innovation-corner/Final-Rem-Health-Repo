@@ -16,7 +16,6 @@ module.exports = {
       const data = {
         type,
         administeredBy: id,
-        child: childId
       };
 
       if (_.isEmpty(type)) {
@@ -28,6 +27,7 @@ module.exports = {
       if (!child) {
         return res.status(400).json({ message: "Incomplete child id" });
       }
+      data.child = child.id
 
       await ImmunizationRecord.create(data);
 
