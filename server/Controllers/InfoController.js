@@ -274,7 +274,7 @@ module.exports = {
 
       let search = [];
 
-      if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
+      if (req.user.role == "stateAdmin") {
         search.push({ state: user.state });
       }
 
