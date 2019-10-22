@@ -1705,7 +1705,7 @@ export default class Data extends Component {
     });
     // console.log("done!", all);
     // return alert("done!", all);
-
+    let recipients = [];
     const token = sessionStorage.getItem("token");
     const res = await fetch(`https://api.remhealth.co/info/query`, {
       method: "POST",
@@ -1720,13 +1720,12 @@ export default class Data extends Component {
     const response = await res.json();
     console.log(response);
     if (!res.ok) {
-      this.setState({ total: 0 });
+      this.setState({ total: 0, recipients });
       this.noData("No results found!");
       return;
     }
 
     this.setState({ total: response.data.length });
-    let recipients = [];
     response.data.map(datum => {
       return recipients.push(datum.phonenumber);
     });
@@ -1975,10 +1974,9 @@ export default class Data extends Component {
   sendMessage = async e => {
     e.preventDefault();
     const { message } = this.state;
-    if (message == ''){
+    if (message == "") {
       return;
     }
-    
   };
 
   buttonHandler = e => {
