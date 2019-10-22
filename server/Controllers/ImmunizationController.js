@@ -1,4 +1,4 @@
-const { Info, User, ImmunizationRecord, Child } = require("../models");
+const { Info, User, ImmunizationRecord } = require("../models");
 const { Op } = require("sequelize");
 const _ = require("lodash");
 const stateCode = require("../Services/stateService");
@@ -23,8 +23,8 @@ module.exports = {
         return res.status(400).json({ message: "Incomplete parameters" });
       }
 
-      const child = await Child.findOne({ where: { id: childId } });
-      
+      const child = await Info.findOne({ where: { id: childId } });
+
       if (!child) {
         return res.status(400).json({ message: "Incomplete child id" });
       }
