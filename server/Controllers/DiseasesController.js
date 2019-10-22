@@ -11,11 +11,11 @@ module.exports = {
       if (_.isEmpty(type) || _.isEmpty(state) || _.isEmpty(lga)) {
         return res.status(400).json({ message: "incomplete filelds" });
       }
-      const child = await Info.findOne({ where: { id } });
+      const child = await Info.findOne({ where: { immunizationCode: id } });
       if (!child) {
         return res.status(400).json({ message: "Invalid id" });
       }
-      data.child = id;
+      data.child = child.id;
 
       await DiseasesRecord.create(data);
 
