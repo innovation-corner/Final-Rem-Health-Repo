@@ -34,7 +34,7 @@ module.exports = {
       return res.status(200).json({ message: "saved" });
     } catch (e) {
       e = e || e.toString();
-      return res.status(400).json({ message: "An error occurred", e });
+      return res.status(400).json({ message: "An error occurred", e:e.toString() });
     }
   },
 
