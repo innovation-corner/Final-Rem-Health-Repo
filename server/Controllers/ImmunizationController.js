@@ -1,4 +1,4 @@
-const { Info, User, ImmunizationRecord } = require("../models");
+const { Info, User, ImmunizationRecord, Child } = require("../models");
 const { Op } = require("sequelize");
 const _ = require("lodash");
 const stateCode = require("../Services/stateService");
@@ -23,11 +23,17 @@ module.exports = {
         return res.status(400).json({ message: "Incomplete parameters" });
       }
 
+      const child = await Child.findOne({ where: { id: childId } });
+      
+      if (!child) {
+        return res.status(400).json({ message: "Incomplete child id" });
+      }
+
       await ImmunizationRecord.create(data);
 
       return res.status(200).json({ message: "saved" });
     } catch (e) {
-      e = e || e.toString()
+      e = e || e.toString();
       return res.status(400).json({ message: "An error occurred", e });
     }
   },
