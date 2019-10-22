@@ -153,14 +153,14 @@ module.exports = {
         const { code } = await stateCode.selectCode(update.state);
 
         let imCode;
-        if (update.id < 10) {
-          imCode = code + "000" + update.id;
-        } else if (update.id >= 10 && update.id < 99) {
-          imCode = code + "00" + update.id;
-        } else if (update.id >= 100 && update.id < 999) {
+        if (reqData.id < 10) {
+          imCode = code + "000" + reqData.id;
+        } else if (reqData.id >= 10 && reqData.id < 99) {
+          imCode = code + "00" + reqData.id;
+        } else if (reqData.id >= 100 && reqData.id < 999) {
           imCode = code + "0" + update.id;
-        } else if (update.id >= 1000) {
-          imCode = code + update.id;
+        } else if (reqData.id >= 1000) {
+          imCode = code + reqData.id;
         }
         update.immunizationCode = imCode;
         // await update.save();
@@ -168,7 +168,7 @@ module.exports = {
 
       await Info.update(update, { where: { immunizationCode: id } });
 
-      data = await Info.findOne({ where: { immunizationCode: id } });
+      data = await Info.findOne({ where: { id: reqData.id } });
 
       return res.status(200).json({ message: "Data updated", data });
     } catch (e) {
