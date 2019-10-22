@@ -1684,6 +1684,14 @@ export default class Data extends Component {
         });
       }
       if (query["searchCriteria form-control"] == "State") {
+        const lga = query["slga form-control"];
+        if (lga !== "" && lga !== null && lga) {
+          all.push({
+            name: "lga",
+            type: "equals",
+            value: lga
+          });
+        }
         const state = query["soo form-control"];
         return all.push({
           name: "state",

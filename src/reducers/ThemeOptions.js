@@ -120,7 +120,7 @@ export default function reducer(state = {
     enableSidebarShadow: true,
     enableFixedFooter: true,
     enableFixedSidebar: true,
-    colorScheme: 'white',
+    colorScheme: 'black',
     backgroundImage: sideBar6,
     backgroundImageOpacity: 'opacity-06',
     enablePageTitleIcon: true,
