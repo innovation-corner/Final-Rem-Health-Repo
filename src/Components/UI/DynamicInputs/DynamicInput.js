@@ -25,64 +25,41 @@ const DynamicInputs = props => {
     console.log(props.inputs[idx]["searchCriteria"]);
     return (
       <div key={idx}>
-        {/* <label htmlFor={catId}>{`Cat #${idx + 1}`}</label>
-        <input
-          type="text"
-          name={catId}
-          data-id={idx}
-          className=''
-          id={catId}
-          value={props.cats[idx].name}
-          className="name"
-        />
-        <label htmlFor={ageId}>Age</label>
-        <input
-          type="text"
-          name={ageId}
-          data-id={idx}
-          className=''
-          id={ageId}
-          value={props.cats[idx].age}
-          className="age"
-        /> */}
-        <div>
-          {/* <Col md={2}></Col> */}
-          <Col md={4}>
-            <FormGroup>
-              <Label for={"searchCriteria" + idx + 1}>
-                Search Criteria No{idx + 1}
-              </Label>
-              <Input
-                value={props.inputs[idx]["searchCriteria form-control"]}
-                type="select"
-                data-id={idx}
-                required
-                name={"searchCriteria " + idx}
-                id={"searchCriteria " + idx}
-                className="searchCriteria"
-                onChange={props.onChangeHandler}
-              >
-                <option defaultValue></option>
-                <option>Age</option>
-                <option>Gender</option>
-                <option>Vaccine</option>
-                <option>Age Range</option>
-                <option>Date Range</option>
-                {props.role == "superAdmin" || props.role == "nationalAdmin" ? (
-                  <option>State</option>
-                ) : null}
-                {props.role == "stateAdmin" || props.role == "user" ? (
-                  <option>LGA</option>
-                ) : null}
-              </Input>
-            </FormGroup>
-          </Col>
-        </div>
+        <Col md={4}>
+          <FormGroup>
+            <Label for={"searchCriteria" + idx + 1}>
+              Search Criteria No {idx + 1}
+            </Label>
+            <Input
+              value={props.inputs[idx]["searchCriteria form-control"]}
+              type="select"
+              data-id={idx}
+              required
+              name={"searchCriteria " + idx}
+              id={"searchCriteria " + idx}
+              className="searchCriteria"
+              onChange={props.onChangeHandler}
+            >
+              <option defaultValue></option>
+              <option>Age</option>
+              <option>Gender</option>
+              <option>Vaccine</option>
+              <option>Age Range</option>
+              <option>Date Range</option>
+              {props.role == "superAdmin" || props.role == "nationalAdmin" ? (
+                <option>State</option>
+              ) : null}
+              {props.role == "stateAdmin" || props.role == "user" ? (
+                <option>LGA</option>
+              ) : null}
+            </Input>
+          </FormGroup>
+        </Col>
+
         <Row>
-          <Row form>
-            {/* <Col md={2}></Col> */}
+          <Col md={12}>
             {props.inputs[idx].dateRange ? (
-              <Col md={6}>
+              <Col md={3}>
                 <FormGroup>
                   <Label for="dateFrom">From</Label>
                   <Input
@@ -138,7 +115,7 @@ const DynamicInputs = props => {
               </Col>
             ) : null}
             {props.inputs[idx].searchByAge ? (
-              <Col md={6}>
+              <Col md={2}>
                 <FormGroup>
                   <Label for="ageSearch">Select Age</Label>
                   <Input
@@ -156,7 +133,7 @@ const DynamicInputs = props => {
             ) : null}
 
             {props.inputs[idx].searchByGender ? (
-              <Col md={10}>
+              <Col md={2}>
                 <FormGroup>
                   <Label for="gender">Gender</Label>
                   <Input
@@ -177,7 +154,7 @@ const DynamicInputs = props => {
             ) : null}
 
             {props.inputs[idx].searchByAge ? (
-              <Col md={4}>
+              <Col md={2}>
                 <FormGroup>
                   <Label for="ageType">Type</Label>
                   <Input
@@ -256,7 +233,7 @@ const DynamicInputs = props => {
               </Col>
             ) : null}
             {props.inputs[idx].ageRange ? (
-              <Col md={6}> 
+              <Col md={6}>
                 <FormGroup>
                   <Label for="ageToType">Range Type</Label>
                   <Input
@@ -402,7 +379,7 @@ const DynamicInputs = props => {
                 </FormGroup>
               </Col>
             ) : null}
-          </Row>
+          </Col>
         </Row>
       </div>
     );

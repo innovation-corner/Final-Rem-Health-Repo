@@ -2014,7 +2014,8 @@ export default class Data extends Component {
                   />
                 </div>
                 <Row>
-                  <Col md={3}>
+                  {/* <Col md={1}> </Col> */}
+                  <Col style={{marginLeft:'14px'}} md={3}>
                     <Button color="info" onClick={this.addCat}>
                       Add query
                     </Button>
