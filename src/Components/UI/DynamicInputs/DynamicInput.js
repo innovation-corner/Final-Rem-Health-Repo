@@ -19,10 +19,6 @@ const max = moment().format("YYYY-MM-DD");
 
 const DynamicInputs = props => {
   return props.inputs.map((val, idx) => {
-    // let catId = `cat-${idx}`,
-    //   ageId = `age-${idx}`;
-    console.log(props.inputs[0]);
-    console.log(props.inputs[idx]["searchCriteria"]);
     return (
       <div key={idx}>
         <Col md={4}>

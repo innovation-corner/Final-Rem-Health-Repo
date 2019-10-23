@@ -44,6 +44,7 @@ export default class Data extends Component {
     message: "",
     error: "",
     activeSearch: false,
+    save: true,
     message: "",
     totalData: [],
     inputs: [
@@ -123,6 +124,7 @@ export default class Data extends Component {
     ageFrom: "",
     ageToType: "Days",
     ageTo: "",
+    recipients: [],
     vaccine: "BCG",
     searchCriteria: "",
     searchByAge: false,
@@ -1473,21 +1475,6 @@ export default class Data extends Component {
   filterHandler = async e => {
     e.preventDefault();
     ("age, age range, date range, vaccine, gender");
-    let url;
-    const dates =
-      this.state.searchCriteria == "Age Range" ||
-      (this.state.searchCriteria == "Date Range" &&
-        this.state.dateRangeType == "Registration") ||
-      this.state.searchCriteria == "Vaccine";
-
-    // let dateFrom, dateTo;
-
-    if (dates) {
-      url = "https://api.remhealth.co/info/date";
-    } else {
-      url = "https://api.remhealth.co/info/list";
-    }
-
     let { inputs } = this.state;
     let all = [];
 
@@ -1738,7 +1725,6 @@ export default class Data extends Component {
       return recipients.push(datum.phonenumber);
     });
     this.setState({ recipients });
-    console.log(recipients);
     this.retrievedData(`${response.data.length} results found`);
     return;
     // if (this.state.searchCriteria == "Vaccine") {
@@ -1966,17 +1952,24 @@ export default class Data extends Component {
     ) {
       let inputs = [...this.state.inputs];
       inputs[e.target.dataset.id][e.target.className] = e.target.value;
-      console.log(e.target.value);
-      this.setState({ inputs }, () => console.log(this.state.inputs));
+      this.setState({ inputs });
+      this.criteriaHandler(e.target.dataset.id);
       if ([e.target.name] == "soo" + e.target.dataset.id) {
         this.handleState(e.target.dataset.id);
         return;
       }
     } else {
-      console.log(e.target.value);
+      console.log(e.target.type);
+      e.target.value =
+        e.target.type === "checkbox" ? e.target.checked : e.target.value;
       await this.setState({ [e.target.name]: e.target.value });
     }
-    this.criteriaHandler(e.target.dataset.id);
+  };
+  toggleChange = e => {
+    // e.preventDefault();
+    this.setState({
+      save: !this.state.save
+    });
   };
 
   sendMessage = async e => {
@@ -1985,6 +1978,25 @@ export default class Data extends Component {
     if (message == "") {
       return;
     }
+    const token = sessionStorage.getItem("token");
+    const res = await fetch("https://api.remhealth.co/sms/new", {
+      method: "POST",
+      body: JSON.stringify({
+        recipients: this.state.recipients,
+        message: this.state.message,
+        save: this.state.save
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const response = await res.json();
+    if (!res.ok) {
+      console.log(response.message)
+      return this.noData('message not sent');
+    }
+    this.retrievedData(response.message)
   };
 
   buttonHandler = e => {
@@ -2015,7 +2027,7 @@ export default class Data extends Component {
                 </div>
                 <Row>
                   {/* <Col md={1}> </Col> */}
-                  <Col style={{marginLeft:'14px'}} md={3}>
+                  <Col style={{ marginLeft: "14px" }} md={3}>
                     <Button color="info" onClick={this.addCat}>
                       Add query
                     </Button>
@@ -2046,7 +2058,6 @@ export default class Data extends Component {
                           <Input
                             value={this.state.recipients}
                             type="textarea"
-                            required
                             disabled
                             name="recipients"
                             id="recipients"
@@ -2068,16 +2079,39 @@ export default class Data extends Component {
                             required
                             name="message"
                             id="message"
+                            rows="6"
                             onChange={this.onChangeHandler}
                           />
-                          <Button
-                            onClick={this.sendMessage}
-                            disabled={this.state.total < 1}
-                            color="success"
-                            style={{ marginTop: "10px", marginBottom: "10px" }}
-                          >
-                            Send
-                          </Button>
+                        </Row>
+                        <Row
+                          style={{ marginTop: "10px", marginBottom: "10px" }}
+                        >
+                          {/* <Col md="6">
+                            <input
+                              type="checkbox"
+                              name="save"
+                              checked={this.state.save}
+                              onChange={this.toggleChange}
+                            />{" "}
+
+                            <label for="save">Save Message</label>
+                          </Col> */}
+                          <Col md="6">
+                            <Button
+                              onClick={this.sendMessage}
+                              disabled={
+                                this.state.recipients.length < 1 || this.state.message == ""
+                              }
+                              color="success"
+                              style={{
+                                marginTop: "10px",
+                                marginBottom: "10px"
+                              }}
+                              onChange={this.onChangeHandler}
+                            >
+                              Send
+                            </Button>
+                          </Col>
                         </Row>
                       </Col>
                     </Row>
