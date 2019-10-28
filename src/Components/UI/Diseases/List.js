@@ -1687,7 +1687,7 @@ export default class Data extends Component {
                             max={max}
                             onChange={this.onChangeHandler}
                           >
-                            <option defaultValue></option>
+                            <option defaultValue>select search criteria</option>
                             {this.state.role == "superAdmin" ||
                             this.state.role == "nationalAdmin" ? (
                               <option>State</option>
@@ -2062,6 +2062,7 @@ export default class Data extends Component {
                           onClick={this.mapHandler}
                           role="group"
                           className="btn-group-sm btn-group"
+                          style={{ cursor: "pointer" }}
                         >
                           {/* <Link to="/new">
                             <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
@@ -2093,6 +2094,7 @@ export default class Data extends Component {
 
                                 <td
                                   className="text-center"
+                                  style={{ cursor: "pointer" }}
                                   onClick={e => {
                                     this.modalHandler(e, item.lat, item.lon);
                                   }}
@@ -2100,6 +2102,21 @@ export default class Data extends Component {
                                   {item.lat ? (
                                     <i className="pe-7s-map-marker"></i>
                                   ) : null}
+                                </td>
+
+                                <td
+                                  className="text-center"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={e => {
+                                    this.modalHandler(e, item.lat, item.lon);
+                                  }}
+                                >
+                                  <Link
+                                    to={`/data/${item.child}`}
+                                    params={{ id: item.child }}
+                                  >
+                                    view
+                                  </Link>
                                 </td>
                               </tr>
                             </tbody>

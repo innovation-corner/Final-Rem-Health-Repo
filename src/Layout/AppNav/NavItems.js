@@ -35,6 +35,11 @@ let MainNav = [
     to: "/reported-diseases"
   },
   {
+    icon: "pe-7s-helm",
+    label: "Vaccines",
+    to: "/vaccines"
+  },
+  {
     icon: "pe-7s-users",
     label: "Add User",
     to: "/user/new"

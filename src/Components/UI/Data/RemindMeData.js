@@ -1639,7 +1639,7 @@ export default class Data extends Component {
                         max={max}
                         onChange={this.onChangeHandler}
                       >
-                        <option defaultValue></option>
+                        <option defaultValue>select search criteria</option>
                         <option>Age</option>
                         <option>Gender</option>
                         <option>Vaccine</option>

@@ -36,7 +36,7 @@ const DynamicInputs = props => {
               className="searchCriteria"
               onChange={props.onChangeHandler}
             >
-              <option defaultValue></option>
+              <option defaultValue>select search criteria</option>
               <option>Age</option>
               <option>Gender</option>
               <option>Vaccine</option>
