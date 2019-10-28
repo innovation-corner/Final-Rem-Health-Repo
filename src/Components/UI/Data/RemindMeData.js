@@ -2025,7 +2025,7 @@ export default class Data extends Component {
                                   to={`/data/${item.id}`}
                                   params={{ id: item.id }}
                                 >
-                                  view
+                                  profile
                                 </Link>
                               </td>
                             </tr>

@@ -60,6 +60,8 @@ export default class Data extends Component {
     pageOfItems: [],
     name: "",
     gender: "",
+    fatherName: '',
+    motherName: '',
     disableState: true,
     disableInput: true,
     button: "Edit",
@@ -155,6 +157,8 @@ export default class Data extends Component {
       name,
       immunizationCode,
       gender,
+      fatherName,
+      motherName,
       state,
       language
     } = data;
@@ -165,6 +169,8 @@ export default class Data extends Component {
       dob,
       id,
       name,
+      fatherName,
+      motherName,
       immunizationCode,
       gender,
       language,
@@ -237,7 +243,7 @@ export default class Data extends Component {
       //     return (im.color = "rgba(0, 255, 0, 0.5)");
       //   }
       // });
-// This piece of code is irrelevant atm but i think it has a future
+      // This piece of code is irrelevant atm but i think it has a future
       // await list.map(item => {
       //   immunization.data.forEach(im => {
       //     if (item == im.type) {
@@ -1322,6 +1328,8 @@ export default class Data extends Component {
         phonenumber: this.state.phonenumber,
         dob: this.state.dob,
         gender: this.state.gender,
+        motherName: this.state.motherName,
+        fatherName: this.state.fatherName,
         name: this.state.name,
         language: this.state.language,
         name: this.state.name
@@ -1555,6 +1563,34 @@ export default class Data extends Component {
                                   name="email"
                                   id="email"
                                   placeholder="yourmail@host.com"
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="motherName">Mother's Name</Label>
+                                <Input
+                                  value={this.state.motherName}
+                                  type="text"
+                                  name="motherName"
+                                  id="motherName"
+                                  placeholder="Full Name"
+                                  onChange={this.onChangeHandler}
+                                  disabled={this.state.disableInput}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                              <FormGroup>
+                                <Label for="fatherName">Father's Name</Label>
+                                <Input
+                                  value={this.state.fatherName}
+                                  type="text"
+                                  name="fatherName"
+                                  id="fatherName"
+                                  placeholder="Full Name"
                                   onChange={this.onChangeHandler}
                                   disabled={this.state.disableInput}
                                 />
