@@ -1,4 +1,4 @@
-const { Vaccine } = require("../models");
+const { Vaccine, ImmunizationRecord, Info } = require("../models");
 const _ = require("lodash");
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
         return res.status(400).json({ message: "name already exists" });
       }
 
-      await Vaccine.create({name});
+      await Vaccine.create({ name });
       return res.status(200).json({ message: "vaccine saved" });
     } catch (e) {
       return res
@@ -46,6 +46,23 @@ module.exports = {
       await vaccine.destroy();
       return res.status(200).json({ message: "vaccine deleted" });
     } catch (e) {
+      return res
+        .status(400)
+        .json({ message: "An error occured", e: e.tostring() });
+    }
+  },
+
+  async vaccinedetails(req, res) {
+    try {
+      const { name } = req.params;
+      let data = [];
+
+      const record = await ImmunizationRecord.findAll(
+        { where: { type: name } },
+        { include: [{ all: true }] }
+      );
+      data.record = record;
+    } catch (error) {
       return res
         .status(400)
         .json({ message: "An error occured", e: e.tostring() });
