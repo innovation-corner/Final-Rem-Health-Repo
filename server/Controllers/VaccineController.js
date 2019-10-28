@@ -63,7 +63,7 @@ module.exports = {
       );
       data.record = record;
       return res.status(200).json({ message: "vaccines retrieved", data });
-    } catch (error) {
+    } catch (e) {
       return res
         .status(400)
         .json({ message: "An error occured", e: e.tostring() });
