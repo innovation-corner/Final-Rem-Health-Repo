@@ -57,10 +57,10 @@ module.exports = {
       const { name } = req.params;
       let data = [];
 
-      const record = await ImmunizationRecord.findAll(
-        { where: { type: name } },
-        { include: [{ all: true }] }
-      );
+      const record = await ImmunizationRecord.findAll({
+        where: { type: name },
+        include: [{ all: true }]
+      });
       data.record = record;
       return res.status(200).json({ message: "vaccines retrieved", record });
     } catch (e) {
