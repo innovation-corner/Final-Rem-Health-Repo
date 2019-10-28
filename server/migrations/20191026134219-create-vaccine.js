@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("HMOs", {
+    return queryInterface.createTable('Vaccines', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,23 +9,6 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
-      },
-      address: {
-        type: Sequelize.STRING
-      },
-      admin: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "admin",
-          as: "hmo"
-        }
-      },
-      lat: {
-        type: Sequelize.STRING
-      },
-      lon: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -39,6 +22,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("HMOs");
+    return queryInterface.dropTable('Vaccines');
   }
 };

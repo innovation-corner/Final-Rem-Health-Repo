@@ -5,8 +5,9 @@ const user = require("./userRoutes");
 const hs = require("./hospitalRoutes");
 const sms = require("./smsRoutes");
 const hmo = require("./hmoRoutes");
-const disease = require('./diseaseRoutes');
-const im = require('./immunizationRoutes');
+const disease = require("./diseaseRoutes");
+const im = require("./immunizationRoutes");
+const vaccine = require("./vaccineRoutes");
 
 module.exports = {
   ussd,
@@ -17,5 +18,6 @@ module.exports = {
   disease,
   hmo,
   sms,
-  auth
+  auth,
+  vaccine
 };
