@@ -45,6 +45,11 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   router.im
 );
+app.use(
+  "/vaccine/",
+  passport.authenticate("jwt", { session: false }),
+  router.vaccine
+);
 
 // app.get("/", (req, res) =>
 //   res.status(401).send({

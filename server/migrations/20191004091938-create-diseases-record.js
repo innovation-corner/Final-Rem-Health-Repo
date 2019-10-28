@@ -33,6 +33,12 @@ module.exports = {
           as: "reportedBy"
         }
       },
+      lat: {
+        type: Sequelize.STRING
+      },
+      lon: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

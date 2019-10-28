@@ -29,6 +29,12 @@ module.exports = {
           as: "childImmunized"
         }
       },
+      lat: {
+        type: Sequelize.STRING
+      },
+      lon: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

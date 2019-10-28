@@ -20,6 +20,12 @@ module.exports = {
       lga: {
         type: Sequelize.STRING
       },
+      lat: {
+        type: Sequelize.STRING
+      },
+      lon: {
+        type: Sequelize.STRING
+      },
       address: {
         type: Sequelize.STRING
       },
