@@ -14,7 +14,7 @@ module.exports = {
         return res.status(400).json({ message: "name already exists" });
       }
 
-      await Vaccine.create(name);
+      await Vaccine.create({name});
       return res.status(200).json({ message: "vaccine saved" });
     } catch (e) {
       return res
