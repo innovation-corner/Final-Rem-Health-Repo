@@ -62,6 +62,7 @@ module.exports = {
         { include: [{ all: true }] }
       );
       data.record = record;
+      return res.status(200).json({ message: "vaccines retrieved", data });
     } catch (error) {
       return res
         .status(400)
