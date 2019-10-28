@@ -26,6 +26,24 @@ class Add extends React.Component {
     vaccines: []
   };
 
+  noData = msg =>
+    (this.toastId = toast(msg, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "error",
+      hideProgressBar: true
+    }));
+
+  retrievedData = msg =>
+    (this.toastId = toast(msg, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "success",
+      hideProgressBar: true
+    }));
+
   async componentDidMount() {
     const token = await sessionStorage.getItem("token");
     const totData = await fetch("https://api.remhealth.co/user/view", {
@@ -70,7 +88,37 @@ class Add extends React.Component {
     await this.setState({ [e.target.name]: e.target.value });
   };
 
-  max = moment().format("YYYY-MM-DD");
+  deleteHandler = async (e, id) => {
+    console.log(id);
+    const token = sessionStorage.getItem("token");
+    const res = await fetch(`https://api.remhealth.co/vaccine/remove/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const response = await res.json();
+    if (!res.ok) {
+      this.noData(response.message);
+      return;
+    }
+    this.retrievedData(response.message);
+
+    const res1 = await fetch("https://api.remhealth.co/vaccine/get", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const { vaccines } = await res1.json();
+    this.setState({
+      vaccines
+    });
+  };
 
   render() {
     return (
@@ -473,6 +521,13 @@ class Add extends React.Component {
                                   #{i + 1}
                                 </td>
                                 <td className="text-center">{item.name}</td>
+                                <td
+                                  className="text-center"
+                                  style={{ color: "red", cursor: "pointer" }}
+                                  onClick={e => this.deleteHandler(e, item.id)}
+                                >
+                                  delete
+                                </td>
                               </tr>
                             </tbody>
                           );
