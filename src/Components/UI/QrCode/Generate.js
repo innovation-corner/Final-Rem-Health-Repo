@@ -113,6 +113,14 @@ class QrCode extends Component {
           transitionLeave={false}
         >
           <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
             <PageTitle
               heading={"Generate Qr Code"}
               subheading=""
@@ -137,7 +145,7 @@ class QrCode extends Component {
                               type="number"
                               name="num"
                               id="num"
-                              min = {0}
+                              min={0}
                               placeholder="Enter qty"
                               onChange={this.onChangeHandler}
                             />

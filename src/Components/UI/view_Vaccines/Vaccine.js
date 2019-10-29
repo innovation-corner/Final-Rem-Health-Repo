@@ -132,6 +132,14 @@ class Add extends React.Component {
           transitionLeave={false}
         >
           <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
             <Row>
               <Col md="12">
                 {/* <Row form>
@@ -521,6 +529,14 @@ class Add extends React.Component {
                                   #{i + 1}
                                 </td>
                                 <td className="text-center">{item.name}</td>
+                                <td className="text-center">
+                                  <Link
+                                    to={`/vaccine/${item.name}`}
+                                    params={{ id: item.name }}
+                                  >
+                                    details
+                                  </Link>
+                                </td>
                                 <td
                                   className="text-center"
                                   style={{ color: "red", cursor: "pointer" }}

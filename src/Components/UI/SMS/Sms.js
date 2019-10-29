@@ -1993,10 +1993,10 @@ export default class Data extends Component {
     });
     const response = await res.json();
     if (!res.ok) {
-      console.log(response.message)
-      return this.noData('message not sent');
+      console.log(response.message);
+      return this.noData("message not sent");
     }
-    this.retrievedData(response.message)
+    this.retrievedData(response.message);
   };
 
   buttonHandler = e => {
@@ -2017,6 +2017,14 @@ export default class Data extends Component {
         >
           <div>
             <Row>
+              <i
+                className="lnr-arrow-left"
+                style={{ cursor: "pointer" }}
+                onClick={this.props.history.goBack}
+              >
+                {" "}
+              </i>{" "}
+              <br />
               <Col md="12">
                 <div md={12}>
                   <DynamicInputs
@@ -2100,7 +2108,8 @@ export default class Data extends Component {
                             <Button
                               onClick={this.sendMessage}
                               disabled={
-                                this.state.recipients.length < 1 || this.state.message == ""
+                                this.state.recipients.length < 1 ||
+                                this.state.message == ""
                               }
                               color="success"
                               style={{

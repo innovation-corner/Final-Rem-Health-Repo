@@ -105,56 +105,68 @@ class Add extends React.Component {
           transitionEnter={false}
           transitionLeave={false}
         >
-          <Card className="main-card mb-3 new">
-            <CardBody>
-              <CardTitle style={{ textAlign: "center" }}>Add Vaccine</CardTitle>
-              <Form>
-                <Row form>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="name"> Name</Label>
-                      <Input
-                        value={this.state.name}
-                        required
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder="Enter Vaccine name"
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                {!this.state.loading ? (
+          <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
+            <Card className="main-card mb-3 new">
+              <CardBody>
+                <CardTitle style={{ textAlign: "center" }}>
+                  Add Vaccine
+                </CardTitle>
+                <Form>
                   <Row form>
-                    <Col md={6}></Col>
+                    <Col md={2}></Col>
                     <Col md={4}>
-                      <Button
-                        color="success"
-                        className="mt-2"
-                        onClick={this.submitHandler}
-                      >
-                        Save
-                      </Button>
+                      <FormGroup>
+                        <Label for="name"> Name</Label>
+                        <Input
+                          value={this.state.name}
+                          required
+                          type="text"
+                          name="name"
+                          id="name"
+                          placeholder="Enter Vaccine name"
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
                     </Col>
                   </Row>
-                ) : (
-                  <Row form>
-                    <Col md={6}></Col>
-                    <Col md={4}>
-                      <div
-                        className="spinner-border text-success"
-                        role="status"
-                      >
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </Col>
-                  </Row>
-                )}
-              </Form>
-            </CardBody>
-          </Card>
+                  {!this.state.loading ? (
+                    <Row form>
+                      <Col md={6}></Col>
+                      <Col md={4}>
+                        <Button
+                          color="success"
+                          className="mt-2"
+                          onClick={this.submitHandler}
+                        >
+                          Save
+                        </Button>
+                      </Col>
+                    </Row>
+                  ) : (
+                    <Row form>
+                      <Col md={6}></Col>
+                      <Col md={4}>
+                        <div
+                          className="spinner-border text-success"
+                          role="status"
+                        >
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  )}
+                </Form>
+              </CardBody>
+            </Card>
+          </div>
         </ReactCSSTransitionGroup>
       </Fragment>
     );

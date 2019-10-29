@@ -1230,6 +1230,14 @@ export default class Data extends Component {
           transitionLeave={false}
         >
           <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
             <Row>
               <Col md="12">
                 <Card className="main-card mb-3">

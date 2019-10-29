@@ -1210,7 +1210,7 @@ export default class Data extends Component {
       method: "PUT",
       body: JSON.stringify({
         address: this.state.address,
-        name: this.state.name,
+        name: this.state.name
       }),
       headers: {
         "Content-Type": "application/json"
@@ -1228,14 +1228,11 @@ export default class Data extends Component {
           return res.json().then(res => {
             const { data } = res;
 
-            const {
-              name,
-              address
-            } = data;
+            const { name, address } = data;
 
             this.setState({
               name,
-              address,
+              address
             });
           });
         }
@@ -1258,6 +1255,14 @@ export default class Data extends Component {
           transitionLeave={false}
         >
           <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
             <Row>
               <Col md="12">
                 <Card className="main-card mb-3">

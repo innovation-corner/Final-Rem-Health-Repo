@@ -20,6 +20,7 @@ const List = lazy(() => import("../../Components/UI/Diseases/"));
 const Hospital_id = lazy(() => import("../../Components/UI/Hospital_id/"));
 const addVaccine = lazy(() => import("../../Components/UI/add_Vaccine/"));
 const  Vaccines = lazy(() => import("../../Components/UI/view_Vaccines/"));
+const  VaccineData = lazy(() => import("../../Components/UI/vaccine_Data/"));
 
 const AppMain = () => {
   return (
@@ -71,6 +72,18 @@ const AppMain = () => {
         }
       >
         <Route path="/data/:id" name="user" component={Data_id} />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="loader-container">
+            <div className="loader-container-inner">
+              <h6 className="mt-3">Please wait ...</h6>
+            </div>
+          </div>
+        }
+      >
+        <Route path="/vaccine/:id" name="user" component={VaccineData} />
       </Suspense>
 
       <Suspense

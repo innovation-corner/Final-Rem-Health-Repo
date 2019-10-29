@@ -1513,10 +1513,13 @@ export default class Data extends Component {
           );
           return;
         }
-        return this.setState({ totalData: [], error: "No data found" }, this.noData);
+        return this.setState(
+          { totalData: [], error: "No data found" },
+          this.noData
+        );
       }
     } else if (this.state.searchCriteria == "State") {
-      if(!this.state.soo){
+      if (!this.state.soo) {
         return;
       }
       let param = this.state.soo;
@@ -1540,7 +1543,10 @@ export default class Data extends Component {
         );
         return;
       }
-      return this.setState({ totalData: [], error: "No data found" }, this.noData);
+      return this.setState(
+        { totalData: [], error: "No data found" },
+        this.noData
+      );
     } else if (this.state.searchCriteria == "Age") {
       dateFrom = moment()
         .subtract(this.state.ageSearch, this.state.ageType)
@@ -1609,7 +1615,7 @@ export default class Data extends Component {
 
   buttonHandler = e => {
     e.preventDefault();
-    this.setState({ activeSearch: !this.state.activeSearch, input:'' });
+    this.setState({ activeSearch: !this.state.activeSearch, input: "" });
   };
 
   render() {
@@ -1624,6 +1630,14 @@ export default class Data extends Component {
           transitionLeave={false}
         >
           <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
             <Row>
               <Col md="12">
                 <Row form>

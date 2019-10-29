@@ -150,7 +150,7 @@ class Add extends React.Component {
       this.setState({ loading: false });
       this.successToast("profile updated");
       this.setState({
-        password: ''
+        password: ""
       });
     } catch (error) {
       this.setState({ loading: false });
@@ -172,100 +172,111 @@ class Add extends React.Component {
           transitionEnter={false}
           transitionLeave={false}
         >
-          <Card className="main-card mb-3 new">
-            <CardBody>
-              <CardTitle style={{ textAlign: "left" }}>Edit Profile</CardTitle>
-              <Form>
-                <Row form>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="name">Full Name</Label>
-                      <Input
-                        value={this.state.name}
-                        required
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder={this.state.name}
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="email">Email</Label>
-                      <Input
-                        value={this.state.email}
-                        type="email"
-                        required
-                        name="email"
-                        id="email"
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row form>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="state">State</Label>
-                      <Input
-                        value={this.state.soo}
-                        type="text"
-                        name="soo"
-                        id="state"
-                        onChange={this.onChangeHandler}
-                        disabled={this.state.disableState}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="username">Username</Label>
-                      <Input
-                        value={this.state.username}
-                        type="text"
-                        name="username"
-                        id="username"
-                        required
-                        disabled={this.state.disableState}
-                        placeholder={this.state.username}
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row form>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="oldPassword">Old Password</Label>
-                      <Input
-                        value={this.state.oldPassword}
-                        type="password"
-                        name="oldPassword"
-                        id="oldPassword"
-                        required={this.state.passwordRequired}
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="password">Password</Label>
-                      <Input
-                        value={this.state.password}
-                        type="password"
-                        name="password"
-                        id="password"
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                {/* <Row form>
+          <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
+            <Card className="main-card mb-3 new">
+              <CardBody>
+                <CardTitle style={{ textAlign: "left" }}>
+                  Edit Profile
+                </CardTitle>
+                <Form>
+                  <Row form>
+                    <Col md={2}></Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="name">Full Name</Label>
+                        <Input
+                          value={this.state.name}
+                          required
+                          type="text"
+                          name="name"
+                          id="name"
+                          placeholder={this.state.name}
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="email">Email</Label>
+                        <Input
+                          value={this.state.email}
+                          type="email"
+                          required
+                          name="email"
+                          id="email"
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row form>
+                    <Col md={2}></Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="state">State</Label>
+                        <Input
+                          value={this.state.soo}
+                          type="text"
+                          name="soo"
+                          id="state"
+                          onChange={this.onChangeHandler}
+                          disabled={this.state.disableState}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="username">Username</Label>
+                        <Input
+                          value={this.state.username}
+                          type="text"
+                          name="username"
+                          id="username"
+                          required
+                          disabled={this.state.disableState}
+                          placeholder={this.state.username}
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row form>
+                    <Col md={2}></Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="oldPassword">Old Password</Label>
+                        <Input
+                          value={this.state.oldPassword}
+                          type="password"
+                          name="oldPassword"
+                          id="oldPassword"
+                          required={this.state.passwordRequired}
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="password">Password</Label>
+                        <Input
+                          value={this.state.password}
+                          type="password"
+                          name="password"
+                          id="password"
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  {/* <Row form>
                   <Col md={2}></Col>
                   <Col md={6}>
                     <FormGroup>
@@ -281,35 +292,36 @@ class Add extends React.Component {
                   </Col>
                 </Row> */}
 
-                {!this.state.loading ? (
-                  <Row form>
-                    <Col md={6}></Col>
-                    <Col md={4}>
-                      <Button
-                        color="success"
-                        className="mt-2"
-                        onClick={this.onSubmitHandler}
-                      >
-                        Save
-                      </Button>
-                    </Col>
-                  </Row>
-                ) : (
-                  <Row form>
-                    <Col md={6}></Col>
-                    <Col md={4}>
-                      <div
-                        className="spinner-border text-success"
-                        role="status"
-                      >
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </Col>
-                  </Row>
-                )}
-              </Form>
-            </CardBody>
-          </Card>
+                  {!this.state.loading ? (
+                    <Row form>
+                      <Col md={6}></Col>
+                      <Col md={4}>
+                        <Button
+                          color="success"
+                          className="mt-2"
+                          onClick={this.onSubmitHandler}
+                        >
+                          Save
+                        </Button>
+                      </Col>
+                    </Row>
+                  ) : (
+                    <Row form>
+                      <Col md={6}></Col>
+                      <Col md={4}>
+                        <div
+                          className="spinner-border text-success"
+                          role="status"
+                        >
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  )}
+                </Form>
+              </CardBody>
+            </Card>
+          </div>
         </ReactCSSTransitionGroup>
       </Fragment>
     );

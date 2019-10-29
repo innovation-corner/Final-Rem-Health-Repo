@@ -197,7 +197,7 @@ class User extends React.Component {
 
         return this.setState({ error: response.message }, this.errorToast);
       }
-      console.log(response)
+      console.log(response);
       return this.setState({ error: response.message }, this.successToast);
     } catch (e) {
       console.log(e);
@@ -215,187 +215,197 @@ class User extends React.Component {
           transitionEnter={false}
           transitionLeave={false}
         >
-          <Card className="main-card mb-3 new">
-            <CardBody>
-              <CardTitle style={{ textAlign: "left" }}>Add User</CardTitle>
-              <Form>
-                <Row form>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="name">Full Name</Label>
-                      <Input
-                        value={this.state.name}
-                        required
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder={this.state.name}
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="email">Email</Label>
-                      <Input
-                        value={this.state.email}
-                        type="email"
-                        required
-                        name="email"
-                        id="email"
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row form>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="state">State</Label>
-                      <Input
-                        value={this.state.soo}
-                        type="select"
-                        name="soo"
-                        id="state"
-                        onChange={this.onChangeHandler}
-                      >
-                        <option>--State--</option>
-                        {this.state.sor.map(sors => {
-                          return (
-                            <option key={sors} value={sors}>
-                              {sors}
-                            </option>
-                          );
-                        })}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="username">Username</Label>
-                      <Input
-                        value={this.state.username}
-                        type="text"
-                        name="username"
-                        id="username"
-                        required
-                        placeholder={this.state.username}
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row form>
-                  <Col md={2}></Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="role">Role</Label>
-                      <Input
-                        value={this.state.role}
-                        type="select"
-                        name="role"
-                        id="role"
-                        onChange={this.onChangeHandler}
-                      >
-                        <option defaultValue>user</option>
-                        <option defaultValue>HMO</option>
-                        <option>stateAdmin</option>
-                        <option>nationalAdmin</option>
-                        <option>superAdmin</option>
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Label for="password">Password</Label>
-                      <Input
-                        value={this.state.password}
-                        type="password"
-                        name="password"
-                        id="password"
-                        onChange={this.onChangeHandler}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                {this.state.role == "HMO" ? (
+          <div>
+            <i
+              className="lnr-arrow-left"
+              style={{ cursor: "pointer" }}
+              onClick={this.props.history.goBack}
+            >
+              {" "}
+            </i>{" "}
+            <br />
+            <Card className="main-card mb-3 new">
+              <CardBody>
+                <CardTitle style={{ textAlign: "left" }}>Add User</CardTitle>
+                <Form>
                   <Row form>
                     <Col md={2}></Col>
                     <Col md={4}>
                       <FormGroup>
-                        <Label for="password">HMO</Label>
+                        <Label for="name">Full Name</Label>
                         <Input
-                          value={this.state.hmo}
+                          value={this.state.name}
+                          required
                           type="text"
-                          name="hmo"
-                          id="hmo"
+                          name="name"
+                          id="name"
+                          placeholder={this.state.name}
                           onChange={this.onChangeHandler}
                         />
                       </FormGroup>
                     </Col>
                     <Col md={4}>
                       <FormGroup>
-                        <Label for="address">Address</Label>
+                        <Label for="email">Email</Label>
                         <Input
-                          value={this.state.address}
-                          type="text-area"
-                          name="address"
-                          id="address"
+                          value={this.state.email}
+                          type="email"
+                          required
+                          name="email"
+                          id="email"
                           onChange={this.onChangeHandler}
                         />
                       </FormGroup>
                     </Col>
                   </Row>
-                ) : null}
-                <Row form>
-                  <Col md={2}></Col>
+                  <Row form>
+                    <Col md={2}></Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="state">State</Label>
+                        <Input
+                          value={this.state.soo}
+                          type="select"
+                          name="soo"
+                          id="state"
+                          onChange={this.onChangeHandler}
+                        >
+                          <option>--State--</option>
+                          {this.state.sor.map(sors => {
+                            return (
+                              <option key={sors} value={sors}>
+                                {sors}
+                              </option>
+                            );
+                          })}
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="username">Username</Label>
+                        <Input
+                          value={this.state.username}
+                          type="text"
+                          name="username"
+                          id="username"
+                          required
+                          placeholder={this.state.username}
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row form>
+                    <Col md={2}></Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="role">Role</Label>
+                        <Input
+                          value={this.state.role}
+                          type="select"
+                          name="role"
+                          id="role"
+                          onChange={this.onChangeHandler}
+                        >
+                          <option defaultValue>user</option>
+                          <option defaultValue>HMO</option>
+                          <option>stateAdmin</option>
+                          <option>nationalAdmin</option>
+                          <option>superAdmin</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup>
+                        <Label for="password">Password</Label>
+                        <Input
+                          value={this.state.password}
+                          type="password"
+                          name="password"
+                          id="password"
+                          onChange={this.onChangeHandler}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                   {this.state.role == "HMO" ? (
-                    <Col md={4}>
-                      <FormGroup>
-                        <Label for="phonenumber">Phonenumber</Label>
-                        <Input
-                          value={this.state.phonenumber}
-                          type="text"
-                          name="phonenumber"
-                          id="phonenumber"
-                          onChange={this.onChangeHandler}
-                        />
-                      </FormGroup>
-                    </Col>
+                    <Row form>
+                      <Col md={2}></Col>
+                      <Col md={4}>
+                        <FormGroup>
+                          <Label for="password">HMO</Label>
+                          <Input
+                            value={this.state.hmo}
+                            type="text"
+                            name="hmo"
+                            id="hmo"
+                            onChange={this.onChangeHandler}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md={4}>
+                        <FormGroup>
+                          <Label for="address">Address</Label>
+                          <Input
+                            value={this.state.address}
+                            type="text-area"
+                            name="address"
+                            id="address"
+                            onChange={this.onChangeHandler}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
                   ) : null}
-                </Row>
+                  <Row form>
+                    <Col md={2}></Col>
+                    {this.state.role == "HMO" ? (
+                      <Col md={4}>
+                        <FormGroup>
+                          <Label for="phonenumber">Phonenumber</Label>
+                          <Input
+                            value={this.state.phonenumber}
+                            type="text"
+                            name="phonenumber"
+                            id="phonenumber"
+                            onChange={this.onChangeHandler}
+                          />
+                        </FormGroup>
+                      </Col>
+                    ) : null}
+                  </Row>
 
-                {!this.state.loading ? (
-                  <Row form>
-                    <Col md={5}></Col>
-                    <Col md={4}>
-                      <Button
-                        color="success"
-                        className="mt-2"
-                        onClick={this.submitHandler}
-                      >
-                        Save
-                      </Button>
-                    </Col>
-                  </Row>
-                ) : (
-                  <Row form>
-                    <Col md={5}></Col>
-                    <Col md={4}>
-                      <div
-                        className="spinner-border text-success"
-                        role="status"
-                      >
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </Col>
-                  </Row>
-                )}
-              </Form>
-            </CardBody>
-          </Card>
+                  {!this.state.loading ? (
+                    <Row form>
+                      <Col md={5}></Col>
+                      <Col md={4}>
+                        <Button
+                          color="success"
+                          className="mt-2"
+                          onClick={this.submitHandler}
+                        >
+                          Save
+                        </Button>
+                      </Col>
+                    </Row>
+                  ) : (
+                    <Row form>
+                      <Col md={5}></Col>
+                      <Col md={4}>
+                        <div
+                          className="spinner-border text-success"
+                          role="status"
+                        >
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  )}
+                </Form>
+              </CardBody>
+            </Card>
+          </div>
         </ReactCSSTransitionGroup>
       </Fragment>
     );
