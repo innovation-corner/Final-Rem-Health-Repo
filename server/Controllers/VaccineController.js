@@ -55,13 +55,29 @@ module.exports = {
   async vaccinedetails(req, res) {
     try {
       const { name } = req.params;
-      let data = [];
+      let criteria = { type: name };
+
+      if (req.user.role == "stateAdmin") {
+        criteria.state = user.state;
+      }
+
+      if (req.user.role == "HMO") {
+        criteria.hmo = id;
+      }
+
+      if (req.user.role == "hospitalAdmin") {
+        const hospital = await Hospital.findOne({
+          where: { admin: req.user.id }
+        });
+
+        criteria.hospitalCode = hospital.code;
+      }
 
       const record = await ImmunizationRecord.findAll({
-        where: { type: name },
+        where: criteria,
         include: [{ all: true }]
       });
-      data.record = record;
+
       return res.status(200).json({ message: "vaccines retrieved", record });
     } catch (e) {
       return res
