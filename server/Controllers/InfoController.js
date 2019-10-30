@@ -10,7 +10,7 @@ const _ = require("lodash");
 module.exports = {
   async getTotalCount(req, res) {
     let criteria = {};
-    if (req.user.role !== "superAdmin" && req.user.role !== "nationalAdmin") {
+    if (req.user.role == "stateAdmin") {
       criteria.state = user.state;
     }
 
@@ -37,7 +37,7 @@ module.exports = {
       const user = await User.findOne({ where: { id } });
       let data;
 
-      if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
+      if (req.user.role == "stateAdmin") {
         criteria = { state: user.state };
       }
 
@@ -90,7 +90,7 @@ module.exports = {
       let criteria = {};
       const user = await User.findOne({ where: { id: req.user.id } });
 
-      if (user.role !== "superAdmin" && user.role !== "nationalAdmin") {
+      if (req.user.role == "stateAdmin") {
         criteria.state = user.state;
       }
 
@@ -318,5 +318,19 @@ module.exports = {
     }
   },
 
-  
+  async getChildByImCode(req, res) {
+    try {
+      const { id } = req.params;
+      const child = await Info.findOne({ where: { immunizationCode: id } });
+
+      if (!child) {
+        return res.status(400).json({ message: "Invalid Id" });
+      }
+      return res
+        .status(200)
+        .json({ message: "details retrieved", data: child });
+    } catch (e) {
+      return res.status(400).json({ message: "An error occurred", e:e.toString() });
+    }
+  }
 };
