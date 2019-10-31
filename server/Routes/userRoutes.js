@@ -3,24 +3,27 @@ const router = express.Router();
 const user = require("../Controllers/UserController");
 
 const multer = require("multer");
-const cloudinary = require("cloudinary");
-const cloudinaryStorage = require("multer-storage-cloudinary");
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET
-});
+const upload = multer({ dest: "uploads/" });
 
-const storage = cloudinaryStorage({
-  cloudinary: cloudinary
-});
+// const cloudinary = require("cloudinary");
+// const cloudinaryStorage = require("multer-storage-cloudinary");
 
-const upload = multer({ storage: storage });
+// cloudinary.config({
+//   cloud_name: process.env.CLOUD_NAME,
+//   api_key: process.env.CLOUD_API_KEY,
+//   api_secret: process.env.CLOUD_API_SECRET
+// });
+
+// const storage = cloudinaryStorage({
+//   cloudinary: cloudinary
+// });
+
+// const upload = multer({ storage: storage });
 
 router.get("/view", user.single);
 router.put("/edit/:id", user.edit);
 router.delete("/delete/:id", user.delete);
-router.put("/avatar", upload.single("image"), user.avatar);
+router.put("/avatar", upload.single("file"), user.avatar);
 
 module.exports = router;
