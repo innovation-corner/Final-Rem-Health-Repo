@@ -36,9 +36,9 @@ const list = [
   "OPV 3",
   "PCV 3",
   "IPV",
-  "Rotarix 3",
   "Pentavalent 3",
   "Vitamin A1",
+  "Rotarix 3",
   "Measles Vaccine",
   "Yellow Fever Vaccine",
   "Meningitis Vaccine",
@@ -222,9 +222,9 @@ export default class Data extends Component {
         "Pentavalent 2",
         "OPV 3",
         "PCV 3",
+        "Pentavalent 3",
         "IPV",
         "Rotarix 3",
-        "Pentavalent 3",
         "Vitamin A1",
         "Measles Vaccine",
         "Yellow Fever Vaccine",
@@ -1668,12 +1668,77 @@ export default class Data extends Component {
                       <thead>
                         <tr>
                           <th className="text-center">Name</th>
+                          <th className="text-center">Due Date</th>
                           <th className="text-center">Date Immunized</th>
                         </tr>
                       </thead>
                       {list.map(item => {
                         let color = "";
                         let date = "-";
+                        let dueDate = "-";
+
+                        switch (item) {
+                          case "BCG":
+                          case "HBV 1":
+                          case "OPV":
+                            console.log("hello");
+                            dueDate = moment(this.state.dob)
+                              .add(7, "days")
+                            break;
+
+                          case "OPV 1":
+                          case "PCV 1":
+                          case "Rotarix 1":
+                          case "Pentavalent 1":
+                            dueDate = moment(this.state.dob)
+                              .add(6, "weeks")
+                            break;
+
+                          case "OPV 2":
+                          case "Rotarix 2":
+                          case "PCV 2":
+                          case "Pentavalent 2":
+                            dueDate = moment(this.state.dob)
+                              .add(10, "weeks")
+                            break;
+
+                          case "OPV 3":
+                          case "PCV 3":
+                          case "IPV":
+                          case "Pentavalent 3":
+                            dueDate = moment(this.state.dob)
+                              .add(14, "weeks")
+                            break;
+
+                          case "Vitamin A1":
+                          case "Rotarix 3":
+                            dueDate = moment(this.state.dob)
+                              .add(6, "months")
+                            break;
+
+                          case "Measles Vaccine":
+                          case "Yellow Fever Vaccine":
+                            dueDate = moment(this.state.dob)
+                              .add(9, "months")
+                            break;
+
+                          case "Meningitis Vaccine":
+                          case "Vitamin A2":
+                          case "OPV Booster":
+                            dueDate = moment(this.state.dob)
+                              .add(12, "months")
+                            break;
+
+                          case "Measles 2 Vaccine":
+                            dueDate = moment(this.state.dob)
+                              .add(18, "months")
+                            break;
+
+                          case "Typhoid Vaccine":
+                            dueDate = moment(this.state.dob)
+                              .add(24, "months")
+                            break;
+                        }
                         this.state.immunization.forEach(im => {
                           if (item == im.type) {
                             color = "rgba(0, 255, 0, 0.5)";
@@ -1686,6 +1751,9 @@ export default class Data extends Component {
                           <tbody key={item}>
                             <tr style={{ backgroundColor: color }}>
                               <td className="text-center">{item}</td>
+                              <td className="text-center">
+                                {moment(dueDate).format("DD - MM - YYYY")}
+                              </td>
                               <td className="text-center">{date}</td>
                               <td
                                 className="text-center"

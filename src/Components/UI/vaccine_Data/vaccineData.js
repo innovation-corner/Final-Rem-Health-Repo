@@ -331,12 +331,18 @@ export default class MainDashboard extends PureComponent {
         if (data.length) {
           const record = data.filter(im => im.type == id);
           if (record.length) {
-            immunized.push(datum.id);
+            immunized.push({ datum, record });
+          } else {
+            if (dueDate > datum.dob) {
+              defaulted.push(datum.id);
+            } else {
+              yet.push("stuff");
+            }
           }
         }
       } else {
-        if (dueDate > data.dob) {
-          defaulted.push(data.id);
+        if (dueDate > datum.dob) {
+          defaulted.push(datum.id);
         } else {
           yet.push("stuff");
         }
@@ -498,7 +504,7 @@ export default class MainDashboard extends PureComponent {
                       </Col>
                     </Row>
                     <div className="divider mt-4" />
-                    <Row className="mt-3">
+                    {/* <Row className="mt-3">
                       <Col md="6">
                         <div className="widget-chart-content">
                           <div
@@ -575,7 +581,7 @@ export default class MainDashboard extends PureComponent {
                           </div>
                         </div>
                       </Col>
-                    </Row>
+                    </Row>*/}
                   </CardBody>
                 </Card>
               </Col>
@@ -629,24 +635,77 @@ export default class MainDashboard extends PureComponent {
                       <th className="text-center">State</th>
                       <th className="text-center">LGA</th>
                       <th className="text-center">Gender</th>
-                      <th className="text-center">Immunization Code</th>
+                      <th className="text-center">Due Date</th>
+                      <th className="text-center">Immunization Date</th>
                     </tr>
                   </thead>
                   {this.state.pageOfItems.map(item => {
-                    let color;
-                    const asyncForEach = async (array, cb) => {
-                      for (let index = 0; index < array.length; index++) {
-                        await cb(array[index], index, array);
-                      }
-                    };
-                    asyncForEach(this.state.imunizedArray, im => {
-                      if (im == item.id) {
+                    let color, immunizationDate, dueDate;
+
+                    switch (this.props.match.params.id) {
+                      case "BCG":
+                      case "HBV 1":
+                      case "OPV":
+                        dueDate = moment(item.dob).add(7, "days");
+                        break;
+
+                      case "OPV 1":
+                      case "PCV 1":
+                      case "Rotarix 1":
+                      case "Pentavalent 1":
+                        dueDate = moment(item.dob).add(6, "weeks");
+                        break;
+
+                      case "OPV 2":
+                      case "Rotarix 2":
+                      case "PCV 2":
+                      case "Pentavalent 2":
+                        dueDate = moment(item.dob).add(10, "weeks");
+                        break;
+
+                      case "OPV 3":
+                      case "PCV 3":
+                      case "IPV":
+                      case "Pentavalent 3":
+                        dueDate = moment(item.dob).add(14, "weeks");
+                        break;
+
+                      case "Vitamin A1":
+                      case "Rotarix 3":
+                        dueDate = moment(item.dob).add(6, "months");
+                        break;
+
+                      case "Measles Vaccine":
+                      case "Yellow Fever Vaccine":
+                        dueDate = moment(item.dob).add(9, "months");
+                        break;
+
+                      case "Meningitis Vaccine":
+                      case "Vitamin A2":
+                      case "OPV Booster":
+                        dueDate = moment(item.dob).add(12, "months");
+                        break;
+
+                      case "Measles 2 Vaccine":
+                        dueDate = moment(item.dob).add(18, "months");
+                        break;
+
+                      case "Typhoid Vaccine":
+                        dueDate = moment(item.dob).add(24, "months");
+                        break;
+                    }
+                    this.state.imunizedArray.forEach(im => {
+                      if (im.datum.id == item.id) {
                         color = "rgba(0, 255, 0, 0.5)";
+                        console.log(im.record[0].createdAt);
+                        immunizationDate = moment(
+                          im.record[0].createdAt
+                        ).format("DD - MM - YYYY");
                       }
                     });
-                    asyncForEach(this.state.defaultedArray, im => {
+                    this.state.defaultedArray.forEach(im => {
                       if (im == item.id) {
-                        color = "rgba(255,255,255 0.5)";
+                        color = "rgba(255,0,0, 0.1)";
                       }
                     });
                     return (
@@ -662,8 +721,9 @@ export default class MainDashboard extends PureComponent {
                           <td className="text-center">{item.lga || "-"}</td>
                           <td className="text-center">{item.gender}</td>
                           <td className="text-center">
-                            {item.immunizationCode}
+                            {moment(dueDate).format("DD - MM - YYYY")}
                           </td>
+                          <td className="text-center">{immunizationDate}</td>
                           <td className="text-center">
                             <Link
                               to={`/data/${item.id}`}
