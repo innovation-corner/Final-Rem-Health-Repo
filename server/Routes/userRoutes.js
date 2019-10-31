@@ -3,8 +3,8 @@ const router = express.Router();
 const user = require("../Controllers/UserController");
 const multer = require("multer");
 const path = require("path");
-// let upload = multer();
-const upload = multer({ dest: path.join(__dirname + "/public/uploads/") });
+let upload = multer();
+// const upload = multer({ dest: path.join(__dirname + "/public/uploads/") });
 
 // const cloudinary = require("cloudinary");
 // const cloudinaryStorage = require("multer-storage-cloudinary");
