@@ -2,6 +2,7 @@ const { User } = require("../models");
 // const JwtService = require("../modules/auth.module");
 // const passport = require("passport");
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 module.exports = {
   async list(req, res) {
@@ -36,7 +37,7 @@ module.exports = {
             message: "Incorrect password."
           });
         }
-        if (details.password.trim() === "" || details.password == '') {
+        if (details.password.trim() === "" || details.password == "") {
           return res.status(400).json({ message: "invalid password" });
         }
 
@@ -94,7 +95,7 @@ module.exports = {
   async avatar(req, res) {
     try {
       const { id } = req.user;
-      const image = req.file.secure_url;
+      const image = fs.readFileSync(req.file.path);
       await User.update({ image }, { id });
       return res.status(200).json({ message: "avatar added" });
     } catch (e) {
