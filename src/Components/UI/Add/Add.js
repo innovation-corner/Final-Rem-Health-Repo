@@ -13,7 +13,6 @@ import {
   Input
 } from "reactstrap";
 
-import { toast, Bounce } from "react-toastify";
 import { connect } from "react-redux";
 import { setUser } from "../../../store/actions";
 import moment from "moment";

@@ -3,17 +3,9 @@ import moment from "moment";
 import {
   Row,
   Col,
-  Card,
-  Button,
-  CardHeader,
-  Form,
   FormGroup,
   Label,
-  Input,
-  CardBody,
-  Progress,
-  TabContent,
-  TabPane
+  Input
 } from "reactstrap";
 const max = moment().format("YYYY-MM-DD");
 
@@ -37,10 +29,10 @@ const DynamicInputs = props => {
               onChange={props.onChangeHandler}
             >
               <option defaultValue>select search criteria</option>
-              <option>Age</option>
               <option>Gender</option>
-              <option>Vaccine</option>
-              <option>Age Range</option>
+              {!props.vaccine ? <option>Age</option> : null}
+              {!props.vaccine ? <option>Vaccine</option> : null}
+              {!props.vaccine ? <option>Age Range</option> : null}
               <option>Date Range</option>
               {props.role == "superAdmin" || props.role == "nationalAdmin" ? (
                 <option>State</option>
@@ -90,7 +82,7 @@ const DynamicInputs = props => {
                 </FormGroup>
               </Col>
             ) : null}
-            {props.inputs[idx].dateRange ? (
+            {props.inputs[idx].dateRange && !props.vaccine ? (
               <Col md={6}>
                 <FormGroup>
                   <Label for="dateRangeType">Type</Label>

@@ -11,20 +11,12 @@ import {
   Col,
   Card,
   Button,
-  CardHeader,
-  Form,
   FormGroup,
   Label,
-  Input,
-  CardBody,
-  Progress,
-  TabContent,
-  TabPane
+  Input
 } from "reactstrap";
 
 import { toast, Bounce } from "react-toastify";
-
-const max = moment().format("YYYY-MM-DD");
 
 export default class Data extends Component {
   constructor() {
@@ -134,8 +126,8 @@ export default class Data extends Component {
     searchByState: false,
     searchByLga: false,
     ageRange: false,
-    slga: "",
     pageOfItems: [],
+    slga: "",
     soo: "Abia",
     lga: [],
     sor: [

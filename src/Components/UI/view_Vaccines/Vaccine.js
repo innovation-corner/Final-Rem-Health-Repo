@@ -4,20 +4,12 @@ import { Link } from "react-router-dom";
 import {
   Col,
   Row,
-  Card,
-  CardBody,
-  CardTitle,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input
+  Card
 } from "reactstrap";
 
 import { toast, Bounce } from "react-toastify";
 import { connect } from "react-redux";
 import { setUser } from "../../../store/actions";
-import moment from "moment";
 
 class Add extends React.Component {
   state = {

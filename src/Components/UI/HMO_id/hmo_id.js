@@ -1,9 +1,6 @@
 import React, { Component, Fragment } from "react";
 import moment from "moment";
-import { Link, matchPath } from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import classnames from "classnames";
-import JwPagination from "jw-react-pagination";
 
 import {
   Row,

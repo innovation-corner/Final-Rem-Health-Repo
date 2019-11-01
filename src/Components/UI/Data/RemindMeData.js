@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import classnames from "classnames";
 import JwPagination from "jw-react-pagination";
 import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
 
@@ -11,15 +10,9 @@ import {
   Col,
   Card,
   Button,
-  CardHeader,
-  Form,
   FormGroup,
   Label,
-  Input,
-  CardBody,
-  Progress,
-  TabContent,
-  TabPane
+  Input
 } from "reactstrap";
 
 import { toast, Bounce } from "react-toastify";

@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import classnames from "classnames";
 import moment from "moment";
 
 import {
@@ -21,40 +20,11 @@ import {
   Card,
   CardBody,
   CardTitle,
-  Progress,
-  TabContent,
-  TabPane
+  Progress
 } from "reactstrap";
 
 import PageTitle from "../../../Layout/AppMain/PageTitle";
 import DynamicDoughnutExample from "./dynamicDoughnut";
-
-import {
-  faAngleUp,
-  faArrowRight,
-  faArrowUp,
-  faArrowLeft,
-  faAngleDown,
-  faArrowDown
-} from "@fortawesome/free-solid-svg-icons";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import avatar1 from "../../../assets/utils/images/avatars/1.jpg";
-import avatar2 from "../../../assets/utils/images/avatars/2.jpg";
-import avatar3 from "../../../assets/utils/images/avatars/3.jpg";
-import avatar4 from "../../../assets/utils/images/avatars/4.jpg";
-
-// const data = [
-//   {
-//     label: "somethingA",
-//     values: [{ x: "SomethingA", y: 10 }, { x: "SomethingB", y: 4 }]
-//   },
-//   {
-//     label: "somethingB",
-//     values: [{ x: "SomethingA", y: 6 }, { x: "SomethingB", y: 8 }]
-//   }
-// ];
 
 let chartData = [];
 export default class MainDashboard extends PureComponent {

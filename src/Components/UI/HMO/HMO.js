@@ -9,22 +9,10 @@ import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
 import {
   Row,
   Col,
-  Card,
-  Button,
-  CardHeader,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  CardBody,
-  Progress,
-  TabContent,
-  TabPane
+  Card
 } from "reactstrap";
 
 import { toast, Bounce } from "react-toastify";
-
-const max = moment().format("YYYY-MM-DD");
 
 export default class Data extends Component {
   constructor() {
