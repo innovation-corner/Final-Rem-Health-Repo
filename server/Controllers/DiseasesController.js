@@ -43,7 +43,10 @@ module.exports = {
           { lga: search }
         ];
       }
-      const data = await DiseasesRecord.findAll({ where: criteria });
+      const data = await DiseasesRecord.findAll({
+        where: criteria,
+        include: [{ all: true }]
+      });
       if (!data.length) {
         return res.status(400).json({ message: "No data" });
       }
@@ -62,6 +65,24 @@ module.exports = {
       const record = await DiseasesRecord.findOne({ where: { id } });
       if (!record) {
         return res.status(400).json({ message: "Invalid id" });
+      }
+
+      const data = record;
+      return res.status(200).json({ message: "records retrieved", data });
+    } catch (error) {
+      console.log(error);
+      error = error || error.toString();
+      return res.status(400).json({ message: "An error occured", error });
+    }
+  },
+
+  async viewDisease(req, res) {
+    try {
+      const { id } = req.params;
+
+      const record = await DiseasesRecord.findAll({ where: { type: id } });
+      if (!record.length) {
+        return res.status(400).json({ message: "Invalid name" });
       }
 
       const data = record;
