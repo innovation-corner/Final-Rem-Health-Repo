@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     DiseasesRecord.belongsTo(models.Info,{
       foreignKey:'child',
-      as: 'reported-diseases'
+      as: 'childData'
     })
     DiseasesRecord.belongsTo(models.User,{
       foreignKey:'reportedBy',
