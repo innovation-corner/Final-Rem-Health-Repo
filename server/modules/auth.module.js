@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.jwtSecret || "secret";
-const tokenExpirationInMinutes = 120000;
+const tokenExpirationInMinutes = 12000000000000;
 
 module.exports = {
   async issueToken(payload, expirytime) {

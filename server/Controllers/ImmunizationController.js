@@ -92,10 +92,8 @@ module.exports = {
       const { id } = req.params;
 
       const data = await Info.findOne({ where: { id } });
-      console.log(data);
 
       if (!data) {
-        console.log("see!!");
         return res.status(400).json({ message: "Data does not exist" });
       }
 
