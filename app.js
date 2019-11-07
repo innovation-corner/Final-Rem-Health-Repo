@@ -53,7 +53,7 @@ app.use(
 
 // app.get("/", (req, res) =>
 //   res.status(401).send({
-//     message: "You shouldn't be here.\n Nice try though!"
+//     message: "You shouldn't be here!"
 //   })
 // );
 
