@@ -9,25 +9,29 @@ const _ = require("lodash");
 
 module.exports = {
   async getTotalCount(req, res) {
-    let criteria = {};
-    const user = await User.findOne({ where: { id: req.user.id } });
-    if (req.user.role == "stateAdmin") {
-      criteria.state = user.state;
-    }
+    try {
+      let criteria = {};
+      const user = await User.findOne({ where: { id: req.user.id } });
+      if (req.user.role == "stateAdmin") {
+        criteria.state = user.state;
+      }
 
-    if (req.user.role == "HMO") {
-      criteria.hmo = id;
-    }
-    if (req.user.role == "hospitalAdmin") {
-      const hospital = await Hospital.findOne({
-        where: { admin: req.user.id }
-      });
+      if (req.user.role == "HMO") {
+        criteria.hmo = id;
+      }
+      if (req.user.role == "hospitalAdmin") {
+        const hospital = await Hospital.findOne({
+          where: { admin: req.user.id }
+        });
 
-      criteria.hospitalCode = hospital.code;
-    }
-    const data = await Info.findAndCountAll({ where: criteria });
+        criteria.hospitalCode = hospital.code;
+      }
+      const data = await Info.findAndCountAll({ where: criteria });
 
-    return res.json({ message: "Data retrieved", data });
+      return res.status(200).json({ message: "Data retrieved", data });
+    } catch (error) {
+      return res.sataus(400).json({ message: "An error occurred" });
+    }
   },
 
   async list(req, res) {
