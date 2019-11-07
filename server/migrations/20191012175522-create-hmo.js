@@ -16,11 +16,11 @@ module.exports = {
       },
       admin: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "admin",
-          as: "hmo"
-        }
+        // references: {
+        //   model: "Users",
+        //   key: "admin",
+        //   as: "hmo"
+        // }
       },
       lat: {
         type: Sequelize.STRING

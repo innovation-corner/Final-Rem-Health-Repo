@@ -19,19 +19,19 @@ module.exports = {
       },
       hospitalCode: {
         type: Sequelize.STRING,
-        references: {
-          model: "Hospitals",
-          key: "code",
-          as: "PHC"
-        }
+        // references: {
+        //   model: "Hospitals",
+        //   key: "code",
+        //   as: "PHC"
+        // }
       },
       hmo: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "hmo",
-          as: "hmo"
-        }
+        // references: {
+        //   model: "Users",
+        //   key: "hmo",
+        //   as: "hmo"
+        // }
       },
       language: {
         type: Sequelize.STRING
