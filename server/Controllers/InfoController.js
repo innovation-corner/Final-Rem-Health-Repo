@@ -10,6 +10,7 @@ const _ = require("lodash");
 module.exports = {
   async getTotalCount(req, res) {
     let criteria = {};
+    const user = await User.findOne({ where: { id: req.user.id } });
     if (req.user.role == "stateAdmin") {
       criteria.state = user.state;
     }
@@ -265,6 +266,7 @@ module.exports = {
     try {
       const { values } = req.body;
       let criteria = {};
+      const user = await User.findOne({ where: { id: req.user.id } });
 
       const asyncForEach = async (array, cb) => {
         for (let index = 0; index < array.length; index++) {
@@ -330,7 +332,9 @@ module.exports = {
         .status(200)
         .json({ message: "details retrieved", data: child });
     } catch (e) {
-      return res.status(400).json({ message: "An error occurred", e:e.toString() });
+      return res
+        .status(400)
+        .json({ message: "An error occurred", e: e.toString() });
     }
   }
 };
