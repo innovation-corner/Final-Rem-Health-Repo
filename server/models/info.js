@@ -24,6 +24,12 @@ module.exports = (sequelize, DataTypes) => {
       qrCode: {
         type: DataTypes.STRING
       },
+      lat: {
+        type: DataTypes.STRING
+      },
+      lon: {
+        type: DataTypes.STRING
+      },
       dob: {
         type: DataTypes.STRING
       },
