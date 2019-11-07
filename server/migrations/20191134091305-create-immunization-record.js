@@ -14,20 +14,20 @@ module.exports = {
       child: {
         type: Sequelize.STRING,
         allowNull: true,
-        references: {
-          model: "Infos",
-          key: "child",
-          as: "admin"
-        }
+        // references: {
+        //   model: "Infos",
+        //   key: "child",
+        //   as: "admin"
+        // }
       },
       administeredBy: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        references: {
-          model: "Users",
-          key: "id",
-          as: "childImmunized"
-        }
+        // references: {
+        //   model: "Users",
+        //   key: "id",
+        //   as: "childImmunized"
+        // }
       },
       lat: {
         type: Sequelize.STRING
