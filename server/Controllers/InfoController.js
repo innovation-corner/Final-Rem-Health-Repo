@@ -255,7 +255,9 @@ module.exports = {
 
       await sms.sendSms(message, "Remind Me", info.phonenumber);
 
-      return res.status(200).json({ message: "Data saved" });
+      return res
+        .status(200)
+        .json({ message: "Data saved", data: { body: req.body, info } });
     } catch (error) {
       console.log(error);
       return res.status(400).json({ message: "An error occurred", error });
