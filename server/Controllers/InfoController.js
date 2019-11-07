@@ -30,7 +30,7 @@ module.exports = {
 
       return res.status(200).json({ message: "Data retrieved", data });
     } catch (error) {
-      return res.sataus(400).json({ message: "An error occurred" });
+      return res.sataus(400).json({ message: "An error occurred", error });
     }
   },
 
