@@ -188,13 +188,7 @@ module.exports = {
         state,
         lga,
         language,
-        lat,
-        lon,
-        email,
-        motherName,
-        fatherName,
-        gender,
-        qrCode
+        gender
       } = req.body);
       if (
         _.isEmpty(name) ||
@@ -209,7 +203,7 @@ module.exports = {
       }
       data.dob = moment(dob).format("YYYYMMDD");
 
-      const info = await Info.create(data);
+      const info = await Info.create(req.body);
 
       if (req.user.role == "HMO") {
         info.hmo = req.user.id;
