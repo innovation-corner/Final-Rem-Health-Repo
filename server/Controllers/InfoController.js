@@ -188,7 +188,13 @@ module.exports = {
         state,
         lga,
         language,
-        gender
+        lat,
+        lon,
+        email,
+        motherName,
+        fatherName,
+        gender,
+        qrCode
       } = req.body);
       if (
         _.isEmpty(name) ||
