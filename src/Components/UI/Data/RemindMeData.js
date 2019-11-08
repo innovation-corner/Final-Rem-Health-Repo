@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import JwPagination from "jw-react-pagination";
 import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
+import Map from "../Map/Map";
 
 import {
   Row,
   Col,
   Card,
   Button,
+  Tooltip,
   FormGroup,
   Label,
   Input
@@ -28,10 +30,11 @@ export default class Data extends Component {
   }
   state = {
     dropdownOpen: false,
-    activeTab1: "11",
+    tooltipOpen: false,
     name: "",
     input: "",
     dateTo: "",
+    locations: [],
     error: "",
     message: "",
     dateFrom: "",
@@ -100,6 +103,15 @@ export default class Data extends Component {
     ]
   };
 
+  modalHandler = (e, lat, lng) => {
+    e.preventDefault();
+    const locations = [{ lat, lng }];
+    // this.setState({ locations, initial: locations[0] });
+    this.state.showMap
+      ? this.setState({ showMap: false, zoom: null })
+      : this.setState({ locations }, this.setState({ showMap: true }));
+  };
+
   noData = () =>
     (this.toastId = toast(this.state.error, {
       transition: Bounce,
@@ -136,6 +148,7 @@ export default class Data extends Component {
       name: user.name
     });
   }
+  toggle = () => this.setState({ tooltipOpen: !this.state.tooltipOpen });
 
   async componentDidMount() {
     const token = await sessionStorage.getItem("token");
@@ -177,6 +190,26 @@ export default class Data extends Component {
       totalData
     });
   }
+
+  mapHandler = e => {
+    const loc = this.state.totalData
+      .filter(data => {
+        return data.lon !== null && data.lat !== null;
+      })
+      .map(data => {
+        return {
+          lat: data.lat,
+          lng: data.lon
+        };
+      });
+    this.setState(
+      { locations: loc, zoom: 5 },
+
+      this.state.showMap
+        ? this.setState({ showMap: false, zoom: null })
+        : this.setState({ showMap: true })
+    );
+  };
 
   handleState = () => {
     let states = this.state.soo;
@@ -1983,14 +2016,45 @@ export default class Data extends Component {
                       />
                     </div>
                     <div className="btn-actions-pane-right">
-                      <div role="group" className="btn-group-sm btn-group">
+                      <div
+                        id="TooltipExample"
+                        role="group"
+                        className="btn-group-sm btn-group"
+                      >
                         <Link to="/new">
-                          <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
+                          <button
+                            style={{ marginLeft: "15px" }}
+                            className="mr-2 btn-icon btn-icon-only btn btn-outline-success"
+                          >
                             <i className="pe-7s-plus btn-icon-wrapper"> </i>
                           </button>
                         </Link>
-                        Add New Data
                       </div>
+                      <div
+                        onClick={this.mapHandler}
+                        role="group"
+                        className="btn-group-sm btn-group"
+                      >
+                        {/* <Link to="/new">
+                            <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
+                              <i className="pe-7s-plus btn-icon-wrapper"> </i>
+                            </button>
+                          </Link> */}
+                        <button
+                          style={{ marginLeft: "15px" }}
+                          className="mr-2 btn-icon btn-icon-only btn btn-outline-info"
+                        >
+                          <i className="pe-7s-map-marker"></i>
+                        </button>
+                      </div>
+                      <Tooltip
+                        placement="right"
+                        isOpen={this.state.tooltipOpen}
+                        target="TooltipExample"
+                        toggle={this.toggle}
+                      >
+                        Register Child
+                      </Tooltip>
                     </div>
                   </div>
                   <div className="table-responsive">
@@ -2002,9 +2066,9 @@ export default class Data extends Component {
                           <th className="text-center">Date Of Birth</th>
                           <th className="text-center">Phonenumber</th>
                           <th className="text-center">State</th>
-                          <th className="text-center">LGA</th>
                           <th className="text-center">Gender</th>
-                          <th className="text-center">Immunization Code</th>
+                          {/* <th className="text-center">LGA</th>
+                          <th className="text-center">Immunization Code</th> */}
                         </tr>
                       </thead>
                       {this.state.pageOfItems.map(item => {
@@ -2022,10 +2086,21 @@ export default class Data extends Component {
                                 {item.phonenumber}
                               </td>
                               <td className="text-center">{item.state}</td>
-                              <td className="text-center">{item.lga || "-"}</td>
                               <td className="text-center">{item.gender}</td>
-                              <td className="text-center">
-                                {item.immunizationCode}
+                              <td
+                                className="text-center"
+                                style={{ cursor: "pointer" }}
+                                onClick={e => {
+                                  {
+                                    item.lat
+                                      ? this.modalHandler(e, item.lat, item.lon)
+                                      : null;
+                                  }
+                                }}
+                              >
+                                {item.lat ? (
+                                  <i className="pe-7s-map-marker"></i>
+                                ) : null}
                               </td>
                               <td className="text-center">
                                 <Link
@@ -2049,6 +2124,15 @@ export default class Data extends Component {
                 </Card>
               </Col>
             </Row>
+            {this.state.locations.length > 0 ? (
+              <Map
+                initial={this.state.locations[0]}
+                clicked={this.modalHandler}
+                shows={this.state.showMap}
+                stores={this.state.locations}
+                zoom={this.state.zoom}
+              />
+            ) : null}
           </div>
         </ReactCSSTransitionGroup>
       </Fragment>

@@ -2,28 +2,12 @@ import React, { Component, Fragment } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import classnames from "classnames";
 import JwPagination from "jw-react-pagination";
 import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
 
 import Map from "../Map/Map";
 
-import {
-  Row,
-  Col,
-  Card,
-  Button,
-  CardHeader,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Tooltip,
-  CardBody,
-  Progress,
-  TabContent,
-  TabPane
-} from "reactstrap";
+import { Row, Col, Card, Button, FormGroup, Label, Input } from "reactstrap";
 
 import { toast, Bounce } from "react-toastify";
 
@@ -191,7 +175,7 @@ export default class Data extends Component {
       role: user.role
     });
 
-    const totData = await fetch(`https://api.remhealth.co/disease/view/all`, {
+    const res = await fetch(`https://api.remhealth.co/disease/view/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -199,18 +183,23 @@ export default class Data extends Component {
       }
     });
 
-    const length = await totData.json();
+    const response = await res.json();
 
-    if (totData.ok) {
-      const totalData = length.data;
-
-      await this.setState({
+    if (res.ok) {
+      const data = response.data;
+      const totalData = data
+        .sort((a, b) => (a.type > b.type ? 1 : -1))
+        .filter((x, i, a) => {
+          return !i || x.type != a[i - 1].type || x.type == a.length - 1;
+          // return data.indexOf(x)== i;
+        });
+      this.setState({
         totalData
       });
     }
   }
 
-  mapHandler = e => {
+  mapHandler = () => {
     const loc = this.state.totalData
       .filter(data => {
         return data.lon !== null && data.lat !== null;
@@ -1680,349 +1669,6 @@ export default class Data extends Component {
             <br />
             <Row>
               <Col md="12">
-                {this.state.totalData.length >= 1 ? (
-                  <div>
-                    <Row form>
-                      <Col md={3}>
-                        <FormGroup>
-                          <Label for="dob">Choose Criteria</Label>
-                          <Input
-                            value={this.state.searchCriteria}
-                            type="select"
-                            required
-                            name="searchCriteria"
-                            id="searchCriteria"
-                            max={max}
-                            onChange={this.onChangeHandler}
-                          >
-                            <option defaultValue>select search criteria</option>
-                            {this.state.role == "superAdmin" ||
-                            this.state.role == "nationalAdmin" ? (
-                              <option>State</option>
-                            ) : null}
-                            {this.state.role == "stateAdmin" ||
-                            this.state.role == "user" ? (
-                              <option>LGA</option>
-                            ) : null}
-                          </Input>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row form>
-                      {this.state.dateRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="dateFrom">From</Label>
-                            <Input
-                              value={this.state.dateFrom}
-                              type="date"
-                              required
-                              name="dateFrom"
-                              id="dateFrom"
-                              max={max}
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.dateRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="dateTo">To</Label>
-                            <Input
-                              value={this.state.dateTo}
-                              type="date"
-                              required
-                              name="dateTo"
-                              id="dateTo"
-                              max={max}
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.dateRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="dateRangeType">Type</Label>
-                            <Input
-                              value={this.state.dateRangeType}
-                              type="select"
-                              required
-                              name="dateRangeType"
-                              id="dateRangeType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Registration</option>
-                              <option>Date Of Birth</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByAge ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="ageSearch">Select Age</Label>
-                            <Input
-                              value={this.state.ageSearch}
-                              type="number"
-                              required
-                              name="ageSearch"
-                              id="ageSearch"
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByAge ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="ageType">Type</Label>
-                            <Input
-                              value={this.state.ageType}
-                              type="select"
-                              required
-                              name="ageType"
-                              id="ageType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Days</option>
-                              <option>Weeks</option>
-                              <option>Months</option>
-                              <option>Years</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="ageFrom">From</Label>
-                            <Input
-                              value={this.state.ageFrom}
-                              type="number"
-                              required
-                              name="ageFrom"
-                              id="ageFrom"
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="ageFromType">Range Type</Label>
-                            <Input
-                              value={this.state.ageFromType}
-                              type="select"
-                              required
-                              name="ageFromType"
-                              id="ageFromType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Days</option>
-                              <option>Weeks</option>
-                              <option>Months</option>
-                              <option>Years</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col style={{ textAlign: "center" }} md={1}>
-                          -
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="ageTo">To</Label>
-                            <Input
-                              value={this.state.ageTo}
-                              type="number"
-                              required
-                              name="ageTo"
-                              id="ageTo"
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="ageToType">Range Type</Label>
-                            <Input
-                              value={this.state.ageToType}
-                              type="select"
-                              required
-                              name="ageToType"
-                              id="ageToType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Days</option>
-                              <option>Weeks</option>
-                              <option>Months</option>
-                              <option>Years</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByGender ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="gender">Gender</Label>
-                            <Input
-                              value={this.state.gender}
-                              type="select"
-                              required
-                              name="gender"
-                              id="gender"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Male</option>
-                              <option defaultValue>Female</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByState ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="soo">State</Label>
-                            <Input
-                              value={this.state.soo}
-                              type="select"
-                              name="soo"
-                              id="soo"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableState}
-                            >
-                              <option>--State--</option>
-                              {this.state.sor.map(sors => {
-                                return (
-                                  <option key={sors} value={sors}>
-                                    {sors}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByState ? (
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="lga">Local Government Area</Label>
-                            <Input
-                              value={this.state.slga}
-                              type="select"
-                              name="slga"
-                              id="lga"
-                              onChange={this.onChangeHandler}
-                              disabled={
-                                this.state.disableState || this.state.soo == ""
-                              }
-                            >
-                              <option defaultValue>--select lga--</option>
-                              {this.state.lga.map(slga => {
-                                return (
-                                  <option key={slga} value={slga}>
-                                    {slga}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByLga ? (
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="slga">Local Government Area</Label>
-                            <Input
-                              value={this.state.slga}
-                              type="select"
-                              name="slga"
-                              id="lga"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option>--select lga--</option>
-                              {this.state.lga.map(slga => {
-                                return (
-                                  <option key={slga} value={slga}>
-                                    {slga}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByVaccine ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="vaccine">Vaccine</Label>
-                            <Input
-                              value={this.state.vaccine}
-                              type="select"
-                              required
-                              name="vaccine"
-                              id="vaccine"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>BCG</option>
-                              <option defaultValue>HBV 1</option>
-                              <option defaultValue>OPV</option>
-                              <option defaultValue>OPV 1</option>
-                              <option defaultValue>PCV 1</option>
-                              <option defaultValue>Rotarix 1</option>
-                              <option defaultValue>Pentavalent 1</option>
-                              <option defaultValue>OPV 2</option>
-                              <option defaultValue>Rotarix 2</option>
-                              <option defaultValue>PCV 2</option>
-                              <option defaultValue>OPV 2</option>
-                              <option defaultValue>Pentavalent 2</option>
-                              <option defaultValue>OPV 3</option>
-                              <option defaultValue>PCV 3</option>
-                              <option defaultValue>IPV</option>
-                              <option defaultValue>Rotarix 3</option>
-                              <option defaultValue>Pentavalent 3</option>
-                              <option defaultValue>Vitamin A1</option>
-                              <option defaultValue>Measles Vaccine</option>
-                              <option defaultValue>Yellow Fever Vaccine</option>
-                              <option defaultValue>Meningitis Vaccine</option>
-                              <option defaultValue>Vitamin A2</option>
-                              <option defaultValue>OPV Booster</option>
-                              <option defaultValue>Measles 2 Vaccine</option>
-                              <option defaultValue>Typhoid Vaccine</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                    </Row>
-                    <Row>
-                      <Col md={3}>
-                        <FormGroup>
-                          <Label for="submit"></Label>
-                          <Button
-                            onClick={this.filterHandler}
-                            disabled={this.state.searchCriteria == ""}
-                            color="warning"
-                          >
-                            Filter
-                          </Button>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col md={3}>
-                        <h4>Total Cases: {this.state.totalData.length}</h4>
-                      </Col>
-                    </Row>
-                  </div>
-                ) : null}
                 {this.state.totalData.length < 1 ? (
                   <Card>
                     <div className="card-header">
@@ -2055,39 +1701,13 @@ export default class Data extends Component {
                   </Card>
                 ) : (
                   <Card className="main-card mb-3">
-                    <div className="card-header">
-                      <div className="app-header-left">
-                        <SearchBox
-                          input={this.state.input}
-                          buttonHandler={this.buttonHandler}
-                          searchHandler={this.searchHandler}
-                          onChangeHandler={this.onChangeHandler}
-                          activeSearch={this.state.activeSearch}
-                        />
-                      </div>
-                      <div className="btn-actions-pane-right">
-                        <div
-                          onClick={this.mapHandler}
-                          role="group"
-                          className="btn-group-sm btn-group"
-                          style={{ cursor: "pointer" }}
-                        >
-                          {/* <Link to="/new">
-                            <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
-                              <i className="pe-7s-plus btn-icon-wrapper"> </i>
-                            </button>
-                          </Link> */}
-                          View Map Data
-                        </div>
-                      </div>
-                    </div>
                     <div className="table-responsive">
                       <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                         <thead>
                           <tr>
                             <th className="text-center">Name</th>
-                            <th className="text-center">State</th>
-                            <th className="text-center">LGA</th>
+                            {/* <th className="text-center">State</th>
+                            <th className="text-center">LGA</th> */}
                             {/* <th className="text-center">Gender</th>
                           <th className="text-center">Immunization Code</th> */}
                           </tr>
@@ -2097,33 +1717,35 @@ export default class Data extends Component {
                             <tbody key={item.id}>
                               <tr>
                                 <td className="text-center">{item.type}</td>
-                                <td className="text-center">{item.state}</td>
-                                <td className="text-center">{item.lga}</td>
+                                {/* <td className="text-center">{item.state}</td>
+                                <td className="text-center">{item.lga}</td> 
 
                                 <td
                                   className="text-center"
                                   style={{ cursor: "pointer" }}
                                   onClick={e => {
-                                    this.modalHandler(e, item.lat, item.lon);
+                                    {
+                                      item.lat
+                                        ? this.modalHandler(
+                                            e,
+                                            item.lat,
+                                            item.lon
+                                          )
+                                        : null;
+                                    }
                                   }}
                                 >
                                   {item.lat ? (
                                     <i className="pe-7s-map-marker"></i>
                                   ) : null}
-                                </td>
+                                </td>*/}
 
-                                <td
-                                  className="text-center"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={e => {
-                                    this.modalHandler(e, item.lat, item.lon);
-                                  }}
-                                >
+                                <td className="text-center">
                                   <Link
-                                    to={`/data/${item.child}`}
-                                    params={{ id: item.child }}
+                                    to={`/disease/${item.type}`}
+                                    params={{ id: item.type }}
                                   >
-                                    view
+                                    details
                                   </Link>
                                 </td>
                               </tr>

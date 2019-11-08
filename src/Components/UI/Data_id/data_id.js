@@ -49,6 +49,7 @@ export default class Data extends Component {
     loading: false,
     soo: "",
     email: "",
+    locations: [],
     language: "",
     phonenumber: "",
     dob: "",
@@ -255,6 +256,7 @@ export default class Data extends Component {
       //     }
       //   });
       // });
+      console.log(immunization.data);
       await this.setState({
         immunization: immunization.data
       });
@@ -1378,6 +1380,26 @@ export default class Data extends Component {
       });
   };
 
+  mapHandler = e => {
+    const loc = this.state.totalData
+      .filter(data => {
+        return data.lon !== null && data.lat !== null;
+      })
+      .map(data => {
+        return {
+          lat: data.lat,
+          lng: data.lon
+        };
+      });
+    this.setState(
+      { locations: loc, zoom: 5 },
+
+      this.state.showMap
+        ? this.setState({ showMap: false, zoom: null })
+        : this.setState({ showMap: true })
+    );
+  };
+
   modalHandler = (e, lat, lng) => {
     e.preventDefault();
     const locations = [{ lat, lng }];
@@ -1672,67 +1694,59 @@ export default class Data extends Component {
                         let color = "";
                         let date = "-";
                         let dueDate = "-";
+                        let lat = null;
+                        let lon = null;
 
                         switch (item) {
                           case "BCG":
                           case "HBV 1":
                           case "OPV":
-                            console.log("hello");
-                            dueDate = moment(this.state.dob)
-                              .add(7, "days")
+                            dueDate = moment(this.state.dob).add(7, "days");
                             break;
 
                           case "OPV 1":
                           case "PCV 1":
                           case "Rotarix 1":
                           case "Pentavalent 1":
-                            dueDate = moment(this.state.dob)
-                              .add(6, "weeks")
+                            dueDate = moment(this.state.dob).add(6, "weeks");
                             break;
 
                           case "OPV 2":
                           case "Rotarix 2":
                           case "PCV 2":
                           case "Pentavalent 2":
-                            dueDate = moment(this.state.dob)
-                              .add(10, "weeks")
+                            dueDate = moment(this.state.dob).add(10, "weeks");
                             break;
 
                           case "OPV 3":
                           case "PCV 3":
                           case "IPV":
                           case "Pentavalent 3":
-                            dueDate = moment(this.state.dob)
-                              .add(14, "weeks")
+                            dueDate = moment(this.state.dob).add(14, "weeks");
                             break;
 
                           case "Vitamin A1":
                           case "Rotarix 3":
-                            dueDate = moment(this.state.dob)
-                              .add(6, "months")
+                            dueDate = moment(this.state.dob).add(6, "months");
                             break;
 
                           case "Measles Vaccine":
                           case "Yellow Fever Vaccine":
-                            dueDate = moment(this.state.dob)
-                              .add(9, "months")
+                            dueDate = moment(this.state.dob).add(9, "months");
                             break;
 
                           case "Meningitis Vaccine":
                           case "Vitamin A2":
                           case "OPV Booster":
-                            dueDate = moment(this.state.dob)
-                              .add(12, "months")
+                            dueDate = moment(this.state.dob).add(12, "months");
                             break;
 
                           case "Measles 2 Vaccine":
-                            dueDate = moment(this.state.dob)
-                              .add(18, "months")
+                            dueDate = moment(this.state.dob).add(18, "months");
                             break;
 
                           case "Typhoid Vaccine":
-                            dueDate = moment(this.state.dob)
-                              .add(24, "months")
+                            dueDate = moment(this.state.dob).add(24, "months");
                             break;
                         }
                         this.state.immunization.forEach(im => {
@@ -1741,6 +1755,14 @@ export default class Data extends Component {
                             date = moment(im.createdAt).format(
                               "DD - MM - YYYY"
                             );
+
+                            if (im.lat !== null) {
+                              lat = im.lat;
+                              lon = im.lon;
+                            } else {
+                              lat = null;
+                              lon = null;
+                            }
                           }
                         });
                         return (
@@ -1754,10 +1776,11 @@ export default class Data extends Component {
                               <td
                                 className="text-center"
                                 onClick={e => {
-                                  this.modalHandler(e, item.lat, item.lon);
+                                  this.modalHandler(e, lat, lon);
                                 }}
+                                style={{ cursor: "pointer" }}
                               >
-                                {item.lat ? (
+                                {lat !== null ? (
                                   <i className="pe-7s-map-marker"></i>
                                 ) : null}
                               </td>

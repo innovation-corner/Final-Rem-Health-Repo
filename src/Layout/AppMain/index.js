@@ -17,6 +17,7 @@ const HMO_id = lazy(() => import("../../Components/UI/HMO_id/"));
 const Hospital = lazy(() => import("../../Components/UI/Hospital/"));
 const NewHospital = lazy(() => import("../../Components/UI/New"));
 const List = lazy(() => import("../../Components/UI/Diseases/"));
+const Disease = lazy(() => import("../../Components/UI/DiseaseData/"));
 const Hospital_id = lazy(() => import("../../Components/UI/Hospital_id/"));
 const addVaccine = lazy(() => import("../../Components/UI/add_Vaccine/"));
 const  Vaccines = lazy(() => import("../../Components/UI/view_Vaccines/"));
@@ -156,6 +157,18 @@ const AppMain = () => {
         }
       >
         <Route exact path="/hospital" component={Hospital} />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="loader-container">
+            <div className="loader-container-inner">
+              <h6 className="mt-3">Please wait ...</h6>
+            </div>
+          </div>
+        }
+      >
+        <Route exact path="/disease/:id" component={Disease} />
       </Suspense>
 
       <Suspense

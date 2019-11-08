@@ -107,25 +107,25 @@ export default class MainDashboard extends PureComponent {
     const sixMonths = await this.getAgeRange(6);
     const twelveMonths = await this.getAgeRange(12);
     const twentyFourMonths = await this.getAgeRange(24);
-    const sixMonthsFemaleData = sixMonths.filter(
-      data => data.gender == "Female"
-    );
+    const sixMonthsFemaleData = sixMonths
+      ? sixMonths.filter(data => data.gender == "Female")
+      : [];
 
     const sixMonthsFemale = sixMonthsFemaleData.length;
 
-    const twelveMonthsFemaleData = twelveMonths.filter(
-      data => data.gender == "Female"
-    );
+    const twelveMonthsFemaleData = twelveMonths
+      ? twelveMonths.filter(data => data.gender == "Female")
+      : [];
     const twelveMonthsFemale = twelveMonthsFemaleData.length;
 
-    const twentyFourMonthsFemaleData = twentyFourMonths.filter(
-      data => data.gender == "Female"
-    );
+    const twentyFourMonthsFemaleData = twentyFourMonths
+      ? twentyFourMonths.filter(data => data.gender == "Female")
+      : [];
     const twentyFourMonthsFemale = twentyFourMonthsFemaleData.length;
 
-    const twentyFourMonthsData = twentyFourMonths.length;
-    const twelveMonthsData = twelveMonths.length;
-    const sixMonthsData = sixMonths.length;
+    const twentyFourMonthsData = twentyFourMonths ? twentyFourMonths.length : 0;
+    const twelveMonthsData = twelveMonths ? twelveMonths.length : 0;
+    const sixMonthsData = sixMonths ? sixMonths.length : 0;
 
     const twentyFourMonthsMale = twentyFourMonthsData - twentyFourMonthsFemale;
     const twelveMonthsMale = twelveMonthsData - twelveMonthsFemale;

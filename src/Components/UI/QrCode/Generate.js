@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import PrintThisComponent from "../../Print";
 
 import PageTitle from "../../../Layout/AppMain/PageTitle";
 import {
@@ -9,7 +8,6 @@ import {
   Card,
   Button,
   CardTitle,
-  CardHeader,
   Form,
   FormGroup,
   Label,
