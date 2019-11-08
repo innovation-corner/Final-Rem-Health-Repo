@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       lga: {
         type: DataTypes.STRING
       },
+      lat: {
+        type: DataTypes.STRING
+      },
+      lon: {
+        type: DataTypes.STRING
+      },
       address: {
         type: DataTypes.TEXT
       }
@@ -27,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     Hospital.belongsTo(models.User, {
       foreignKey: "admin",
-      as: 'administrator'
+      as: "administrator"
     });
   };
   return Hospital;
