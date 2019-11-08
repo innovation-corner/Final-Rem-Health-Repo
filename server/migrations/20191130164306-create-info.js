@@ -17,8 +17,11 @@ module.exports = {
       dob: {
         type: Sequelize.DATE
       },
+      email: {
+        type: Sequelize.STRING
+      },
       hospitalCode: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
         // references: {
         //   model: "Hospitals",
         //   key: "code",
@@ -26,7 +29,7 @@ module.exports = {
         // }
       },
       hmo: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
         // references: {
         //   model: "Users",
         //   key: "hmo",
