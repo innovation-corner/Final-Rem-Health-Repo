@@ -9,13 +9,15 @@ const { generate } = require("../Services/QrCodeService");
 module.exports = {
   async create(req, res) {
     try {
-      const { type } = req.body;
+      const { type, lat, lon } = req.body;
       const { id } = req.user;
       const immunizationCode = req.params.id;
 
       const data = {
         type,
         administeredBy: id,
+        lat,
+        lon
       };
 
       if (_.isEmpty(type)) {
@@ -27,14 +29,16 @@ module.exports = {
       if (!child) {
         return res.status(400).json({ message: "Incomplete child id" });
       }
-      data.child = child.id
+      data.child = child.id;
 
       await ImmunizationRecord.create(data);
 
       return res.status(200).json({ message: "saved" });
     } catch (e) {
       e = e || e.toString();
-      return res.status(400).json({ message: "An error occurred", e:e.toString() });
+      return res
+        .status(400)
+        .json({ message: "An error occurred", e: e.toString() });
     }
   },
 
@@ -176,5 +180,4 @@ module.exports = {
   //     return res.status(400).json({ message: "An error occurred", e });
   //   }
   // }
-
 };
