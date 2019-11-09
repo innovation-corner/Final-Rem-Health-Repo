@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING
       },
       dob: {
-        type: DataTypes.STRING
+        type: DataTypes.DATE
       },
       state: {
         type: DataTypes.STRING
