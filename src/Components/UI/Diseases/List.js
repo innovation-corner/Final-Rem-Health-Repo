@@ -175,28 +175,45 @@ export default class Data extends Component {
       role: user.role
     });
 
-    const res = await fetch(`https://api.remhealth.co/disease/view/all`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    });
+    // const res = await fetch(`https://api.remhealth.co/disease/view/all`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${token}`
+    //   }
+    // });
 
-    const response = await res.json();
+    // const response = await res.json();
 
-    if (res.ok) {
-      const data = response.data;
-      const totalData = data
-        .sort((a, b) => (a.type > b.type ? 1 : -1))
-        .filter((x, i, a) => {
-          return !i || x.type != a[i - 1].type || x.type == a.length - 1;
-          // return data.indexOf(x)== i;
-        });
-      this.setState({
-        totalData
-      });
-    }
+    // if (res.ok) {
+    //   const data = response.data;
+    //   const totalData = data
+    //     .sort((a, b) => (a.type > b.type ? 1 : -1))
+    //     .filter((x, i, a) => {
+    //       return !i || x.type != a[i - 1].type || x.type == a.length - 1;
+    //       // return data.indexOf(x)== i;
+    //     });
+    //   this.setState({
+    //     totalData
+    //   });
+    // }
+    const totalData = [
+      "Tuberculosis",
+      "Hepatitis",
+      "Poliomyelitis",
+      "Pneumonia",
+      "Diarrhoea",
+      "Diphtheria",
+      "Tetanus",
+      "Pertussis",
+      "Hepatitis B",
+      "Hemophilus Influenza type B",
+      "Measles",
+      "Yellow fever",
+      "Meningococcal Meningitis ",
+      "Typhoid"
+    ];
+    this.setState({totalData})
   }
 
   mapHandler = () => {
@@ -1705,7 +1722,7 @@ export default class Data extends Component {
                       <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                         <thead>
                           <tr>
-                            <th className="text-center">Name</th>
+                            <th className="text-left">Name</th>
                             {/* <th className="text-center">State</th>
                             <th className="text-center">LGA</th> */}
                             {/* <th className="text-center">Gender</th>
@@ -1714,9 +1731,9 @@ export default class Data extends Component {
                         </thead>
                         {this.state.pageOfItems.map(item => {
                           return (
-                            <tbody key={item.id}>
+                            <tbody key={item}>
                               <tr>
-                                <td className="text-center">{item.type}</td>
+                                <td className="text-left">{item}</td>
                                 {/* <td className="text-center">{item.state}</td>
                                 <td className="text-center">{item.lga}</td> 
 
@@ -1742,8 +1759,8 @@ export default class Data extends Component {
 
                                 <td className="text-center">
                                   <Link
-                                    to={`/disease/${item.type}`}
-                                    params={{ id: item.type }}
+                                    to={`/disease/${item}`}
+                                    params={{ id: item }}
                                   >
                                     details
                                   </Link>

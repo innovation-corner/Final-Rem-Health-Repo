@@ -59,6 +59,7 @@ export default class Data extends Component {
     gender: "",
     fatherName: "",
     motherName: "",
+    immunizationCode: "",
     disableState: true,
     disableInput: true,
     button: "Edit",
@@ -1308,6 +1309,7 @@ export default class Data extends Component {
   };
 
   submitHandler = e => {
+    const token = sessionStorage.getItem("token");
     e.preventDefault();
     if (this.state.button == "Edit") {
       return this.setState({
@@ -1319,12 +1321,14 @@ export default class Data extends Component {
     if (this.state.button == "Save") {
       this.setState({ loading: true });
     }
-    fetch(`https://api.remhealth.co/info/edit/${this.state.id}`, {
+    // console.log(moment(this.state.dob).format("YYYY-MM-DD"));
+    // return;
+    fetch(`https://api.remhealth.co/info/edit/${this.state.immunizationCode}`, {
       method: "PUT",
       body: JSON.stringify({
         email: this.state.email,
         phonenumber: this.state.phonenumber,
-        dob: this.state.dob,
+        dob: moment(this.state.dob).format("YYYY-MM-DD"),
         gender: this.state.gender,
         motherName: this.state.motherName,
         fatherName: this.state.fatherName,
@@ -1333,15 +1337,16 @@ export default class Data extends Component {
         name: this.state.name
       }),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       }
     })
-      .then(res => {
+      .then(async res => {
         this.setState({ loading: false, disableInput: true });
-        if (!res.ok && res.status !== 401) {
-          throw Error(res.message);
-        } else if (res.status === 401) {
+        // const response = await res.json();
+        if (res.status === 401 || res.status === 400) {
           res.json().then(res => {
+            console.log(res);
             this.setState({ error: res.message }, this.loginError);
           });
         } else {
@@ -1759,9 +1764,6 @@ export default class Data extends Component {
                             if (im.lat !== null) {
                               lat = im.lat;
                               lon = im.lon;
-                            } else {
-                              lat = null;
-                              lon = null;
                             }
                           }
                         });

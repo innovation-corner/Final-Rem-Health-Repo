@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import JwPagination from "jw-react-pagination";
 import SearchBox from "../../../Layout/AppHeader/Components/SearchBox";
+import DynamicInputs from "../DynamicInputs/DynamicInput";
 
 import Map from "../Map/Map";
 
@@ -25,6 +26,72 @@ export default class Data extends Component {
     activeTab1: "11",
     tooltipOpen: false,
     name: "",
+    inputs: [
+      {
+        dateTo: "",
+        dateFrom: "",
+        gender: "Male",
+        dateRangeType: "Registration",
+        ageSearch: "",
+        ageType: "Days",
+        ageFromType: "Days",
+        disableState: true,
+        ageFrom: "",
+        ageToType: "Days",
+        ageTo: "",
+        vaccine: "BCG",
+        searchCriteria: "",
+        searchByAge: false,
+        searchByGender: false,
+        searchByVaccine: false,
+        dateRange: false,
+        searchByState: false,
+        searchByLga: false,
+        ageRange: false,
+        soo: "Abia",
+        sor: [
+          "Abia",
+          "Adamawa",
+          "Akwa Ibom",
+          "Anambra",
+          "Bayelsa",
+          "Bauchi",
+          "Benue",
+          "Borno",
+          "Cross River",
+          "Delta",
+          "Ebonyi",
+          "Edo",
+          "Ekiti",
+          "Enugu",
+          "Gombe",
+          "Imo",
+          "Jigawa",
+          "Kaduna",
+          "Katsina",
+          "Kano",
+          "Kebbi",
+          "Kogi",
+          "Kwara",
+          "Lagos",
+          "Nassarawa",
+          "Niger",
+          "Ogun",
+          "Ondo",
+          "Osun",
+          "Oyo",
+          "Plateau",
+          "Rivers",
+          "Sokoto",
+          "Taraba",
+          "Yobe",
+          "Zamfara",
+          "F.C.T"
+        ],
+        slga: "",
+        lga: []
+      }
+    ],
     showMap: false,
     input: "",
     dateTo: "",
@@ -98,6 +165,860 @@ export default class Data extends Component {
     locations: []
   };
 
+  filterHandler = async e => {
+    e.preventDefault();
+    ("age, age range, date range, vaccine, gender");
+    let { inputs } = this.state;
+    let all = [];
+
+    let dueDate, dateFrom, dateTo;
+    const { id } = this.props.match.params;
+
+    switch (id) {
+      case "BCG":
+      case "HBV 1":
+      case "OPV":
+        dateFrom = moment()
+          .subtract(7, "days")
+          .startOf("week")
+          .toISOString();
+        dateTo = moment().toISOString();
+        dueDate = moment()
+          .subtract(7, "days")
+          .toISOString();
+        break;
+
+      case "OPV 1":
+      case "PCV 1":
+      case "Rotarix 1":
+      case "Pentavalent 1":
+        dateFrom = moment()
+          .subtract(6, "weeks")
+          .startOf("week")
+          .toISOString();
+        dateTo = moment()
+          .subtract(6, "weeks")
+          .endOf("weeks")
+          .toISOString();
+        dueDate = moment()
+          .subtract(6, "weeks")
+          .toISOString();
+        break;
+
+      case "OPV 2":
+      case "Rotarix 2":
+      case "PCV 2":
+      case "Pentavalent 2":
+        dateFrom = moment()
+          .subtract(10, "weeks")
+          .startOf("week")
+          .toISOString();
+        dateTo = moment()
+          .subtract(10, "weeks")
+          .endOf("week")
+          .toISOString();
+        dueDate = moment()
+          .subtract(10, "weeks")
+          .toISOString();
+        break;
+
+      case "OPV 3":
+      case "PCV 3":
+      case "IPV":
+      case "Pentavalent 3":
+        dateFrom = moment()
+          .subtract(14, "weeks")
+          .startOf("week")
+          .toISOString();
+        dueDate = moment()
+          .subtract(14, "weeks")
+          .toISOString();
+        dateTo = moment()
+          .subtract(14, "weeks")
+          .endOf("week")
+          .toISOString();
+        break;
+
+      case "Vitamin A1":
+        dateFrom = moment()
+          .subtract(6, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(6, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(6, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+
+      case "Measles Vaccine":
+      case "Yellow Fever Vaccine":
+        dateFrom = moment()
+          .subtract(9, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(9, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(9, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+
+      case "Meningitis Vaccine":
+      case "Vitamin A2":
+      case "OPV booster":
+        dateFrom = moment()
+          .subtract(12, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(12, "months")
+          .toISOString();
+        dateTo = moment()
+          .endOf("weeks")
+          .toISOString();
+        break;
+
+      case "Measles 2":
+        dateFrom = moment()
+          .subtract(18, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(18, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(12, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+
+      case "Typhoid Vaccine":
+        dateFrom = moment()
+          .subtract(24, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(24, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(24, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+    }
+
+    const asyncForEach = async (array, cb) => {
+      for (let index = 0; index < array.length; index++) {
+        await cb(array[index], index, array);
+      }
+    };
+
+    await asyncForEach(inputs, async query => {
+      if (query["searchCriteria form-control"] == "Gender") {
+        // just in case there's no selected gender, default is male
+        const input = query["gender form-control"] || "Male";
+        all.push(
+          { name: "gender", type: "equals", value: input },
+          { name: "dob", type: "between", value: [dateFrom, dateTo] }
+        );
+        return;
+      }
+
+      if (query["searchCriteria form-control"] == "Date Range") {
+        const selectedDateFrom = moment(query["dateFrom form-control"]);
+        const selectedDateTo = moment(query["dateTo form-control"]);
+        let dateFrom;
+        let dateTo;
+
+        const { id } = this.props.match.params;
+
+        switch (id) {
+          case "BCG":
+          case "HBV 1":
+          case "OPV":
+            dateFrom = selectedDateFrom
+              .subtract(7, "days")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo.toISOString();
+            break;
+
+          case "OPV 1":
+          case "PCV 1":
+          case "Rotarix 1":
+          case "Pentavalent 1":
+            dateFrom = selectedDateFrom
+              .subtract(6, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(6, "weeks")
+              .endOf("weeks")
+              .toISOString();
+            break;
+
+          case "OPV 2":
+          case "Rotarix 2":
+          case "PCV 2":
+          case "Pentavalent 2":
+            dateFrom = selectedDateFrom
+              .subtract(10, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(10, "weeks")
+              .endOf("week")
+              .toISOString();
+            break;
+
+          case "OPV 3":
+          case "PCV 3":
+          case "IPV":
+          case "Pentavalent 3":
+            dateFrom = selectedDateFrom
+              .subtract(14, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(14, "weeks")
+              .endOf("week")
+              .toISOString();
+            break;
+
+          case "Vitamin A1":
+            dateFrom = selectedDateFrom
+              .subtract(6, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(6, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Measles Vaccine":
+          case "Yellow Fever Vaccine":
+            dateFrom = selectedDateFrom
+              .subtract(9, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(9, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Meningitis Vaccine":
+          case "Vitamin A2":
+          case "OPV booster":
+            dateFrom = selectedDateFrom.subtract(12, "months").toISOString();
+            dateTo = selectedDateTo.endOf("weeks").toISOString();
+            break;
+
+          case "Measles 2":
+            dateFrom = selectedDateFrom
+              .subtract(18, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(12, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Typhoid Vaccine":
+            dateFrom = selectedDateFrom
+              .subtract(24, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(24, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+        }
+        return all.push({
+          name: "dob",
+          type: "between",
+          value: [dateFrom, dateTo]
+        });
+      }
+
+      if (query["searchCriteria form-control"] == "State") {
+        const lga = query["slga form-control"];
+        if (lga !== "" && lga !== null && lga) {
+          all.push(
+            {
+              name: "lga",
+              type: "equals",
+              value: lga
+            },
+            { name: "dob", type: "between", value: [dateFrom, dateTo] }
+          );
+        }
+        const state = query["soo form-control"];
+        return all.push(
+          {
+            name: "state",
+            type: "equals",
+            value: state
+          },
+          { name: "dob", type: "between", value: [dateFrom, dateTo] }
+        );
+      }
+
+      if (query["searchCriteria form-control"] == "Lga") {
+        const lga = query["slga form-control"];
+        return all.push(
+          {
+            name: "lga",
+            type: "equals",
+            value: lga
+          },
+          { name: "dob", type: "between", value: [dateFrom, dateTo] }
+        );
+      }
+    });
+
+    const token = sessionStorage.getItem("token");
+
+    const res = await fetch(`https://api.remhealth.co/info/query`, {
+      method: "POST",
+      body: JSON.stringify({
+        values: all
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      console.log("shit!!!");
+      return;
+    }
+    const response = await res.json();
+
+    const { data } = response;
+
+    let defaulted = [];
+    let immunized = [];
+    let yet = [];
+
+    // fetch immunization records to check their status
+    await asyncForEach(data, async datum => {
+      const res = await fetch(
+        `https://api.remhealth.co/immunization/child/${datum.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.state.token}`
+          }
+        }
+      );
+      if (res.ok) {
+        const { data } = await res.json();
+        if (data.length) {
+          const record = data.filter(im => im.type == id);
+          if (record.length) {
+            immunized.push({ datum, record });
+          } else {
+            if (dueDate > datum.dob) {
+              defaulted.push(datum.id);
+            } else {
+              yet.push("stuff");
+            }
+          }
+        }
+      } else {
+        if (dueDate > datum.dob) {
+          defaulted.push(datum.id);
+        } else {
+          yet.push("stuff");
+        }
+      }
+    });
+    this.retrievedData(`${response.data.length} results found`);
+    await this.setState({
+      imunizedArray: immunized,
+      defaulted: defaulted.length,
+      defaultedArray: defaulted,
+      immunized: immunized.length,
+      yet: yet.length,
+      length: data.length,
+      totalData: data
+    });
+  };
+
+  addCat = e => {
+    this.setState(prevState => ({
+      inputs: [
+        ...prevState.inputs,
+        {
+          dateTo: "",
+          dateFrom: "",
+          gender: "Male",
+          dateRangeType: "Registration",
+          ageSearch: "",
+          ageType: "Days",
+          ageFromType: "Days",
+          disableState: true,
+          ageFrom: "",
+          ageToType: "Days",
+          ageTo: "",
+          vaccine: "BCG",
+          searchCriteria: "",
+          searchByAge: false,
+          searchByGender: false,
+          searchByVaccine: false,
+          dateRange: false,
+          searchByState: false,
+          searchByLga: false,
+          ageRange: false,
+          soo: "Abia",
+          slga: "",
+          sor: [
+            "Abia",
+            "Adamawa",
+            "Akwa Ibom",
+            "Anambra",
+            "Bayelsa",
+            "Bauchi",
+            "Benue",
+            "Borno",
+            "Cross River",
+            "Delta",
+            "Ebonyi",
+            "Edo",
+            "Ekiti",
+            "Enugu",
+            "Gombe",
+            "Imo",
+            "Jigawa",
+            "Kaduna",
+            "Katsina",
+            "Kano",
+            "Kebbi",
+            "Kogi",
+            "Kwara",
+            "Lagos",
+            "Nassarawa",
+            "Niger",
+            "Ogun",
+            "Ondo",
+            "Osun",
+            "Oyo",
+            "Plateau",
+            "Rivers",
+            "Sokoto",
+            "Taraba",
+            "Yobe",
+            "Zamfara",
+            "F.C.T"
+          ],
+          lga: []
+        }
+      ]
+    }));
+  };
+
+  filterHandler = async e => {
+    e.preventDefault();
+    ("age, age range, date range, vaccine, gender");
+    let { inputs } = this.state;
+    let all = [];
+
+    let dueDate, dateFrom, dateTo;
+    const { id } = this.props.match.params;
+
+    switch (id) {
+      case "BCG":
+      case "HBV 1":
+      case "OPV":
+        dateFrom = moment()
+          .subtract(7, "days")
+          .startOf("week")
+          .toISOString();
+        dateTo = moment().toISOString();
+        dueDate = moment()
+          .subtract(7, "days")
+          .toISOString();
+        break;
+
+      case "OPV 1":
+      case "PCV 1":
+      case "Rotarix 1":
+      case "Pentavalent 1":
+        dateFrom = moment()
+          .subtract(6, "weeks")
+          .startOf("week")
+          .toISOString();
+        dateTo = moment()
+          .subtract(6, "weeks")
+          .endOf("weeks")
+          .toISOString();
+        dueDate = moment()
+          .subtract(6, "weeks")
+          .toISOString();
+        break;
+
+      case "OPV 2":
+      case "Rotarix 2":
+      case "PCV 2":
+      case "Pentavalent 2":
+        dateFrom = moment()
+          .subtract(10, "weeks")
+          .startOf("week")
+          .toISOString();
+        dateTo = moment()
+          .subtract(10, "weeks")
+          .endOf("week")
+          .toISOString();
+        dueDate = moment()
+          .subtract(10, "weeks")
+          .toISOString();
+        break;
+
+      case "OPV 3":
+      case "PCV 3":
+      case "IPV":
+      case "Pentavalent 3":
+        dateFrom = moment()
+          .subtract(14, "weeks")
+          .startOf("week")
+          .toISOString();
+        dueDate = moment()
+          .subtract(14, "weeks")
+          .toISOString();
+        dateTo = moment()
+          .subtract(14, "weeks")
+          .endOf("week")
+          .toISOString();
+        break;
+
+      case "Vitamin A1":
+        dateFrom = moment()
+          .subtract(6, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(6, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(6, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+
+      case "Measles Vaccine":
+      case "Yellow Fever Vaccine":
+        dateFrom = moment()
+          .subtract(9, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(9, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(9, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+
+      case "Meningitis Vaccine":
+      case "Vitamin A2":
+      case "OPV booster":
+        dateFrom = moment()
+          .subtract(12, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(12, "months")
+          .toISOString();
+        dateTo = moment()
+          .endOf("weeks")
+          .toISOString();
+        break;
+
+      case "Measles 2":
+        dateFrom = moment()
+          .subtract(18, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(18, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(12, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+
+      case "Typhoid Vaccine":
+        dateFrom = moment()
+          .subtract(24, "months")
+          .startOf("month")
+          .toISOString();
+        dueDate = moment()
+          .subtract(24, "months")
+          .toISOString();
+        dateTo = moment()
+          .subtract(24, "months")
+          .endOf("month")
+          .toISOString();
+        break;
+    }
+
+    const asyncForEach = async (array, cb) => {
+      for (let index = 0; index < array.length; index++) {
+        await cb(array[index], index, array);
+      }
+    };
+
+    await asyncForEach(inputs, async query => {
+      if (query["searchCriteria form-control"] == "Gender") {
+        // just in case there's no selected gender, default is male
+        const input = query["gender form-control"] || "Male";
+        all.push(
+          { name: "gender", type: "equals", value: input },
+          { name: "dob", type: "between", value: [dateFrom, dateTo] }
+        );
+        return;
+      }
+
+      if (query["searchCriteria form-control"] == "Date Range") {
+        const selectedDateFrom = moment(query["dateFrom form-control"]);
+        const selectedDateTo = moment(query["dateTo form-control"]);
+        let dateFrom;
+        let dateTo;
+
+        const { id } = this.props.match.params;
+
+        switch (id) {
+          case "BCG":
+          case "HBV 1":
+          case "OPV":
+            dateFrom = selectedDateFrom
+              .subtract(7, "days")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo.toISOString();
+            break;
+
+          case "OPV 1":
+          case "PCV 1":
+          case "Rotarix 1":
+          case "Pentavalent 1":
+            dateFrom = selectedDateFrom
+              .subtract(6, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(6, "weeks")
+              .endOf("weeks")
+              .toISOString();
+            break;
+
+          case "OPV 2":
+          case "Rotarix 2":
+          case "PCV 2":
+          case "Pentavalent 2":
+            dateFrom = selectedDateFrom
+              .subtract(10, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(10, "weeks")
+              .endOf("week")
+              .toISOString();
+            break;
+
+          case "OPV 3":
+          case "PCV 3":
+          case "IPV":
+          case "Pentavalent 3":
+            dateFrom = selectedDateFrom
+              .subtract(14, "weeks")
+              .startOf("week")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(14, "weeks")
+              .endOf("week")
+              .toISOString();
+            break;
+
+          case "Vitamin A1":
+            dateFrom = selectedDateFrom
+              .subtract(6, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(6, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Measles Vaccine":
+          case "Yellow Fever Vaccine":
+            dateFrom = selectedDateFrom
+              .subtract(9, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(9, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Meningitis Vaccine":
+          case "Vitamin A2":
+          case "OPV booster":
+            dateFrom = selectedDateFrom.subtract(12, "months").toISOString();
+            dateTo = selectedDateTo.endOf("weeks").toISOString();
+            break;
+
+          case "Measles 2":
+            dateFrom = selectedDateFrom
+              .subtract(18, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(12, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+
+          case "Typhoid Vaccine":
+            dateFrom = selectedDateFrom
+              .subtract(24, "months")
+              .startOf("month")
+              .toISOString();
+            dateTo = selectedDateTo
+              .subtract(24, "months")
+              .endOf("month")
+              .toISOString();
+            break;
+        }
+        return all.push({
+          name: "dob",
+          type: "between",
+          value: [dateFrom, dateTo]
+        });
+      }
+
+      if (query["searchCriteria form-control"] == "State") {
+        const lga = query["slga form-control"];
+        if (lga !== "" && lga !== null && lga) {
+          all.push(
+            {
+              name: "lga",
+              type: "equals",
+              value: lga
+            },
+            { name: "dob", type: "between", value: [dateFrom, dateTo] }
+          );
+        }
+        const state = query["soo form-control"];
+        return all.push(
+          {
+            name: "state",
+            type: "equals",
+            value: state
+          },
+          { name: "dob", type: "between", value: [dateFrom, dateTo] }
+        );
+      }
+
+      if (query["searchCriteria form-control"] == "Lga") {
+        const lga = query["slga form-control"];
+        return all.push(
+          {
+            name: "lga",
+            type: "equals",
+            value: lga
+          },
+          { name: "dob", type: "between", value: [dateFrom, dateTo] }
+        );
+      }
+    });
+
+    const token = sessionStorage.getItem("token");
+
+    const res = await fetch(`https://api.remhealth.co/info/query`, {
+      method: "POST",
+      body: JSON.stringify({
+        values: all
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      console.log("shit!!!");
+      return;
+    }
+    const response = await res.json();
+
+    const { data } = response;
+
+    let defaulted = [];
+    let immunized = [];
+    let yet = [];
+
+    // fetch immunization records to check their status
+    await asyncForEach(data, async datum => {
+      const res = await fetch(
+        `https://api.remhealth.co/immunization/child/${datum.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.state.token}`
+          }
+        }
+      );
+      if (res.ok) {
+        const { data } = await res.json();
+        if (data.length) {
+          const record = data.filter(im => im.type == id);
+          if (record.length) {
+            immunized.push({ datum, record });
+          } else {
+            if (dueDate > datum.dob) {
+              defaulted.push(datum.id);
+            } else {
+              yet.push("stuff");
+            }
+          }
+        }
+      } else {
+        if (dueDate > datum.dob) {
+          defaulted.push(datum.id);
+        } else {
+          yet.push("stuff");
+        }
+      }
+    });
+    this.retrievedData(`${response.data.length} results found`);
+    await this.setState({
+      imunizedArray: immunized,
+      defaulted: defaulted.length,
+      defaultedArray: defaulted,
+      immunized: immunized.length,
+      yet: yet.length,
+      length: data.length,
+      totalData: data
+    });
+  };
+
   modalHandler = (e, lat, lng) => {
     e.preventDefault();
     const locations = [{ lat, lng }];
@@ -140,9 +1061,7 @@ export default class Data extends Component {
       return this.props.history.push("/login");
     }
 
-    this.setState({
-      name: user.name
-    });
+    this.setState({ role: user.role, soo: user.state });
   }
 
   async componentDidMount() {
@@ -218,6 +1137,7 @@ export default class Data extends Component {
         : this.setState({ showMap: true })
     );
   };
+
   handleState = () => {
     let states = this.state.soo;
     switch (states) {
@@ -1648,6 +2568,7 @@ export default class Data extends Component {
   };
 
   render() {
+    let { inputs, role } = this.state;
     return (
       <Fragment>
         <ReactCSSTransitionGroup
@@ -1671,333 +2592,26 @@ export default class Data extends Component {
               <Col md="12">
                 {this.state.totalData.length >= 1 ? (
                   <div>
-                    <Row form>
-                      <Col md={3}>
-                        <FormGroup>
-                          <Label for="dob">Choose Criteria</Label>
-                          <Input
-                            value={this.state.searchCriteria}
-                            type="select"
-                            required
-                            name="searchCriteria"
-                            id="searchCriteria"
-                            max={max}
-                            onChange={this.onChangeHandler}
-                          >
-                            <option defaultValue>select search criteria</option>
-                            {this.state.role == "superAdmin" ||
-                            this.state.role == "nationalAdmin" ? (
-                              <option>State</option>
-                            ) : null}
-                            {this.state.role == "stateAdmin" ||
-                            this.state.role == "user" ? (
-                              <option>LGA</option>
-                            ) : null}
-                          </Input>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row form>
-                      {this.state.dateRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="dateFrom">From</Label>
-                            <Input
-                              value={this.state.dateFrom}
-                              type="date"
-                              required
-                              name="dateFrom"
-                              id="dateFrom"
-                              max={max}
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.dateRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="dateTo">To</Label>
-                            <Input
-                              value={this.state.dateTo}
-                              type="date"
-                              required
-                              name="dateTo"
-                              id="dateTo"
-                              max={max}
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.dateRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="dateRangeType">Type</Label>
-                            <Input
-                              value={this.state.dateRangeType}
-                              type="select"
-                              required
-                              name="dateRangeType"
-                              id="dateRangeType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Registration</option>
-                              <option>Date Of Birth</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByAge ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="ageSearch">Select Age</Label>
-                            <Input
-                              value={this.state.ageSearch}
-                              type="number"
-                              required
-                              name="ageSearch"
-                              id="ageSearch"
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByAge ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="ageType">Type</Label>
-                            <Input
-                              value={this.state.ageType}
-                              type="select"
-                              required
-                              name="ageType"
-                              id="ageType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Days</option>
-                              <option>Weeks</option>
-                              <option>Months</option>
-                              <option>Years</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="ageFrom">From</Label>
-                            <Input
-                              value={this.state.ageFrom}
-                              type="number"
-                              required
-                              name="ageFrom"
-                              id="ageFrom"
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="ageFromType">Range Type</Label>
-                            <Input
-                              value={this.state.ageFromType}
-                              type="select"
-                              required
-                              name="ageFromType"
-                              id="ageFromType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Days</option>
-                              <option>Weeks</option>
-                              <option>Months</option>
-                              <option>Years</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col style={{ textAlign: "center" }} md={1}>
-                          -
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={3}>
-                          <FormGroup>
-                            <Label for="ageTo">To</Label>
-                            <Input
-                              value={this.state.ageTo}
-                              type="number"
-                              required
-                              name="ageTo"
-                              id="ageTo"
-                              onChange={this.onChangeHandler}
-                            />
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.ageRange ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="ageToType">Range Type</Label>
-                            <Input
-                              value={this.state.ageToType}
-                              type="select"
-                              required
-                              name="ageToType"
-                              id="ageToType"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Days</option>
-                              <option>Weeks</option>
-                              <option>Months</option>
-                              <option>Years</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByGender ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="gender">Gender</Label>
-                            <Input
-                              value={this.state.gender}
-                              type="select"
-                              required
-                              name="gender"
-                              id="gender"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>Male</option>
-                              <option defaultValue>Female</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByState ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="soo">State</Label>
-                            <Input
-                              value={this.state.soo}
-                              type="select"
-                              name="soo"
-                              id="soo"
-                              onChange={this.onChangeHandler}
-                              disabled={this.state.disableState}
-                            >
-                              <option>--State--</option>
-                              {this.state.sor.map(sors => {
-                                return (
-                                  <option key={sors} value={sors}>
-                                    {sors}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByState ? (
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="lga">Local Government Area</Label>
-                            <Input
-                              value={this.state.slga}
-                              type="select"
-                              name="slga"
-                              id="lga"
-                              onChange={this.onChangeHandler}
-                              disabled={
-                                this.state.disableState || this.state.soo == ""
-                              }
-                            >
-                              <option defaultValue>--select lga--</option>
-                              {this.state.lga.map(slga => {
-                                return (
-                                  <option key={slga} value={slga}>
-                                    {slga}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByLga ? (
-                        <Col md={4}>
-                          <FormGroup>
-                            <Label for="slga">Local Government Area</Label>
-                            <Input
-                              value={this.state.slga}
-                              type="select"
-                              name="slga"
-                              id="lga"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option>--select lga--</option>
-                              {this.state.lga.map(slga => {
-                                return (
-                                  <option key={slga} value={slga}>
-                                    {slga}
-                                  </option>
-                                );
-                              })}
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                      {this.state.searchByVaccine ? (
-                        <Col md={2}>
-                          <FormGroup>
-                            <Label for="vaccine">Vaccine</Label>
-                            <Input
-                              value={this.state.vaccine}
-                              type="select"
-                              required
-                              name="vaccine"
-                              id="vaccine"
-                              onChange={this.onChangeHandler}
-                            >
-                              <option defaultValue>BCG</option>
-                              <option defaultValue>HBV 1</option>
-                              <option defaultValue>OPV</option>
-                              <option defaultValue>OPV 1</option>
-                              <option defaultValue>PCV 1</option>
-                              <option defaultValue>Rotarix 1</option>
-                              <option defaultValue>Pentavalent 1</option>
-                              <option defaultValue>OPV 2</option>
-                              <option defaultValue>Rotarix 2</option>
-                              <option defaultValue>PCV 2</option>
-                              <option defaultValue>OPV 2</option>
-                              <option defaultValue>Pentavalent 2</option>
-                              <option defaultValue>OPV 3</option>
-                              <option defaultValue>PCV 3</option>
-                              <option defaultValue>IPV</option>
-                              <option defaultValue>Rotarix 3</option>
-                              <option defaultValue>Pentavalent 3</option>
-                              <option defaultValue>Vitamin A1</option>
-                              <option defaultValue>Measles Vaccine</option>
-                              <option defaultValue>Yellow Fever Vaccine</option>
-                              <option defaultValue>Meningitis Vaccine</option>
-                              <option defaultValue>Vitamin A2</option>
-                              <option defaultValue>OPV Booster</option>
-                              <option defaultValue>Measles 2 Vaccine</option>
-                              <option defaultValue>Typhoid Vaccine</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
-                    </Row>
+                    <DynamicInputs
+                      inputs={inputs}
+                      vaccine={true}
+                      onChangeHandler={this.onChangeHandler}
+                      role={role}
+                    />
                     <Row>
+                      {/* <Col md={1}> </Col> */}
+                      <Col style={{ marginLeft: "14px" }} md={3}>
+                        <Button color="info" onClick={this.addCat}>
+                          Add query
+                        </Button>
+                      </Col>
                       <Col md={3}>
                         <FormGroup>
-                          <Label for="submit"></Label>
+                          {/* <Label for="submit"></Label> */}
                           <Button
-                            onClick={this.filterHandler}
-                            disabled={this.state.searchCriteria == ""}
+                            // onClick={this.filterHandler}
+                            onClick={()=>alert(`hold on Tochukwu, it'll be functional soon`)}
+                            // disabled={this.state.searchCriteria == ""}
                             color="warning"
                           >
                             Filter

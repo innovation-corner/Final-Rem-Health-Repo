@@ -11,6 +11,10 @@ const mapStyles = {
 export class MapContainer extends Component {
   displayMarkers = () => {
     return this.props.stores.map((store, index) => {
+      let lab = index + 1;
+      lab = lab.toString();
+      let image =
+        "https://res.cloudinary.com/neydoo/image/upload/c_scale,w_111/v1573286661/location_dot.png";
       return (
         <Marker
           key={index}
@@ -19,6 +23,10 @@ export class MapContainer extends Component {
             lat: store.lat,
             lng: store.lng
           }}
+          label={
+            this.props.stores.length > 1 ? { text: lab, color: "red" } : null
+          }
+          icon={this.props.stores.length > 1 ? image : null}
           onClick={() => console.log("You clicked me!")}
         />
       );

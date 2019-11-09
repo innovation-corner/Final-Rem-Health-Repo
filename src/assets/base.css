@@ -10276,7 +10276,7 @@ body {
   .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
     width: 24px;
     height: 2px;
-    background-color: #033C73;
+    background-color: whitesmoke;
     border-radius: 10px;
     position: absolute;
     transition-property: transform;

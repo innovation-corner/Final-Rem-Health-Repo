@@ -44,7 +44,7 @@ class AppSidebar extends Component {
           transitionAppearTimeout={1500}
           transitionEnter={false}
           transitionLeave={false}
-          style={{ backgroundColor: "rgba(153,153,153, 0.3)", color: "black" }}
+          style={{ backgroundColor: "rgba(255,255,255, 0.3)", color: "black" }}
         >
           <HeaderLogo />
           <PerfectScrollbar>
