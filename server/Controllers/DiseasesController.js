@@ -96,7 +96,8 @@ module.exports = {
 
   async complexSearch(req, res) {
     try {
-      const { values, vaccine } = req.body;
+      const { values } = req.body;
+      const {id} = req.params;
       let criteria = {};
       const user = await User.findOne({ where: { id: req.user.id } });
 
@@ -108,8 +109,8 @@ module.exports = {
       let search = [];
       let diseaseCriteria = {};
 
-      if (vaccine) {
-        diseaseCriteria.type = vaccine;
+      if (id) {
+        diseaseCriteria.type = id;
       }
 
       let diseases = await DiseasesRecord.findAll({
@@ -137,7 +138,10 @@ module.exports = {
           }
           if (value.name == "createdAt") {
             diseases = diseases.filter(disease => {
-              return disease.childData.createdAt == value.value;
+              return (
+                disease.childData.createdAt <= value.value[0] &&
+                disease.childData.createdAt >= value.value[1]
+              );
             });
           }
           if (value.name == "gender") {
