@@ -29,11 +29,13 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Hospital.hasMany(models.Info, {
       foreignKey: "hospitalCode",
-      as: "registrations"
+      as: "registrations",
+      onDelete: "cascade"
     });
     Hospital.belongsTo(models.User, {
       foreignKey: "admin",
-      as: "administrator"
+      as: "administrator",
+      onDelete: "cascade"
     });
   };
   return Hospital;

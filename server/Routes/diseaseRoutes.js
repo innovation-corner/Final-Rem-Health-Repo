@@ -6,5 +6,6 @@ router.post("/new/:id", disease.create);
 router.get("/view/all", disease.viewAll);
 router.get("/view/:id", disease.viewSingle);
 router.get("/:id", disease.viewDisease);
+router.get('/search/:id', disease.complexSearch);
 
 module.exports = router;

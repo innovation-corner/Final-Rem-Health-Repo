@@ -1,22 +1,28 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const DiseasesRecord = sequelize.define('DiseasesRecord', {
-    type: DataTypes.STRING,
-    state: DataTypes.STRING,
-    lga: DataTypes.STRING,
-    lat: DataTypes.STRING,
-    lon: DataTypes.STRING,
-  }, {});
+  const DiseasesRecord = sequelize.define(
+    "DiseasesRecord",
+    {
+      type: DataTypes.STRING,
+      state: DataTypes.STRING,
+      lga: DataTypes.STRING,
+      lat: DataTypes.STRING,
+      lon: DataTypes.STRING
+    },
+    {}
+  );
   DiseasesRecord.associate = function(models) {
     // associations can be defined here
-    DiseasesRecord.belongsTo(models.Info,{
-      foreignKey:'child',
-      as: 'childData'
-    })
-    DiseasesRecord.belongsTo(models.User,{
-      foreignKey:'reportedBy',
-      as: 'reported-by'
-    })
+    DiseasesRecord.belongsTo(models.Info, {
+      foreignKey: "child",
+      as: "childData",
+      onDelete: "cascade"
+    });
+    DiseasesRecord.belongsTo(models.User, {
+      foreignKey: "reportedBy",
+      as: "reported-by",
+      onDelete: "cascade"
+    });
   };
   return DiseasesRecord;
 };
