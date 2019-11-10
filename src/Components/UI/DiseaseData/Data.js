@@ -165,395 +165,98 @@ export default class Data extends Component {
     locations: []
   };
 
-  filterHandler = async e => {
-    e.preventDefault();
-    ("age, age range, date range, vaccine, gender");
-    let { inputs } = this.state;
-    let all = [];
+  criteriaHandler = id => {
+    let inputs = [...this.state.inputs];
 
-    let dueDate, dateFrom, dateTo;
-    const { id } = this.props.match.params;
-
-    switch (id) {
-      case "BCG":
-      case "HBV 1":
-      case "OPV":
-        dateFrom = moment()
-          .subtract(7, "days")
-          .startOf("week")
-          .toISOString();
-        dateTo = moment().toISOString();
-        dueDate = moment()
-          .subtract(7, "days")
-          .toISOString();
+    switch (this.state.inputs[id]["searchCriteria form-control"]) {
+      case "Age":
+        inputs[id]["searchByAge"] = true;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
-      case "OPV 1":
-      case "PCV 1":
-      case "Rotarix 1":
-      case "Pentavalent 1":
-        dateFrom = moment()
-          .subtract(6, "weeks")
-          .startOf("week")
-          .toISOString();
-        dateTo = moment()
-          .subtract(6, "weeks")
-          .endOf("weeks")
-          .toISOString();
-        dueDate = moment()
-          .subtract(6, "weeks")
-          .toISOString();
+      case "Gender":
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = true;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
-      case "OPV 2":
-      case "Rotarix 2":
-      case "PCV 2":
-      case "Pentavalent 2":
-        dateFrom = moment()
-          .subtract(10, "weeks")
-          .startOf("week")
-          .toISOString();
-        dateTo = moment()
-          .subtract(10, "weeks")
-          .endOf("week")
-          .toISOString();
-        dueDate = moment()
-          .subtract(10, "weeks")
-          .toISOString();
+      case "Vaccine":
+        inputs[id]["searchByVaccine"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
-      case "OPV 3":
-      case "PCV 3":
-      case "IPV":
-      case "Pentavalent 3":
-        dateFrom = moment()
-          .subtract(14, "weeks")
-          .startOf("week")
-          .toISOString();
-        dueDate = moment()
-          .subtract(14, "weeks")
-          .toISOString();
-        dateTo = moment()
-          .subtract(14, "weeks")
-          .endOf("week")
-          .toISOString();
+      case "Date Range":
+        inputs[id]["dateRange"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
-      case "Vitamin A1":
-        dateFrom = moment()
-          .subtract(6, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(6, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(6, "months")
-          .endOf("month")
-          .toISOString();
+      case "Age Range":
+        inputs[id]["ageRange"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
-      case "Measles Vaccine":
-      case "Yellow Fever Vaccine":
-        dateFrom = moment()
-          .subtract(9, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(9, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(9, "months")
-          .endOf("month")
-          .toISOString();
+      case "State":
+        inputs[id]["searchByState"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
 
-      case "Meningitis Vaccine":
-      case "Vitamin A2":
-      case "OPV booster":
-        dateFrom = moment()
-          .subtract(12, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(12, "months")
-          .toISOString();
-        dateTo = moment()
-          .endOf("weeks")
-          .toISOString();
+      case "LGA":
+        inputs[id]["searchByLga"] = true;
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        this.setState({ inputs });
         break;
 
-      case "Measles 2":
-        dateFrom = moment()
-          .subtract(18, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(18, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(12, "months")
-          .endOf("month")
-          .toISOString();
-        break;
-
-      case "Typhoid Vaccine":
-        dateFrom = moment()
-          .subtract(24, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(24, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(24, "months")
-          .endOf("month")
-          .toISOString();
+      default:
+        inputs[id]["searchByAge"] = false;
+        inputs[id]["searchByGender"] = false;
+        inputs[id]["ageRange"] = false;
+        inputs[id]["searchByVaccine"] = false;
+        inputs[id]["dateRange"] = false;
+        inputs[id]["searchByState"] = false;
+        inputs[id]["searchByLga"] = false;
+        this.setState({ inputs });
         break;
     }
-
-    const asyncForEach = async (array, cb) => {
-      for (let index = 0; index < array.length; index++) {
-        await cb(array[index], index, array);
-      }
-    };
-
-    await asyncForEach(inputs, async query => {
-      if (query["searchCriteria form-control"] == "Gender") {
-        // just in case there's no selected gender, default is male
-        const input = query["gender form-control"] || "Male";
-        all.push(
-          { name: "gender", type: "equals", value: input },
-          { name: "dob", type: "between", value: [dateFrom, dateTo] }
-        );
-        return;
-      }
-
-      if (query["searchCriteria form-control"] == "Date Range") {
-        const selectedDateFrom = moment(query["dateFrom form-control"]);
-        const selectedDateTo = moment(query["dateTo form-control"]);
-        let dateFrom;
-        let dateTo;
-
-        const { id } = this.props.match.params;
-
-        switch (id) {
-          case "BCG":
-          case "HBV 1":
-          case "OPV":
-            dateFrom = selectedDateFrom
-              .subtract(7, "days")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo.toISOString();
-            break;
-
-          case "OPV 1":
-          case "PCV 1":
-          case "Rotarix 1":
-          case "Pentavalent 1":
-            dateFrom = selectedDateFrom
-              .subtract(6, "weeks")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(6, "weeks")
-              .endOf("weeks")
-              .toISOString();
-            break;
-
-          case "OPV 2":
-          case "Rotarix 2":
-          case "PCV 2":
-          case "Pentavalent 2":
-            dateFrom = selectedDateFrom
-              .subtract(10, "weeks")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(10, "weeks")
-              .endOf("week")
-              .toISOString();
-            break;
-
-          case "OPV 3":
-          case "PCV 3":
-          case "IPV":
-          case "Pentavalent 3":
-            dateFrom = selectedDateFrom
-              .subtract(14, "weeks")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(14, "weeks")
-              .endOf("week")
-              .toISOString();
-            break;
-
-          case "Vitamin A1":
-            dateFrom = selectedDateFrom
-              .subtract(6, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(6, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-
-          case "Measles Vaccine":
-          case "Yellow Fever Vaccine":
-            dateFrom = selectedDateFrom
-              .subtract(9, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(9, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-
-          case "Meningitis Vaccine":
-          case "Vitamin A2":
-          case "OPV booster":
-            dateFrom = selectedDateFrom.subtract(12, "months").toISOString();
-            dateTo = selectedDateTo.endOf("weeks").toISOString();
-            break;
-
-          case "Measles 2":
-            dateFrom = selectedDateFrom
-              .subtract(18, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(12, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-
-          case "Typhoid Vaccine":
-            dateFrom = selectedDateFrom
-              .subtract(24, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(24, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-        }
-        return all.push({
-          name: "dob",
-          type: "between",
-          value: [dateFrom, dateTo]
-        });
-      }
-
-      if (query["searchCriteria form-control"] == "State") {
-        const lga = query["slga form-control"];
-        if (lga !== "" && lga !== null && lga) {
-          all.push(
-            {
-              name: "lga",
-              type: "equals",
-              value: lga
-            },
-            { name: "dob", type: "between", value: [dateFrom, dateTo] }
-          );
-        }
-        const state = query["soo form-control"];
-        return all.push(
-          {
-            name: "state",
-            type: "equals",
-            value: state
-          },
-          { name: "dob", type: "between", value: [dateFrom, dateTo] }
-        );
-      }
-
-      if (query["searchCriteria form-control"] == "Lga") {
-        const lga = query["slga form-control"];
-        return all.push(
-          {
-            name: "lga",
-            type: "equals",
-            value: lga
-          },
-          { name: "dob", type: "between", value: [dateFrom, dateTo] }
-        );
-      }
-    });
-
-    const token = sessionStorage.getItem("token");
-
-    const res = await fetch(`https://api.remhealth.co/info/query`, {
-      method: "POST",
-      body: JSON.stringify({
-        values: all
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!res.ok) {
-      console.log("shit!!!");
-      return;
-    }
-    const response = await res.json();
-
-    const { data } = response;
-
-    let defaulted = [];
-    let immunized = [];
-    let yet = [];
-
-    // fetch immunization records to check their status
-    await asyncForEach(data, async datum => {
-      const res = await fetch(
-        `https://api.remhealth.co/immunization/child/${datum.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.state.token}`
-          }
-        }
-      );
-      if (res.ok) {
-        const { data } = await res.json();
-        if (data.length) {
-          const record = data.filter(im => im.type == id);
-          if (record.length) {
-            immunized.push({ datum, record });
-          } else {
-            if (dueDate > datum.dob) {
-              defaulted.push(datum.id);
-            } else {
-              yet.push("stuff");
-            }
-          }
-        }
-      } else {
-        if (dueDate > datum.dob) {
-          defaulted.push(datum.id);
-        } else {
-          yet.push("stuff");
-        }
-      }
-    });
-    this.retrievedData(`${response.data.length} results found`);
-    await this.setState({
-      imunizedArray: immunized,
-      defaulted: defaulted.length,
-      defaultedArray: defaulted,
-      immunized: immunized.length,
-      yet: yet.length,
-      length: data.length,
-      totalData: data
-    });
   };
 
   addCat = e => {
@@ -630,150 +333,10 @@ export default class Data extends Component {
 
   filterHandler = async e => {
     e.preventDefault();
-    ("age, age range, date range, vaccine, gender");
     let { inputs } = this.state;
     let all = [];
 
-    let dueDate, dateFrom, dateTo;
     const { id } = this.props.match.params;
-
-    switch (id) {
-      case "BCG":
-      case "HBV 1":
-      case "OPV":
-        dateFrom = moment()
-          .subtract(7, "days")
-          .startOf("week")
-          .toISOString();
-        dateTo = moment().toISOString();
-        dueDate = moment()
-          .subtract(7, "days")
-          .toISOString();
-        break;
-
-      case "OPV 1":
-      case "PCV 1":
-      case "Rotarix 1":
-      case "Pentavalent 1":
-        dateFrom = moment()
-          .subtract(6, "weeks")
-          .startOf("week")
-          .toISOString();
-        dateTo = moment()
-          .subtract(6, "weeks")
-          .endOf("weeks")
-          .toISOString();
-        dueDate = moment()
-          .subtract(6, "weeks")
-          .toISOString();
-        break;
-
-      case "OPV 2":
-      case "Rotarix 2":
-      case "PCV 2":
-      case "Pentavalent 2":
-        dateFrom = moment()
-          .subtract(10, "weeks")
-          .startOf("week")
-          .toISOString();
-        dateTo = moment()
-          .subtract(10, "weeks")
-          .endOf("week")
-          .toISOString();
-        dueDate = moment()
-          .subtract(10, "weeks")
-          .toISOString();
-        break;
-
-      case "OPV 3":
-      case "PCV 3":
-      case "IPV":
-      case "Pentavalent 3":
-        dateFrom = moment()
-          .subtract(14, "weeks")
-          .startOf("week")
-          .toISOString();
-        dueDate = moment()
-          .subtract(14, "weeks")
-          .toISOString();
-        dateTo = moment()
-          .subtract(14, "weeks")
-          .endOf("week")
-          .toISOString();
-        break;
-
-      case "Vitamin A1":
-        dateFrom = moment()
-          .subtract(6, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(6, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(6, "months")
-          .endOf("month")
-          .toISOString();
-        break;
-
-      case "Measles Vaccine":
-      case "Yellow Fever Vaccine":
-        dateFrom = moment()
-          .subtract(9, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(9, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(9, "months")
-          .endOf("month")
-          .toISOString();
-        break;
-
-      case "Meningitis Vaccine":
-      case "Vitamin A2":
-      case "OPV booster":
-        dateFrom = moment()
-          .subtract(12, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(12, "months")
-          .toISOString();
-        dateTo = moment()
-          .endOf("weeks")
-          .toISOString();
-        break;
-
-      case "Measles 2":
-        dateFrom = moment()
-          .subtract(18, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(18, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(12, "months")
-          .endOf("month")
-          .toISOString();
-        break;
-
-      case "Typhoid Vaccine":
-        dateFrom = moment()
-          .subtract(24, "months")
-          .startOf("month")
-          .toISOString();
-        dueDate = moment()
-          .subtract(24, "months")
-          .toISOString();
-        dateTo = moment()
-          .subtract(24, "months")
-          .endOf("month")
-          .toISOString();
-        break;
-    }
 
     const asyncForEach = async (array, cb) => {
       for (let index = 0; index < array.length; index++) {
@@ -785,129 +348,16 @@ export default class Data extends Component {
       if (query["searchCriteria form-control"] == "Gender") {
         // just in case there's no selected gender, default is male
         const input = query["gender form-control"] || "Male";
-        all.push(
-          { name: "gender", type: "equals", value: input },
-          { name: "dob", type: "between", value: [dateFrom, dateTo] }
-        );
+        all.push({ name: "gender", value: input });
         return;
       }
 
       if (query["searchCriteria form-control"] == "Date Range") {
-        const selectedDateFrom = moment(query["dateFrom form-control"]);
-        const selectedDateTo = moment(query["dateTo form-control"]);
-        let dateFrom;
-        let dateTo;
+        let dateFrom = query["dateFrom form-control"];
+        let dateTo = query["dateTo form-control"];
 
-        const { id } = this.props.match.params;
-
-        switch (id) {
-          case "BCG":
-          case "HBV 1":
-          case "OPV":
-            dateFrom = selectedDateFrom
-              .subtract(7, "days")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo.toISOString();
-            break;
-
-          case "OPV 1":
-          case "PCV 1":
-          case "Rotarix 1":
-          case "Pentavalent 1":
-            dateFrom = selectedDateFrom
-              .subtract(6, "weeks")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(6, "weeks")
-              .endOf("weeks")
-              .toISOString();
-            break;
-
-          case "OPV 2":
-          case "Rotarix 2":
-          case "PCV 2":
-          case "Pentavalent 2":
-            dateFrom = selectedDateFrom
-              .subtract(10, "weeks")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(10, "weeks")
-              .endOf("week")
-              .toISOString();
-            break;
-
-          case "OPV 3":
-          case "PCV 3":
-          case "IPV":
-          case "Pentavalent 3":
-            dateFrom = selectedDateFrom
-              .subtract(14, "weeks")
-              .startOf("week")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(14, "weeks")
-              .endOf("week")
-              .toISOString();
-            break;
-
-          case "Vitamin A1":
-            dateFrom = selectedDateFrom
-              .subtract(6, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(6, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-
-          case "Measles Vaccine":
-          case "Yellow Fever Vaccine":
-            dateFrom = selectedDateFrom
-              .subtract(9, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(9, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-
-          case "Meningitis Vaccine":
-          case "Vitamin A2":
-          case "OPV booster":
-            dateFrom = selectedDateFrom.subtract(12, "months").toISOString();
-            dateTo = selectedDateTo.endOf("weeks").toISOString();
-            break;
-
-          case "Measles 2":
-            dateFrom = selectedDateFrom
-              .subtract(18, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(12, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-
-          case "Typhoid Vaccine":
-            dateFrom = selectedDateFrom
-              .subtract(24, "months")
-              .startOf("month")
-              .toISOString();
-            dateTo = selectedDateTo
-              .subtract(24, "months")
-              .endOf("month")
-              .toISOString();
-            break;
-        }
         return all.push({
-          name: "dob",
-          type: "between",
+          name: "createdAt",
           value: [dateFrom, dateTo]
         });
       }
@@ -915,42 +365,30 @@ export default class Data extends Component {
       if (query["searchCriteria form-control"] == "State") {
         const lga = query["slga form-control"];
         if (lga !== "" && lga !== null && lga) {
-          all.push(
-            {
-              name: "lga",
-              type: "equals",
-              value: lga
-            },
-            { name: "dob", type: "between", value: [dateFrom, dateTo] }
-          );
+          all.push({
+            name: "lga",
+            value: lga
+          });
         }
         const state = query["soo form-control"];
-        return all.push(
-          {
-            name: "state",
-            type: "equals",
-            value: state
-          },
-          { name: "dob", type: "between", value: [dateFrom, dateTo] }
-        );
+        return all.push({
+          name: "state",
+          value: state
+        });
       }
 
       if (query["searchCriteria form-control"] == "Lga") {
         const lga = query["slga form-control"];
-        return all.push(
-          {
-            name: "lga",
-            type: "equals",
-            value: lga
-          },
-          { name: "dob", type: "between", value: [dateFrom, dateTo] }
-        );
+        return all.push({
+          name: "lga",
+          value: lga
+        });
       }
     });
 
     const token = sessionStorage.getItem("token");
 
-    const res = await fetch(`https://api.remhealth.co/info/query`, {
+    const res = await fetch(`https://api.remhealth.co/disease/search/${id}`, {
       method: "POST",
       body: JSON.stringify({
         values: all
@@ -962,60 +400,16 @@ export default class Data extends Component {
     });
 
     if (!res.ok) {
-      console.log("shit!!!");
-      return;
+      return this.noData("no results found");
     }
     const response = await res.json();
 
-    const { data } = response;
+    const { diseases } = response;
+    // return console.log(diseases)
 
-    let defaulted = [];
-    let immunized = [];
-    let yet = [];
-
-    // fetch immunization records to check their status
-    await asyncForEach(data, async datum => {
-      const res = await fetch(
-        `https://api.remhealth.co/immunization/child/${datum.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.state.token}`
-          }
-        }
-      );
-      if (res.ok) {
-        const { data } = await res.json();
-        if (data.length) {
-          const record = data.filter(im => im.type == id);
-          if (record.length) {
-            immunized.push({ datum, record });
-          } else {
-            if (dueDate > datum.dob) {
-              defaulted.push(datum.id);
-            } else {
-              yet.push("stuff");
-            }
-          }
-        }
-      } else {
-        if (dueDate > datum.dob) {
-          defaulted.push(datum.id);
-        } else {
-          yet.push("stuff");
-        }
-      }
-    });
-    this.retrievedData(`${response.data.length} results found`);
+    this.retrievedData(`${diseases.length} results found`);
     await this.setState({
-      imunizedArray: immunized,
-      defaulted: defaulted.length,
-      defaultedArray: defaulted,
-      immunized: immunized.length,
-      yet: yet.length,
-      length: data.length,
-      totalData: data
+      totalData: diseases
     });
   };
 
@@ -1029,8 +423,9 @@ export default class Data extends Component {
   };
 
   toggle = () => this.setState({ tooltipOpen: !this.state.tooltipOpen });
-  noData = () =>
-    (this.toastId = toast(this.state.error, {
+
+  noData = msg =>
+    (this.toastId = toast(msg, {
       transition: Bounce,
       autoClose: 3000,
       position: "top-right",
@@ -1038,8 +433,8 @@ export default class Data extends Component {
       hideProgressBar: true
     }));
 
-  retrievedData = () =>
-    (this.toastId = toast(this.state.message, {
+  retrievedData = msg =>
+    (this.toastId = toast(msg, {
       transition: Bounce,
       autoClose: 3000,
       position: "top-right",
@@ -2177,101 +1572,6 @@ export default class Data extends Component {
     this.setState({ pageOfItems });
   }
 
-  criteriaHandler = () => {
-    switch (this.state.searchCriteria) {
-      case "Age":
-        this.setState({
-          searchByAge: true,
-          searchByGender: false,
-          ageRange: false,
-          searchByVaccine: false,
-          dateRange: false,
-          searchByState: false,
-          searchByLga: false
-        });
-        break;
-
-      case "Gender":
-        this.setState({
-          searchByGender: true,
-          ageRange: false,
-          searchByAge: false,
-          searchByVaccine: false,
-          dateRange: false,
-          searchByState: false,
-          searchByLga: false
-        });
-        break;
-
-      case "Vaccine":
-        this.setState({
-          searchByVaccine: true,
-          ageRange: false,
-          searchByAge: false,
-          searchByGender: false,
-          dateRange: false,
-          searchByState: false,
-          searchByLga: false
-        });
-        break;
-
-      case "Date Range":
-        return this.setState({
-          dateRange: true,
-          searchByAge: false,
-          ageRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: false
-        });
-
-      case "Age Range":
-        return this.setState({
-          ageRange: true,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: false
-        });
-
-      case "State":
-        return this.setState({
-          ageRange: false,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: true,
-          searchByLga: false
-        });
-
-      case "LGA":
-        return this.setState({
-          ageRange: false,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: true
-        });
-
-      default:
-        return this.setState({
-          ageRange: false,
-          searchByAge: false,
-          dateRange: false,
-          searchByGender: false,
-          searchByVaccine: false,
-          searchByState: false,
-          searchByLga: false
-        });
-    }
-  };
-
   searchHandler = async e => {
     e.preventDefault();
     this.setState({ activeSearch: true });
@@ -2309,257 +1609,57 @@ export default class Data extends Component {
       this.setState({ error: "No search criteria" }, this.noData);
   };
 
-  filterHandler = async e => {
-    e.preventDefault();
-    ("age, age range, date range, vaccine, gender");
-    let url;
-    const dates =
-      this.state.searchCriteria == "Age Range" ||
-      (this.state.searchCriteria == "Date Range" &&
-        this.state.dateRangeType == "Registration") ||
-      this.state.searchCriteria == "Vaccine";
-
-    let dateFrom, dateTo;
-
-    if (dates) {
-      url = "https://api.remhealth.co/info/date";
-    } else {
-      url = "https://api.remhealth.co/disease/view/all";
-    }
-
-    if (this.state.searchCriteria == "Age Range") {
-      dateFrom = moment()
-        .subtract(this.state.ageFrom, this.state.ageFromType)
-        .toISOString();
-      dateTo = moment()
-        .subtract(this.state.ageTo, this.state.ageToType)
-        .toISOString();
-    } else if (this.state.searchCriteria == "Date Range") {
-      dateFrom = this.state.dateFrom;
-      dateTo = this.state.dateTo;
-    } else if (this.state.searchCriteria == "Vaccine") {
-      switch (this.state.vaccine) {
-        case "BCG":
-        case "HBV 1":
-        case "OPV":
-          dateFrom = moment()
-            .subtract(7, "days")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment().toISOString();
-          break;
-
-        case "OPV 1":
-        case "PCV 1":
-        case "Rotarix 1":
-        case "Pentavalent 1":
-          dateFrom = moment()
-            .subtract(6, "weeks")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment()
-            .subtract(6, "weeks")
-            .endOf("weeks")
-            .toISOString();
-          break;
-
-        case "OPV 2":
-        case "Rotarix 2":
-        case "PCV 2":
-        case "Pentavalent 2":
-          dateFrom = moment()
-            .subtract(10, "weeks")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment()
-            .subtract(10, "weeks")
-            .endOf("week")
-            .toISOString();
-          break;
-
-        case "OPV 3":
-        case "PCV 3":
-        case "IPV":
-        case "Pentavalent 3":
-          dateFrom = moment()
-            .subtract(14, "weeks")
-            .startOf("week")
-            .toISOString();
-          dateTo = moment()
-            .subtract(14, "weeks")
-            .endOf("week")
-            .toISOString();
-          break;
-
-        case "Vitamin A1":
-          dateFrom = moment()
-            .subtract(6, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(6, "months")
-            .endOf("month")
-            .toISOString();
-          break;
-
-        case "Measles Vaccine":
-        case "Yellow Fever Vaccine":
-          dateFrom = moment()
-            .subtract(9, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(9, "months")
-            .endOf("month")
-            .toISOString();
-          break;
-
-        case "Meningitis Vaccine":
-        case "Vitamin A2":
-        case "OPV booster":
-          dateFrom = moment()
-            .subtract(12, "months")
-            .toISOString();
-          dateTo = moment()
-            .endOf("weeks")
-            .toISOString();
-          break;
-
-        case "Measles 2":
-          dateFrom = moment()
-            .subtract(18, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(12, "months")
-            .endOf("month")
-            .toISOString();
-          break;
-
-        case "Typhoid Vaccine":
-          dateFrom = moment()
-            .subtract(24, "months")
-            .startOf("month")
-            .toISOString();
-          dateTo = moment()
-            .subtract(24, "months")
-            .endOf("month")
-            .toISOString();
-          break;
-      }
-    } else if (this.state.searchCriteria == "Gender") {
-      if (this.state.gender != "") {
-        const token = sessionStorage.getItem("token");
-        const res = await fetch(`${url}?search=${this.state.gender}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          }
-        });
-        if (res.ok) {
-          const { data } = await res.json();
-          this.setState(
-            { totalData: data.rows, message: "Data retrieved" },
-            this.retrievedData
-          );
-          return;
-        }
-        return this.setState(
-          { totalData: [], error: "No data found" },
-          this.noData
-        );
-      }
-    } else if (this.state.searchCriteria == "State") {
-      if (!this.state.soo) {
-        return;
-      }
-      let param = this.state.soo;
-      if (this.state.slga !== "") {
-        param = this.state.slga;
-      }
-      const token = sessionStorage.getItem("token");
-      const res = await fetch(`${url}?search=${param}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      });
-      if (res.ok) {
-        const { data } = await res.json();
-        this.setState(
-          { totalData: data, message: "Data retrieved" },
-          this.retrievedData
-        );
-        return;
-      }
-      return this.setState(
-        { totalData: [], error: "No data found" },
-        this.noData
-      );
-    } else if (this.state.searchCriteria == "Age") {
-      dateFrom = moment()
-        .subtract(this.state.ageSearch, this.state.ageType)
-        .startOf(this.state.ageType)
-        .format("YYYY-MM-DD");
-      dateTo = moment()
-        .subtract(this.state.ageSearch, this.state.ageType)
-        .endOf(this.state.ageType)
-        .toISOString();
-    }
-
-    const start = moment(dateFrom);
-    const end = moment(dateTo);
-    if (start.diff(end, "days") > 0) {
-      this.setState({ error: "Please check the dates" }, this.noData);
-      return;
-    }
-
-    if (dateFrom != "" && dateFrom != "") {
-      const token = sessionStorage.getItem("token");
-      await fetch(`${url}?dateFrom=${dateFrom}&dateTo=${dateTo}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          if (res.status != 200) {
-            this.setState(
-              { totalData: [], error: "No data found" },
-              this.noData
-            );
-            return;
-          }
-          return res.json();
-        })
-        .then(res => {
-          const data = res.data.rows ? res.data.rows : res.data;
-          this.setState(
-            {
-              totalData: data,
-              message: "Data retrieved"
-            },
-            this.retrievedData
-          );
-        });
-      return;
-    }
-    this.setState({ error: "Please select dates" }, this.noData);
-  };
-
   onChangeHandler = async e => {
     e.preventDefault();
     e.persist();
-
-    await this.setState({ [e.target.name]: e.target.value });
-    if ([e.target.name] == "soo") {
-      this.handleState([e.target.value]);
-      return;
+    console.log(e.target.className);
+    if (
+      [
+        "dateTo form-control",
+        "dateFrom form-control",
+        "gender form-control",
+        "dateRangeType form-control",
+        "ageSearch form-control",
+        "ageType form-control",
+        "ageFromType form-control",
+        "disableState form-control",
+        "ageFrom form-control",
+        "ageToType form-control",
+        "ageTo form-control",
+        "vaccine form-control",
+        "searchCriteria form-control",
+        "searchByAge form-control",
+        ,
+        "searchByGender form-control",
+        ,
+        "searchByVaccine form-control",
+        ,
+        "soo form-control",
+        "dateRange form-control",
+        ,
+        "searchByState form-control",
+        ,
+        "searchByLga form-control",
+        ,
+        "ageRange form-control",
+        ,
+        "slga form-control"
+      ].includes(e.target.className)
+    ) {
+      let inputs = [...this.state.inputs];
+      inputs[e.target.dataset.id][e.target.className] = e.target.value;
+      this.setState({ inputs });
+      this.criteriaHandler(e.target.dataset.id);
+      if ([e.target.name] == "soo" + e.target.dataset.id) {
+        this.handleState(e.target.dataset.id);
+        return;
+      }
+    } else {
+      console.log(e.target.type);
+      e.target.value =
+        e.target.type === "checkbox" ? e.target.checked : e.target.value;
+      this.setState({ [e.target.name]: e.target.value });
     }
-    this.criteriaHandler();
   };
 
   buttonHandler = e => {
@@ -2610,7 +1710,13 @@ export default class Data extends Component {
                           {/* <Label for="submit"></Label> */}
                           <Button
                             // onClick={this.filterHandler}
-                            onClick={()=>alert(`hold on Tochukwu, it'll be functional soon`)}
+                            onClick={
+                              // () =>
+                              // alert(
+                              //   `hold on Tochukwu, it'll be functional soon`
+                              // )
+                              this.filterHandler
+                            }
                             // disabled={this.state.searchCriteria == ""}
                             color="warning"
                           >
@@ -2660,13 +1766,13 @@ export default class Data extends Component {
                   <Card className="main-card mb-3">
                     <div className="card-header">
                       <div className="app-header-left">
-                        <SearchBox
+                        {/* <SearchBox
                           input={this.state.input}
                           buttonHandler={this.buttonHandler}
                           searchHandler={this.searchHandler}
                           onChangeHandler={this.onChangeHandler}
                           activeSearch={this.state.activeSearch}
-                        />
+                        /> */}
                       </div>
                       <div className="btn-actions-pane-right">
                         <div

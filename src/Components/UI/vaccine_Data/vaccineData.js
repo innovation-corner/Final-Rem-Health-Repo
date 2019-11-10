@@ -13,6 +13,7 @@ import {
   CardBody
 } from "reactstrap";
 import JwPagination from "jw-react-pagination";
+import Map from "../Map/Map";
 
 import { toast, Bounce } from "react-toastify";
 export default class MainDashboard extends PureComponent {
@@ -156,7 +157,8 @@ export default class MainDashboard extends PureComponent {
     twelveMonthsMale: 0,
     twelveMonthsFemale: 0,
     twentyFourMonthsMale: 0,
-    twentyFourMonthsFemale: 0
+    twentyFourMonthsFemale: 0,
+    locations: []
   };
 
   criteriaHandler = id => {
@@ -1787,6 +1789,35 @@ export default class MainDashboard extends PureComponent {
       : Math.sign(num) * Math.abs(num);
   }
 
+  modalHandler = (e, lat, lng) => {
+    e.preventDefault();
+    const locations = [{ lat, lng }];
+    // this.setState({ locations, initial: locations[0] });
+    this.state.showMap
+      ? this.setState({ showMap: false, zoom: null })
+      : this.setState({ locations }, this.setState({ showMap: true }));
+  };
+
+  mapHandler = e => {
+    const loc = this.state.totalData
+      .filter(data => {
+        return data.lon !== null && data.lat !== null;
+      })
+      .map(data => {
+        return {
+          lat: data.lat,
+          lng: data.lon
+        };
+      });
+    this.setState(
+      { locations: loc, zoom: 5 },
+
+      this.state.showMap
+        ? this.setState({ showMap: false, zoom: null })
+        : this.setState({ showMap: true })
+    );
+  };
+
   onChangePage(pageOfItems) {
     this.setState({ pageOfItems });
   }
@@ -2032,8 +2063,8 @@ export default class MainDashboard extends PureComponent {
       length: data.length,
       totalData: data
     });
-    console.log(this.state.imunizedArray);
   }
+
   async getData(monthStart, monthEnd, month) {
     const res = await fetch(
       `https://api.remhealth.co/info/list?dateFrom=${monthStart}&dateTo=${monthEnd}`,
@@ -2047,6 +2078,7 @@ export default class MainDashboard extends PureComponent {
     );
     return res.json();
   }
+
   onChangeHandler = async e => {
     e.preventDefault();
     e.persist();
@@ -2363,14 +2395,17 @@ export default class MainDashboard extends PureComponent {
               <div className="card-header">
                 <div className="app-header-left"></div>
                 <div className="btn-actions-pane-right">
-                  {/* <div role="group" className="btn-group-sm btn-group">
-                    <Link to="/new">
+                  {this.state.imunizedArray.length > 0 ? (
+                    <div
+                      role="group"
+                      className="btn-group-sm btn-group"
+                      onClick={this.mapHandler}
+                    >
                       <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
-                        <i className="pe-7s-plus btn-icon-wrapper"> </i>
+                        <i className="pe-7s-map-marker btn-icon-wrapper"> </i>
                       </button>
-                    </Link>
-                    Add New Data
-                  </div> */}
+                    </div>
+                  ) : null}
                 </div>
               </div>
               <div className="table-responsive">
@@ -2383,13 +2418,14 @@ export default class MainDashboard extends PureComponent {
                       <th className="text-center">Phonenumber</th>
                       <th className="text-center">State</th>
                       <th className="text-center">LGA</th>
-                      <th className="text-center">Gender</th>
                       <th className="text-center">Due Date</th>
                       <th className="text-center">Immunization Date</th>
                     </tr>
                   </thead>
                   {this.state.pageOfItems.map(item => {
                     let color, immunizationDate, dueDate;
+                    let lat;
+                    let lon;
 
                     switch (this.props.match.params.id) {
                       case "BCG":
@@ -2446,7 +2482,8 @@ export default class MainDashboard extends PureComponent {
                     this.state.imunizedArray.forEach(im => {
                       if (im.datum.id == item.id) {
                         color = "rgba(0, 255, 0, 0.5)";
-                        console.log(im.record[0].createdAt);
+                        lat = im.record[im.record.length - 1].lat;
+                        lon = im.record[im.record.length - 1].lon;
                         immunizationDate = moment(
                           im.record[0].createdAt
                         ).format("DD - MM - YYYY");
@@ -2468,11 +2505,23 @@ export default class MainDashboard extends PureComponent {
                           <td className="text-center">{item.phonenumber}</td>
                           <td className="text-center">{item.state}</td>
                           <td className="text-center">{item.lga || "-"}</td>
-                          <td className="text-center">{item.gender}</td>
                           <td className="text-center">
                             {moment(dueDate).format("DD - MM - YYYY")}
                           </td>
                           <td className="text-center">{immunizationDate}</td>
+
+                          <td
+                            className="text-center"
+                            style={{ cursor: "pointer" }}
+                            onClick={e => {
+                              {
+                                lat ? this.modalHandler(e, lat, lon) : null;
+                              }
+                            }}
+                          >
+                            {lat ? <i className="pe-7s-map-marker"></i> : null}
+                          </td>
+
                           <td className="text-center">
                             <Link
                               to={`/data/${item.id}`}
@@ -2493,6 +2542,15 @@ export default class MainDashboard extends PureComponent {
                 />
               </div>
             </Card>
+            {this.state.locations.length > 0 ? (
+              <Map
+                initial={this.state.locations[0]}
+                clicked={this.modalHandler}
+                shows={this.state.showMap}
+                stores={this.state.locations}
+                zoom={this.state.zoom}
+              />
+            ) : null}
           </div>
         </ReactCSSTransitionGroup>
       </Fragment>

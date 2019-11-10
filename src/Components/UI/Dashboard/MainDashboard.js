@@ -311,7 +311,10 @@ export default class MainDashboard extends PureComponent {
         >
           <div>
             <PageTitle
-              heading={"Hello " + this.state.name + "! Welcome to RemHealth"}
+              heading={
+                "Hello " + this.state.name.split(" ")[1] ||
+                this.state.name.split(" ")[0]
+              }
               subheading=""
               icon="lnr-cog icon-gradient bg-mean-fruit"
             />

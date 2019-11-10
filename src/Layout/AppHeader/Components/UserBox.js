@@ -4,21 +4,16 @@ import {
   DropdownToggle,
   DropdownMenu,
   Nav,
-  Button,
   NavItem,
   NavLink,
-  UncontrolledTooltip,
   UncontrolledButtonDropdown
 } from "reactstrap";
 
 import { toast, Bounce } from "react-toastify";
 
-import { faCalendarAlt, faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import maleAvatar from "../../../assets/utils/images/avatars/avatar_1.png";
-import femaleAvatar from "../../../assets/utils/images/avatars/avatar_2.jpeg";
 
 class UserBox extends React.Component {
   state = {
@@ -39,13 +34,10 @@ class UserBox extends React.Component {
     });
     const { user } = await response.json();
 
-    this.setState(
-      {
-        name: user.name,
-        region: user.state
-      },
-
-    );
+    this.setState({
+      name: user.name,
+      region: user.state
+    });
   }
 
   notify2 = () =>
@@ -66,18 +58,25 @@ class UserBox extends React.Component {
         <div className="header-btn-lg pr-0">
           <div className="widget-content p-0">
             <div className="widget-content-wrapper">
+              <div className="widget-content-left  ml-3 header-user-info">
+                <div className="widget-heading">{this.state.name}</div>
+                <div className="widget-subheading">
+                  {/* {this.state.region ? this.state.region + " state" : null} */}
+                </div>
+              </div>{" "}
               <div className="widget-content-left">
                 <UncontrolledButtonDropdown>
                   <DropdownToggle color="link" className="p-0">
-                    <img
+                    {/* <img
                       width={42}
                       className="rounded-circle"
                       src={femaleAvatar}
                       alt=""
-                    />
+                    /> */}
                     <FontAwesomeIcon
                       className="ml-2 opacity-8"
                       icon={faAngleDown}
+                      style={{ color: "whitesmoke" }}
                     />
                   </DropdownToggle>
                   <DropdownMenu right className="rm-pointers dropdown-menu-lg">
@@ -125,14 +124,7 @@ class UserBox extends React.Component {
                     </Nav>
                   </DropdownMenu>
                 </UncontrolledButtonDropdown>
-              </div>
-              <div className="widget-content-left  ml-3 header-user-info">
-                <div className="widget-heading">{this.state.name}</div>
-                <div className="widget-subheading">
-                  {this.state.region ? this.state.region + " state": null}
-                </div>
-              </div>
-
+              </div> 
               {/* <div className="widget-content-right header-user-info ml-3">
                 <Button
                   className="btn-shadow p-1"

@@ -1859,6 +1859,18 @@ export default class Data extends Component {
                         >
                           Add Hospital
                         </Tooltip>
+                        <div
+                          onClick={this.mapHandler}
+                          role="group"
+                          className="btn-group-sm btn-group"
+                        >
+                          <button
+                            style={{ marginLeft: "15px" }}
+                            className="mr-2 btn-icon btn-icon-only btn btn-outline-info"
+                          >
+                            <i className="pe-7s-map-marker"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div className="table-responsive">

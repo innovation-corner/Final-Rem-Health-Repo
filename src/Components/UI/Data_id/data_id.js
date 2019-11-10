@@ -2,17 +2,21 @@ import React, { Component, Fragment } from "react";
 import moment from "moment";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Map from "../Map/Map";
+import classnames from "classnames";
 
 import {
   Row,
   Col,
   Card,
+  CardHeader,
   Button,
   CardTitle,
   Form,
   FormGroup,
   Label,
   Input,
+  TabContent,
+  TabPane,
   CardBody
 } from "reactstrap";
 
@@ -45,6 +49,7 @@ const list = [
 ];
 export default class Data extends Component {
   state = {
+    activeTab1: "11",
     data: {},
     loading: false,
     soo: "",
@@ -52,6 +57,7 @@ export default class Data extends Component {
     locations: [],
     language: "",
     phonenumber: "",
+    disease: [],
     dob: "",
     qrCode: "",
     pageOfItems: [],
@@ -106,7 +112,6 @@ export default class Data extends Component {
     ],
     id: 0,
     cancel: false,
-    locations: [],
     showMap: false,
     zoom: null
   };
@@ -145,7 +150,7 @@ export default class Data extends Component {
         Authorization: `Bearer ${token}`
       }
     });
-
+    this.getDisease();
     const { data } = await response.json();
 
     const {
@@ -260,6 +265,32 @@ export default class Data extends Component {
       console.log(immunization.data);
       await this.setState({
         immunization: immunization.data
+      });
+    }
+  }
+
+  getDisease = async () => {
+    const token = await sessionStorage.getItem("token");
+    const { id } = this.props.match.params;
+    const response = await fetch(
+      `https://api.remhealth.co/disease/child/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const { data } = await response.json();
+    this.setState({ disease: data });
+  };
+
+  toggle1(tab) {
+    if (this.state.activeTab1 !== tab) {
+      this.setState({
+        activeTab1: tab
       });
     }
   }
@@ -1385,8 +1416,28 @@ export default class Data extends Component {
       });
   };
 
-  mapHandler = e => {
-    const loc = this.state.totalData
+  mapHandler1 = () => {
+    const loc = this.state.disease
+      .filter(data => {
+        return data.lon !== null && data.lat !== null;
+      })
+      .map(data => {
+        return {
+          lat: data.lat,
+          lng: data.lon
+        };
+      });
+    this.setState(
+      { locations: loc, zoom: 5 },
+
+      this.state.showMap
+        ? this.setState({ showMap: false, zoom: null })
+        : this.setState({ showMap: true })
+    );
+  };
+
+  mapHandler = () => {
+    const loc = this.state.immunization
       .filter(data => {
         return data.lon !== null && data.lat !== null;
       })
@@ -1682,121 +1733,247 @@ export default class Data extends Component {
               <Col md="12">
                 <Card className="main-card mb-3">
                   <CardBody>
-                    <CardTitle style={{ textAlign: "center" }}>
-                      Immunization Info
-                    </CardTitle>
-                  </CardBody>
-                  <div className="table-responsive">
-                    <table className="align-middle mb-0 table table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th className="text-center">Name</th>
-                          <th className="text-center">Due Date</th>
-                          <th className="text-center">Date Immunized</th>
-                        </tr>
-                      </thead>
-                      {list.map(item => {
-                        let color = "";
-                        let date = "-";
-                        let dueDate = "-";
-                        let lat = null;
-                        let lon = null;
-
-                        switch (item) {
-                          case "BCG":
-                          case "HBV 1":
-                          case "OPV":
-                            dueDate = moment(this.state.dob).add(7, "days");
-                            break;
-
-                          case "OPV 1":
-                          case "PCV 1":
-                          case "Rotarix 1":
-                          case "Pentavalent 1":
-                            dueDate = moment(this.state.dob).add(6, "weeks");
-                            break;
-
-                          case "OPV 2":
-                          case "Rotarix 2":
-                          case "PCV 2":
-                          case "Pentavalent 2":
-                            dueDate = moment(this.state.dob).add(10, "weeks");
-                            break;
-
-                          case "OPV 3":
-                          case "PCV 3":
-                          case "IPV":
-                          case "Pentavalent 3":
-                            dueDate = moment(this.state.dob).add(14, "weeks");
-                            break;
-
-                          case "Vitamin A1":
-                          case "Rotarix 3":
-                            dueDate = moment(this.state.dob).add(6, "months");
-                            break;
-
-                          case "Measles Vaccine":
-                          case "Yellow Fever Vaccine":
-                            dueDate = moment(this.state.dob).add(9, "months");
-                            break;
-
-                          case "Meningitis Vaccine":
-                          case "Vitamin A2":
-                          case "OPV Booster":
-                            dueDate = moment(this.state.dob).add(12, "months");
-                            break;
-
-                          case "Measles 2 Vaccine":
-                            dueDate = moment(this.state.dob).add(18, "months");
-                            break;
-
-                          case "Typhoid Vaccine":
-                            dueDate = moment(this.state.dob).add(24, "months");
-                            break;
-                        }
-                        this.state.immunization.forEach(im => {
-                          if (item == im.type) {
-                            color = "rgba(0, 255, 0, 0.5)";
-                            date = moment(im.createdAt).format(
-                              "DD - MM - YYYY"
-                            );
-
-                            if (im.lat !== null) {
-                              lat = im.lat;
-                              lon = im.lon;
-                            }
+                    <CardHeader>
+                      <div className="btn-actions-pane-left">
+                        <Button
+                          outline
+                          className={
+                            "border-0 btn-pill btn-wide btn-transition " +
+                            classnames({
+                              active: this.state.activeTab1 === "11"
+                            })
                           }
-                        });
-                        return (
-                          <tbody key={item}>
-                            <tr style={{ backgroundColor: color }}>
-                              <td className="text-center">{item}</td>
-                              <td className="text-center">
-                                {moment(dueDate).format("DD - MM - YYYY")}
-                              </td>
-                              <td className="text-center">{date}</td>
-                              <td
-                                className="text-center"
-                                onClick={e => {
-                                  this.modalHandler(e, lat, lon);
-                                }}
-                                style={{ cursor: "pointer" }}
-                              >
-                                {lat !== null ? (
-                                  <i className="pe-7s-map-marker"></i>
-                                ) : null}
-                              </td>
+                          color="primary"
+                          onClick={() => {
+                            this.toggle1("11");
+                          }}
+                        >
+                          Immunization Info
+                        </Button>
+                        <Button
+                          outline
+                          className={
+                            "ml-1 btn-pill btn-wide border-0 btn-transition " +
+                            classnames({
+                              active: this.state.activeTab1 === "22"
+                            })
+                          }
+                          color="primary"
+                          onClick={() => {
+                            this.toggle1("22");
+                          }}
+                        >
+                          Diseaseses Reported
+                        </Button>
+                      </div>
+                    </CardHeader>
+                  </CardBody>
+                  <TabContent activeTab={this.state.activeTab1}>
+                    <TabPane tabId="11">
+                      <div className="btn-actions-pane-right">
+                        {this.state.immunization.length > 0 ? (
+                          <CardTitle style={{ float: "right" }}>
+                            <div
+                              role="group"
+                              className="btn-group-sm btn-group"
+                              onClick={this.mapHandler}
+                            >
+                              <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
+                                <i className="pe-7s-map-marker btn-icon-wrapper">
+                                  {" "}
+                                </i>
+                              </button>
+                            </div>
+                          </CardTitle>
+                        ) : null}
+                      </div>
+                      <div className="table-responsive">
+                        <table className="align-middle mb-0 table table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th className="text-center">Name</th>
+                              <th className="text-center">Due Date</th>
+                              <th className="text-center">Date Immunized</th>
                             </tr>
-                          </tbody>
-                        );
-                      })}
-                    </table>
-                    {/* <JwPagination
-                      items={this.state.immunization}
-                      onChangePage={this.onChangePage}
-                      pageSize={50} 
-                    />*/}
-                  </div>
+                          </thead>
+                          {list.map(item => {
+                            let color = "";
+                            let date = "-";
+                            let dueDate = "-";
+                            let lat = null;
+                            let lon = null;
+
+                            switch (item) {
+                              case "BCG":
+                              case "HBV 1":
+                              case "OPV":
+                                dueDate = moment(this.state.dob).add(7, "days");
+                                break;
+
+                              case "OPV 1":
+                              case "PCV 1":
+                              case "Rotarix 1":
+                              case "Pentavalent 1":
+                                dueDate = moment(this.state.dob).add(
+                                  6,
+                                  "weeks"
+                                );
+                                break;
+
+                              case "OPV 2":
+                              case "Rotarix 2":
+                              case "PCV 2":
+                              case "Pentavalent 2":
+                                dueDate = moment(this.state.dob).add(
+                                  10,
+                                  "weeks"
+                                );
+                                break;
+
+                              case "OPV 3":
+                              case "PCV 3":
+                              case "IPV":
+                              case "Pentavalent 3":
+                                dueDate = moment(this.state.dob).add(
+                                  14,
+                                  "weeks"
+                                );
+                                break;
+
+                              case "Vitamin A1":
+                              case "Rotarix 3":
+                                dueDate = moment(this.state.dob).add(
+                                  6,
+                                  "months"
+                                );
+                                break;
+
+                              case "Measles Vaccine":
+                              case "Yellow Fever Vaccine":
+                                dueDate = moment(this.state.dob).add(
+                                  9,
+                                  "months"
+                                );
+                                break;
+
+                              case "Meningitis Vaccine":
+                              case "Vitamin A2":
+                              case "OPV Booster":
+                                dueDate = moment(this.state.dob).add(
+                                  12,
+                                  "months"
+                                );
+                                break;
+
+                              case "Measles 2 Vaccine":
+                                dueDate = moment(this.state.dob).add(
+                                  18,
+                                  "months"
+                                );
+                                break;
+
+                              case "Typhoid Vaccine":
+                                dueDate = moment(this.state.dob).add(
+                                  24,
+                                  "months"
+                                );
+                                break;
+                            }
+                            this.state.immunization.forEach(im => {
+                              if (item == im.type) {
+                                color = "rgba(0, 255, 0, 0.5)";
+                                date = moment(im.createdAt).format(
+                                  "DD - MM - YYYY"
+                                );
+
+                                if (im.lat !== null) {
+                                  lat = im.lat;
+                                  lon = im.lon;
+                                }
+                              }
+                            });
+                            return (
+                              <tbody key={item}>
+                                <tr style={{ backgroundColor: color }}>
+                                  <td className="text-center">{item}</td>
+                                  <td className="text-center">
+                                    {moment(dueDate).format("DD - MM - YYYY")}
+                                  </td>
+                                  <td className="text-center">{date}</td>
+                                  <td
+                                    className="text-center"
+                                    onClick={e => {
+                                      this.modalHandler(e, lat, lon);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {lat !== null ? (
+                                      <i className="pe-7s-map-marker"></i>
+                                    ) : null}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            );
+                          })}
+                        </table>
+                      </div>
+                    </TabPane>
+                    <TabPane tabId="22">
+                      <div className="btn-actions-pane-right">
+                        {this.state.disease.length > 0 ? (
+                          <CardTitle style={{ float: "right" }}>
+                            <div
+                              role="group"
+                              className="btn-group-sm btn-group"
+                              onClick={this.mapHandler1}
+                            >
+                              <button className="mr-2 btn-icon btn-icon-only btn btn-outline-success">
+                                <i className="pe-7s-map-marker btn-icon-wrapper">
+                                  {" "}
+                                </i>
+                              </button>
+                            </div>
+                          </CardTitle>
+                        ) : null}
+                      </div>
+                      <div className="table-responsive">
+                        <table className="align-middle mb-0 table table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th className="text-center">Name</th>
+                              <th className="text-center">Date Reported</th>
+                            </tr>
+                          </thead>
+
+                          {this.state.disease.map(item => {
+                            return (
+                              <tbody key={item.id}>
+                                <tr>
+                                  <td className="text-center">{item.type}</td>
+                                  <td className="text-center">
+                                    {moment(item.createdAt).format(
+                                      "DD - MM - YYYY"
+                                    )}
+                                  </td>
+                                  <td
+                                    className="text-center"
+                                    onClick={e => {
+                                      this.modalHandler(e, item.lat, item.lon);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {item.lat ? (
+                                      <i className="pe-7s-map-marker"></i>
+                                    ) : null}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            );
+                          })}
+                        </table>
+                      </div>
+                    </TabPane>
+                  </TabContent>
                 </Card>
               </Col>
             </Row>
