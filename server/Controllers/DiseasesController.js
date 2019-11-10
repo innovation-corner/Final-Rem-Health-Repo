@@ -58,12 +58,12 @@ module.exports = {
     }
   },
 
-  async viewSingle(req, res) {
+  async viewChildDiseases(req, res) {
     try {
       const { id } = req.params;
 
-      const record = await DiseasesRecord.findOne({ where: { id } });
-      if (!record) {
+      const record = await DiseasesRecord.findAll({ where: {child: id } });
+      if (!record.length) {
         return res.status(400).json({ message: "Invalid id" });
       }
 
