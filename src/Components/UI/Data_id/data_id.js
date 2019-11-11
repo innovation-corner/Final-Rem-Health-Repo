@@ -3,6 +3,7 @@ import moment from "moment";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Map from "../Map/Map";
 import classnames from "classnames";
+import { toast, Bounce } from "react-toastify";
 
 import {
   Row,
@@ -262,7 +263,6 @@ export default class Data extends Component {
       //     }
       //   });
       // });
-      console.log(immunization.data);
       await this.setState({
         immunization: immunization.data
       });
@@ -1373,7 +1373,7 @@ export default class Data extends Component {
       }
     })
       .then(async res => {
-        this.setState({ loading: false, disableInput: true });
+        this.setState({ loading: false });
         // const response = await res.json();
         if (res.status === 401 || res.status === 400) {
           res.json().then(res => {
@@ -1405,16 +1405,38 @@ export default class Data extends Component {
               immunizationCode,
               gender,
               language,
-              soo: state
+              soo: state,
+              disableInput: true,
+              button: "Edit",
+              disableInput: true
             });
+            this.retrievedData("updated succesfully");
           });
         }
       })
       .catch(err => {
         this.setState({ loading: false });
-        this.setState({ error: err.message }, this.loginError);
+        this.setState({ error: err.message }, this.noData(err.message));
       });
   };
+
+  noData = msg =>
+    (this.toastId = toast(msg, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "error",
+      hideProgressBar: true
+    }));
+
+  retrievedData = msg =>
+    (this.toastId = toast(msg, {
+      transition: Bounce,
+      autoClose: 3000,
+      position: "top-right",
+      type: "success",
+      hideProgressBar: true
+    }));
 
   mapHandler1 = () => {
     const loc = this.state.disease

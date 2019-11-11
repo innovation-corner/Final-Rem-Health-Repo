@@ -10261,7 +10261,7 @@ body {
   .hamburger.is-active .hamburger-inner,
   .hamburger.is-active .hamburger-inner::before,
   .hamburger.is-active .hamburger-inner::after {
-    background-color: #033C73; }
+    background-color: 'whitesmoke'; }
 
 .hamburger-box {
   width: 24px;
@@ -12332,11 +12332,10 @@ body {
     height: 100%;
     position: fixed;
     z-index: 100;
-    left: 10%;
+    margin-left: -2%;
     top: 0;
     background-color: rgba(0, 0, 0, 0.5);
 }
-
 
 .modaed {
     position: fixed;
