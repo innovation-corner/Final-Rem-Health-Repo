@@ -1666,37 +1666,39 @@ export default class Data extends Component {
             <br />
             <Row>
               <Col md="12">
-                <Row form>
-                  <Col md={3}>
-                    <FormGroup>
-                      <Label for="dob">Choose Criteria</Label>
-                      <Input
-                        value={this.state.searchCriteria}
-                        type="select"
-                        required
-                        name="searchCriteria"
-                        id="searchCriteria"
-                        max={max}
-                        onChange={this.onChangeHandler}
-                      >
-                        <option defaultValue>select search criteria</option>
-                        <option>Age</option>
-                        <option>Gender</option>
-                        <option>Vaccine</option>
-                        <option>Age Range</option>
-                        <option>Date Range</option>
-                        {this.state.role == "superAdmin" ||
-                        this.state.role == "nationalAdmin" ? (
-                          <option>State</option>
-                        ) : null}
-                        {this.state.role == "stateAdmin" ||
-                        this.state.role == "user" ? (
-                          <option>LGA</option>
-                        ) : null}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                </Row>
+                {this.state.totalData.length >= 1 ? (
+                  <Row form>
+                    <Col md={3}>
+                      <FormGroup>
+                        <Label for="dob">Choose Criteria</Label>
+                        <Input
+                          value={this.state.searchCriteria}
+                          type="select"
+                          required
+                          name="searchCriteria"
+                          id="searchCriteria"
+                          max={max}
+                          onChange={this.onChangeHandler}
+                        >
+                          <option defaultValue>select search criteria</option>
+                          <option>Age</option>
+                          <option>Gender</option>
+                          <option>Vaccine</option>
+                          <option>Age Range</option>
+                          <option>Date Range</option>
+                          {this.state.role == "superAdmin" ||
+                          this.state.role == "nationalAdmin" ? (
+                            <option>State</option>
+                          ) : null}
+                          {this.state.role == "stateAdmin" ||
+                          this.state.role == "user" ? (
+                            <option>LGA</option>
+                          ) : null}
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                ) : null}
                 <Row form>
                   {this.state.dateRange ? (
                     <Col md={3}>
@@ -1990,20 +1992,22 @@ export default class Data extends Component {
                     </Col>
                   ) : null}
                 </Row>
-                <Row>
-                  <Col md={3}>
-                    <FormGroup>
-                      {/* <Label for="submit"></Label> */}
-                      <Button
-                        onClick={this.filterHandler}
-                        disabled={this.state.searchCriteria == ""}
-                        color="warning"
-                      >
-                        Filter
-                      </Button>
-                    </FormGroup>
-                  </Col>
-                </Row>
+                {this.state.totalData.length >= 1 ? (
+                  <Row>
+                    <Col md={3}>
+                      <FormGroup>
+                        {/* <Label for="submit"></Label> */}
+                        <Button
+                          onClick={this.filterHandler}
+                          disabled={this.state.searchCriteria == ""}
+                          color="warning"
+                        >
+                          Filter
+                        </Button>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                ) : null}
                 <Card className="main-card mb-3">
                   <div className="card-header">
                     <div className="app-header-left">
