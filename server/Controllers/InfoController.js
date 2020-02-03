@@ -205,7 +205,7 @@ module.exports = {
       ) {
         return res.status(400).json({ message: "Incomplete fields" });
       }
-      data.dob = moment(dob).format("YYYYMMDD");
+      data.dob = moment(dob).format("YYYY-MM-DD");
 
       const info = await Info.create(req.body);
 

@@ -1,4 +1,4 @@
-const { Vaccine, ImmunizationRecord, Info } = require("../models");
+const { Vaccine, ImmunizationRecord } = require("../models");
 const _ = require("lodash");
 
 module.exports = {
@@ -16,6 +16,31 @@ module.exports = {
 
       await Vaccine.create({ name });
       return res.status(200).json({ message: "vaccine saved" });
+    } catch (e) {
+      return res
+        .status(400)
+        .json({ message: "An error occured", e: e.tostring() });
+    }
+  },
+
+  async newVaccine(req, res) {
+    try {
+      const { name, duration, durationType } = req.body;
+      if (
+        _.isEmpty(name) ||
+        _.isEmpty(duration) ||
+        _.isEmpty(durationType) ||
+        _.isEmpty(disease)
+      ) {
+        return res.status(400).json({ message: "incomplete parameters" });
+      }
+      const vaccine = await Vaccine.findOne({ where: { name } });
+
+      if (vaccine) {
+        return res.status(400).json({ message: "name already exists" });
+      }
+
+
     } catch (e) {
       return res
         .status(400)

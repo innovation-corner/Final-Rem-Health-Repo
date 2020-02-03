@@ -155,7 +155,7 @@ module.exports = {
       return res.status(400).json({ message: "An error occured" });
     }
   },
-  
+
   async create(req, res) {
     try {
       const {
@@ -287,7 +287,7 @@ module.exports = {
         .status(200)
         .json({ message: "Password reset successfully", user });
     } catch (e) {
-      return res.status(400).json({ message: "An error occured" });
+      return res.status(400).json({ message: "An error occured", e });
     }
   }
 };
