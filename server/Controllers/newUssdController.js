@@ -32,7 +32,7 @@ module.exports = {
           phonenumber: temp.phonenumber
         };
 
-        data.dob = moment(temp.dob).format("YYYYMMDD");
+        data.dob = moment(temp.dob).format("YYYY-MM-DD");
         await Info.create(data);
         const info = await Info.findOne({
           where: { name: data.name, phonenumber: data.phonenumber }
