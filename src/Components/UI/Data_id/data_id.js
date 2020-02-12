@@ -270,21 +270,31 @@ export default class Data extends Component {
   }
 
   getDisease = async () => {
-    const token = await sessionStorage.getItem("token");
-    const { id } = this.props.match.params;
-    const response = await fetch(
-      `https://api.remhealth.co/disease/child/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+    try {
+      const token = await sessionStorage.getItem("token");
+      const { id } = this.props.match.params;
+      const response = await fetch(
+        `https://api.remhealth.co/disease/child/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
         }
-      }
-    );
+      );
 
-    const { data } = await response.json();
-    this.setState({ disease: data });
+      if(!response.ok){
+      return this.setState({ error: 'An error occurred' }, this.loginError());
+
+      }
+
+      const { data } = await response.json();
+      this.setState({ disease: data });
+    } catch (error) {
+      this.setState({ error: error.message }, this.loginError);
+    }
+    
   };
 
   toggle1(tab) {
