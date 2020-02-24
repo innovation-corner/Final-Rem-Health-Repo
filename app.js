@@ -21,6 +21,7 @@ require("dotenv").config();
 
 // winston.log("info", "Hello World from Node.js!");
 
+console.log("hi", process.env.env.APPOPTICS_SERVICE_KEY);
 require("./server/config/passport");
 const app = express();
 
