@@ -21,7 +21,6 @@ require("dotenv").config();
 
 // winston.log("info", "Hello World from Node.js!");
 
-console.log('hi', JSON.parse(process.env.env));
 require("./server/config/passport");
 const app = express();
 
