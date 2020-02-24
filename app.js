@@ -1,4 +1,4 @@
-require("appoptics-apm");
+// require("appoptics-apm");
 const express = require("express");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
@@ -21,7 +21,7 @@ require("dotenv").config();
 
 // winston.log("info", "Hello World from Node.js!");
 
-console.log(process.env);
+console.log(process.env.APPOPTICS_SERVICE_KEY);
 require("./server/config/passport");
 const app = express();
 
