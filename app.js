@@ -1,9 +1,25 @@
+require("appoptics-apm");
 const express = require("express");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
+const winston = require("winston");
+const { Loggly } = require("winston-loggly-bulk");
+
 require("dotenv").config();
+// ce218668-0937-49d5-b721-376f1276e12d
+
+winston.add(
+  new Loggly({
+    token: process.env.loggly_token,
+    subdomain: process.env.loggly_domain,
+    tags: ["Winston-NodeJS"],
+    json: true
+  })
+);
+
+winston.log("info", "Hello World from Node.js!");
 
 require("./server/config/passport");
 const app = express();
