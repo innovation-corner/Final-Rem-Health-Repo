@@ -7,6 +7,7 @@ const cors = require("cors");
 const winston = require("winston");
 const { Loggly } = require("winston-loggly-bulk");
 
+const Sentry = require("@sentry/node");
 require("dotenv").config();
 // ce218668-0937-49d5-b721-376f1276e12d
 
@@ -23,6 +24,12 @@ require("dotenv").config();
 
 require("./server/config/passport");
 const app = express();
+
+Sentry.init({
+  dsn: process.env.SENTRY_URL
+});
+
+app.use(Sentry.Handlers.requestHandler());
 
 app.use(logger("dev"));
 
@@ -66,11 +73,20 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   router.vaccine
 );
-
+app.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("My first Sentry error!");
+});
 // app.get("/", (req, res) =>
 //   res.status(401).send({
 //     message: "You shouldn't be here!"
 //   })
 // );
+
+app.use(Sentry.Handlers.errorHandler());
+
+app.use(function onError(err, req, res, next) {
+  res.statusCode = 500;
+  res.end(res.sentry + "\n");
+});
 
 module.exports = app;
